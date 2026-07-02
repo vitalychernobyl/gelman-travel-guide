@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f3ea">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Gelman Travel Guide</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --font: 15px;
+      --pad: 7px;
+      --gap: 5px;
+      --bg: #f7f3ea;
+      --ink: #211b14;
+      --muted: #6b6257;
+      --line: #d8d0c3;
+      --panel: #fffdf8;
+      --accent: #9d241f;
+      --accent-ink: #fffaf0;
+    }
+    [data-density="comfortable"] { --pad: 10px; --gap: 8px; }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #171511;
+        --ink: #f3eadc;
+        --muted: #b7aa99;
+        --line: #3d362c;
+        --panel: #211d18;
+        --accent: #ff756d;
+        --accent-ink: #211210;
+      }
+    }
+    * { box-sizing: border-box; }
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: var(--font)/1.25 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      letter-spacing: 0;
+    }
+    .app {
+      width: min(780px, 100%);
+      margin: 0 auto;
+      padding: calc(env(safe-area-inset-top) + 8px) 8px calc(env(safe-area-inset-bottom) + 18px);
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      margin: -8px -8px 8px;
+      padding: calc(env(safe-area-inset-top) + 8px) 8px 8px;
+      background: var(--bg);
+      background: color-mix(in srgb, var(--bg) 94%, transparent);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    h1 {
+      margin: 0;
+      font-size: 1.18rem;
+      line-height: 1.05;
+      font-weight: 800;
+    }
+    .sub {
+      margin: 2px 0 7px;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+    .tools {
+      display: grid;
+      grid-template-columns: 1fr auto auto auto auto;
+      gap: 5px;
+      align-items: center;
+    }
+    input, button {
+      min-height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--panel);
+      color: var(--ink);
+      font: inherit;
+    }
+    input {
+      width: 100%;
+      padding: 6px 8px;
+      font-size: .95rem;
+    }
+    button {
+      padding: 4px 8px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    button[aria-pressed="true"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-ink);
+    }
+    nav {
+      display: flex;
+      gap: 5px;
+      margin-top: 7px;
+      padding-bottom: 1px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    nav::-webkit-scrollbar { display: none; }
+    nav a {
+      flex: 0 0 auto;
+      padding: 5px 7px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--ink);
+      background: var(--panel);
+      text-decoration: none;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+    main { display: grid; gap: 10px; }
+    section {
+      scroll-margin-top: 126px;
+      border-top: 2px solid var(--ink);
+      padding-top: 5px;
+    }
+    h2 {
+      margin: 0 0 5px;
+      font-size: .86rem;
+      line-height: 1;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .list { display: grid; gap: var(--gap); }
+    .phrase {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2px;
+      padding: var(--pad);
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--panel);
+    }
+    .de {
+      font-size: 1.03rem;
+      font-weight: 800;
+      line-height: 1.18;
+    }
+    .en {
+      color: var(--muted);
+      font-size: .84rem;
+      line-height: 1.16;
+    }
+    .pr {
+      color: var(--accent);
+      font-size: .8rem;
+      line-height: 1.15;
+    }
+    .hide, section.empty { display: none; }
+    .note {
+      margin: 12px 0 0;
+      padding: 8px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: .82rem;
+    }
+    @media (min-width: 560px) {
+      .phrase {
+        grid-template-columns: 1.08fr 1fr;
+        align-items: baseline;
+      }
+      .de { grid-column: 2; grid-row: 1; }
+      .en { grid-column: 1; grid-row: 1; }
+      .pr { grid-column: 2; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Gelman Travel Guide</h1>
+      <p class="sub">Austria Travel Dictionary</p>
+      <div class="tools">
+        <input id="search" type="search" placeholder="Search English or German" autocomplete="off" aria-label="Search phrases">
+        <button id="smaller" type="button" aria-label="Decrease font size">A−</button>
+        <button id="larger" type="button" aria-label="Increase font size">A+</button>
+        <button id="density" type="button" aria-pressed="false">Compact</button>
+        <button id="reset" type="button">Reset</button>
+      </div>
+      <nav aria-label="Sections">
+        <a href="#essentials">Essentials</a>
+        <a href="#restaurant">Restaurant</a>
+        <a href="#getting-around">Getting Around</a>
+        <a href="#shopping">Shopping</a>
+        <a href="#hotel">Hotel</a>
+        <a href="#emergency">Emergency</a>
+        <a href="#numbers">Numbers</a>
+        <a href="#austrian-words">Austrian Words</a>
+        <a href="#vienna-coffee">Vienna Coffee</a>
+        <a href="#handy-phrases">Handy Phrases</a>
+      </nav>
+    </header>
+
+    <main id="dictionary">
+      <section id="essentials">
+        <h2>Essentials</h2>
+        <div class="list">
+          <article class="phrase"><div class="en">Hello / good day</div><div class="de">Grüß Gott.</div><div class="pr">groos got</div></article>
+          <article class="phrase"><div class="en">Hi / bye</div><div class="de">Servus.</div><div class="pr">SEHR-voos</div></article>
+          <article class="phrase"><div class="en">Good morning</div><div class="de">Guten Morgen.</div><div class="pr">GOO-ten MOR-gen</div></article>
+          <article class="phrase"><div class="en">Good evening</div><div class="de">Guten Abend.</div><div class="pr">GOO-ten AH-bent</div></article>
+          <article class="phrase"><div class="en">Goodbye</div><div class="de">Auf Wiedersehen.</div><div class="pr">owf VEE-der-zay-en</div></article>
+          <article class="phrase"><div class="en">Please / you're welcome</div><div class="de">Bitte.</div><div class="pr">BIT-tuh</div></article>
+          <article class="phrase"><div class="en">Thank you</div><div class="de">Danke.</div><div class="pr">DAN-kuh</div></article>
+          <article class="phrase"><div class="en">Thank you very much</div><div class="de">Vielen Dank.</div><div class="pr">FEE-len dank</div></article>
+          <article class="phrase"><div class="en">Excuse me / sorry</div><div class="de">Entschuldigung.</div><div class="pr">ent-SHOOL-di-goong</div></article>
+          <article class="phrase"><div class="en">Yes / no</div><div class="de">Ja. / Nein.</div><div class="pr">yah / nine</div></article>
+          <article class="phrase"><div class="en">I don't understand.</div><div class="de">Ich verstehe nicht.</div><div class="pr">ikh fer-SHTAY-uh nikht</div></article>
+          <article class="phrase"><div class="en">Do you speak English?</div><div class="de">Sprechen Sie Englisch?</div><div class="pr">SHPREKH-en zee ENG-lish</div></article>
+        </div>
+      </section>
+
+      <section id="restaurant">
+        <h2>Restaurant</h2>
+        <div class="list">
+          <article class="phrase"><div class="en">A table for two, please.</div><div class="de">Einen Tisch für zwei, bitte.</div><div class="pr">EYE-nen tish fuer tsvy</div></article>
+          <article class="phrase"><div class="en">The menu, please.</div><div class="de">Die Speisekarte, bitte.</div><div class="pr">dee SHPY-zuh-kar-tuh</div></article>
+          <article class="phrase"><div class="en">What do you recommend?</div><div class="de">Was empfehlen Sie?</div><div class="pr">vas emp-FAY-len zee</div></article>
+          <article class="phrase"><div class="en">I would like...</div><div class="de">Ich hätte gern...</div><div class="pr">ikh HET-tuh gairn</div></article>
+          <article class="phrase"><div class="en">Water with gas / still water</div><div class="de">Mineralwasser mit / ohne Kohlensäure.</div><div class="pr">mee-neh-RAHL-vah-ser mit / OH-nuh</div></article>
+          <article class="phrase"><div class="en">A beer / a glass of wine</div><div class="de">Ein Bier / ein Glas Wein.</div><div class="pr">ine beer / ine glahs vine</div></article>
+          <article class="phrase"><div class="en">The bill, please.</div><div class="de">Die Rechnung, bitte.</div><div class="pr">dee REKH-noong</div></article>
+          <article class="phrase"><div class="en">Can I pay by card?</div><div class="de">Kann ich mit Karte zahlen?</div><div class="pr">kan ikh mit KAR-tuh TSAH-len</div></article>
+          <article class="phrase"><div class="en">It was very good.</div><div class="de">Es war sehr gut.</div><div class="pr">es var zair goot</div></article>
+          <article class="phrase"><div class="en">I am vegetarian.</div><div class="de">Ich bin Vegetarier(in).</div><div class="pr">ikh bin veh-geh-TAH-ree-er</div></article>
+          <article class="phrase"><div class="en">I have an allergy.</div><div class="de">Ich habe eine Allergie.</div><div class="pr">ikh HAH-buh EYE-nuh ah-ler-GEE</div></article>
+          <article class="phrase"><div class="en">Without pork, please.</div><div class="de">Ohne Schweinefleisch, bitte.</div><div class="pr">OH-nuh SHVY-nuh-flysh</div></article>
+        </div>
+      </section>
+
+      <section id="getting-around">
+        <h2>Getting Around</h2>
+        <div class="list">
+          <article class="phrase"><div class="en">Where is the subway?</div><div class="de">Wo ist die U-Bahn?</div><div class="pr">vo ist dee OO-bahn</div></article>
+          <article class="phrase"><div class="en">Where is the train station?</div><div class="de">Wo ist der Bahnhof?</div><div class="pr">vo ist dair BAHN-hof</div></article>
+          <article class="phrase"><div class="en">Which platform?</div><div class="de">Welcher Bahnsteig?</div><div class="pr">VEL-kher BAHN-shtyg</div></article>
+          <article class="phrase"><div class="en">One ticket to Vienna, please.</div><div class="de">Eine Fahrkarte nach Wien, bitte.</div><div class="pr">EYE-nuh FAR-kar-tuh nahkh veen</div></article>
+          <article class="phrase"><div class="en">Is this seat free?</div><div class="de">Ist dieser Platz frei?</div><div class="pr">ist DEE-zer plats fry</div></article>
+          <article class="phrase"><div class="en">Where do I change?</div><div class="de">Wo muss ich umsteigen?</div><div class="pr">vo moos ikh OOM-shty-gen</div></article>
+          <article class="phrase"><div class="en">I need a taxi.</div><div class="de">Ich brauche ein Taxi.</div><div class="pr">ikh BROW-khuh ine TAK-see</div></article>
+          <article class="phrase"><div class="en">Please stop here.</div><div class="de">Bitte halten Sie hier.</div><div class="pr">BIT-tuh HAL-ten zee heer</div></article>
+          <article class="phrase"><div class="en">How long does it take?</div><div class="de">Wie lange dauert es?</div><div class="pr">vee LANG-uh DOW-ert es</div></article>
+          <article class="phrase"><div class="en">Left / right / straight ahead</div><div class="de">Links / rechts / geradeaus.</div><div class="pr">links / rekhts / guh-RAH-duh-ows</div></article>
+        </div>
+      </section>
+
+      <section id="shopping">
+        <h2>Shopping</h2>
+        <div class="list">
+          <article class="phrase"><div class="en">How much does it cost?</div><div class="de">Wie viel kostet das?</div><div class="pr">vee feel KOS-tet das</div></article>
+          <article class="phrase"><div class="en">That's too expensive.</div><div class="de">Das ist zu teuer.</div><div class="pr">das ist tsoo TOY-er</div></article>
+          <article class="phrase"><div class="en">Do you have this in another size?</div><div class="de">Haben Sie das in einer anderen Größe?</div><div class="pr">HAH-ben zee das in EYE-ner AHN-der-en GROH-suh</div></article>
+          <article class="phrase"><div class="en">Can I try it on?</div><div class="de">Kann ich das anprobieren?</div><div class="pr">kan ikh das AHN-pro-bee-ren</div></article>
+          <article class="phrase"><div class="en">I'll take it.</div><div class="de">Ich nehme es.</div><div class="pr">ikh NAY-muh es</div></article>
+          <article class="phrase"><div class="en">I am just looking.</div><div class="de">Ich schaue nur.</div><div class="pr">ikh SHOW-uh noor</div></article>
+          <article class="phrase"><div class="en">Where is a pharmacy?</div><div class="de">Wo ist eine Apotheke?</div><div class="pr">vo ist EYE-nuh ah-po-TAY-kuh</div></article>
+          <article class="phrase"><div class="en">Do you take credit cards?</div><div class="de">Nehmen Sie Kreditkarten?</div><div class="pr">NAY-men zee kreh-DEET-kar-ten</div></article>
+        </div>
+      </section>
+
+      <section id="hotel">
+        <h2>Hotel</h2>
+        <div class="list">
+          <article class="phrase"><div class="en">I have a reservation.</div><div class="de">Ich habe eine Reservierung.</div><div class="pr">ikh HAH-buh EYE-nuh reh-zer-VEE-roong</div></article>
+          <article class="phrase"><div class="en">My name is...</div><div class="de">Mein Name ist...</div><div class="pr">mine NAH-muh ist</div></article>
+          <article class="phrase"><div class="en">What time is check-out?</div><div class="de">Wann ist Check-out?</div><div class="pr">van ist check-out</div></article>
+          <article class="phrase"><div class="en">Can I leave my luggage here?</div><div class="de">Kann ich mein Gepäck hier lassen?</div><div class="pr">kan ikh mine geh-PEK heer LAH-sen</div></article>
+          <article class="phrase"><div class="en">The Wi-Fi password, please.</div><div class="de">Das WLAN-Passwort, bitte.</div><div class="pr">das VAY-lahn PASS-vort</div></article>
+          <article class="phrase"><div class="en">The room is too cold / too hot.</div><div class="de">Das Zimmer ist zu kalt / zu warm.</div><div class="pr">das TSIM-mer ist tsoo kalt / varm</div></article>
+          <article class="phrase"><div class="en">There is no hot water.</div><div class="de">Es gibt kein warmes Wasser.</div><div class="pr">es gibt kine VAR-mes VAH-ser</div></article>
+          <article class="phrase"><div class="en">Can you call a taxi?</div><div class="de">Können Sie ein Taxi rufen?</div><div class="pr">KOE-nen zee ine TAK-see ROO-fen</div></article>
+        </div>
+      </section>
+
+      <section id="emergency">
+        <h2>Emergency</h2>
+        <div class="list">
+          <article class="phrase"><div class="en">Help!</div><div class="de">Hilfe!</div><div class="pr">HIL-fuh</div></article>
+          <article class="phrase"><div class="en">Call the police!</div><div class="de">Rufen Sie die Polizei!</div><div class="pr">ROO-fen zee dee po-lee-TSY</div></article>
+          <article class="phrase"><div class="en">Call an ambulance!</div><div class="de">Rufen Sie einen Krankenwagen!</div><div class="pr">ROO-fen zee EYE-nen KRAN-ken-vah-gen</div></article>
+          <article class="phrase"><div class="en">I need a doctor.</div><div class="de">Ich brauche einen Arzt.</div><div class="pr">ikh BROW-khuh EYE-nen artst</div></article>
+          <article class="phrase"><div class="en">I am sick.</div><div class="de">Mir ist schlecht.</div><div class="pr">meer ist shlekht</div></article>
+          <article class="phrase"><div class="en">I am lost.</div><div class="de">Ich habe mich verlaufen.</div><div class="pr">ikh HAH-buh mikh fer-LOW-fen</div></article>
+          <article class="phrase"><div class="en">I lost my passport.</div><div class="de">Ich habe meinen Pass verloren.</div><div class="pr">ikh HAH-buh MY-nen pass fer-LOH-ren</div></article>
+          <article class="phrase"><div class="en">Emergency number in Austria</div><div class="de">112 oder 144 für Rettung, 133 Polizei.</div><div class="pr">112 / 144 / 133</div></article>
+        </div>
+      </section>
+
+      <section id="numbers">
+        <h2>Numbers</h2>
+        <div class="list">
+          <article class="phrase"><div class="en">0 / 1 / 2</div><div class="de">null / eins / zwei</div><div class="pr">nool / ines / tsvy</div></article>
+          <article class="phrase"><div class="en">3 / 4 / 5</div><div class="de">drei / vier / fünf</div><div class="pr">dry / feer / fuenf</div></article>
+          <article class="phrase"><div class="en">6 / 7 / 8</div><div class="de">sechs / sieben / acht</div><div class="pr">zeks / ZEE-ben / akht</div></article>
+          <article class="phrase"><div class="en">9 / 10</div><div class="de">neun / zehn</div><div class="pr">noyn / tsayn</div></article>
+          <article class="phrase"><div class="en">11 / 12</div><div class="de">elf / zwölf</div><div class="pr">elf / tsvoelf</div></article>
+          <article class="phrase"><div class="en">20 / 30 / 40</div><div class="de">zwanzig / dreißig / vierzig</div><div class="pr">TSVAN-tsikh / DRY-sikh / FEER-tsikh</div></article>
+          <article class="phrase"><div class="en">50 / 100 / 1000</div><div class="de">fünfzig / hundert / tausend</div><div class="pr">FUENF-tsikh / HOON-dert / TOW-zent</div></article>
+          <article class="phrase"><div class="en">One euro, two euros</div><div class="de">ein Euro, zwei Euro</div><div class="pr">ine OY-roh, tsvy OY-roh</div></article>
+        </div>
+      </section>
+
+      <section id="austrian-words">
+        <h2>Austrian Words</h2>
+        <div class="list">
+          <article class="phrase"><div class="en">Austrian hello / goodbye</div><div class="de">Servus.</div><div class="pr">SEHR-voos</div></article>
+          <article class="phrase"><div class="en">Austrian greeting</div><div class="de">Grüß Gott.</div><div class="pr">groos got</div></article>
+          <article class="phrase"><div class="en">Tomato</div><div class="de">Paradeiser.</div><div class="pr">pah-rah-DY-zer</div></article>
+          <article class="phrase"><div class="en">Potato</div><div class="de">Erdapfel.</div><div class="pr">AIR-dap-fel</div></article>
+          <article class="phrase"><div class="en">Apricot</div><div class="de">Marille.</div><div class="pr">mah-RIL-luh</div></article>
+          <article class="phrase"><div class="en">Whipped cream</div><div class="de">Schlagobers.</div><div class="pr">SHLAHG-oh-bers</div></article>
+          <article class="phrase"><div class="en">Bread roll</div><div class="de">Semmel.</div><div class="pr">ZEM-mel</div></article>
+          <article class="phrase"><div class="en">Bag / sack</div><div class="de">Sackerl.</div><div class="pr">SAK-erl</div></article>
+          <article class="phrase"><div class="en">No problem / it fits</div><div class="de">Passt schon.</div><div class="pr">past shohn</div></article>
+          <article class="phrase"><div class="en">A little bit</div><div class="de">A bisserl.</div><div class="pr">ah BIS-serl</div></article>
+        </div>
+      </section>
+
+      <section id="vienna-coffee">
+        <h2>Vienna Coffee</h2>
+        <div class="list">
+          <article class="phrase"><div class="en">Black coffee, espresso-like</div><div class="de">Ein kleiner Schwarzer.</div><div class="pr">ine KLY-ner SHVAR-tser</div></article>
+          <article class="phrase"><div class="en">Double black coffee</div><div class="de">Ein großer Schwarzer.</div><div class="pr">ine GROH-ser SHVAR-tser</div></article>
+          <article class="phrase"><div class="en">Espresso with milk</div><div class="de">Ein kleiner Brauner.</div><div class="pr">ine KLY-ner BROW-ner</div></article>
+          <article class="phrase"><div class="en">Double espresso with milk</div><div class="de">Ein großer Brauner.</div><div class="pr">ine GROH-ser BROW-ner</div></article>
+          <article class="phrase"><div class="en">Melange, classic Viennese coffee</div><div class="de">Eine Melange.</div><div class="pr">EYE-nuh meh-LAHNZH</div></article>
+          <article class="phrase"><div class="en">Coffee with whipped cream</div><div class="de">Ein Einspanner.</div><div class="pr">ine IN-shpah-ner</div></article>
+          <article class="phrase"><div class="en">I would like a coffee and water.</div><div class="de">Ich hätte gern einen Kaffee und Wasser.</div><div class="pr">ikh HET-tuh gairn EYE-nen kah-FAY oont VAH-ser</div></article>
+          <article class="phrase"><div class="en">A piece of cake, please.</div><div class="de">Ein Stück Kuchen, bitte.</div><div class="pr">ine shtuek KOO-khen</div></article>
+        </div>
+      </section>
+
+      <section id="handy-phrases">
+        <h2>Handy Phrases</h2>
+        <div class="list">
+          <article class="phrase"><div class="en">Where is the restroom?</div><div class="de">Wo ist die Toilette?</div><div class="pr">vo ist dee toy-LET-tuh</div></article>
+          <article class="phrase"><div class="en">Can you show me on the map?</div><div class="de">Können Sie es mir auf der Karte zeigen?</div><div class="pr">KOE-nen zee es meer owf dair KAR-tuh TSY-gen</div></article>
+          <article class="phrase"><div class="en">Can you repeat that?</div><div class="de">Können Sie das wiederholen?</div><div class="pr">KOE-nen zee das VEE-der-hoh-len</div></article>
+          <article class="phrase"><div class="en">More slowly, please.</div><div class="de">Langsamer, bitte.</div><div class="pr">LANG-zah-mer</div></article>
+          <article class="phrase"><div class="en">I am from the United States.</div><div class="de">Ich komme aus den USA.</div><div class="pr">ikh KOM-muh ows den oo-es-AH</div></article>
+          <article class="phrase"><div class="en">Nice to meet you.</div><div class="de">Freut mich.</div><div class="pr">froyt mikh</div></article>
+          <article class="phrase"><div class="en">That is wonderful.</div><div class="de">Das ist wunderbar.</div><div class="pr">das ist VOON-der-bar</div></article>
+          <article class="phrase"><div class="en">See you later.</div><div class="de">Bis später.</div><div class="pr">bis SHTAY-ter</div></article>
+        </div>
+      </section>
+    </main>
+
+    <p class="note">Edit this guide by changing the phrase rows directly in this HTML file. Search works offline after the page is loaded; full installable offline mode needs the service worker file and a local or HTTPS host.</p>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const search = document.querySelector("#search");
+      const rows = [...document.querySelectorAll(".phrase")];
+      const sections = [...document.querySelectorAll("section")];
+      let size = Number(localStorage.gelmanFont || 15);
+      let density = localStorage.gelmanDensity || "compact";
+
+      function applyPrefs() {
+        root.style.setProperty("--font", size + "px");
+        root.style.setProperty("--saved-font", size + "px");
+        root.dataset.density = density;
+        document.querySelector("#density").textContent = density === "compact" ? "Compact" : "Comfort";
+        document.querySelector("#density").setAttribute("aria-pressed", density !== "compact");
+      }
+      function filter() {
+        const q = search.value.trim().toLowerCase();
+        rows.forEach(row => row.classList.toggle("hide", q && !row.textContent.toLowerCase().includes(q)));
+        sections.forEach(sec => sec.classList.toggle("empty", !sec.querySelector(".phrase:not(.hide)")));
+      }
+
+      document.querySelector("#smaller").onclick = () => { size = Math.max(12, size - 1); localStorage.gelmanFont = size; applyPrefs(); };
+      document.querySelector("#larger").onclick = () => { size = Math.min(22, size + 1); localStorage.gelmanFont = size; applyPrefs(); };
+      document.querySelector("#density").onclick = () => { density = density === "compact" ? "comfortable" : "compact"; localStorage.gelmanDensity = density; applyPrefs(); };
+      document.querySelector("#reset").onclick = () => { size = 15; density = "compact"; search.value = ""; localStorage.removeItem("gelmanFont"); localStorage.removeItem("gelmanDensity"); applyPrefs(); filter(); };
+      search.addEventListener("input", filter);
+      applyPrefs();
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js");
+    })();
+  </script>
+</body>
+</html>
