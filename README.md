@@ -8,6 +8,12 @@ It includes three bottom-tab pages:
 - Tickets: upcoming flight ticket stubs and activity notes.
 - Photos: photo spots, message notes, and a place for an iCloud shared album link.
 
+Logo files:
+
+- `app-logo.png`: square app/Home Screen icon.
+- `apple-touch-icon.png`: iPhone Home Screen icon.
+- `app-logo-circle.svg`: circular logo version for reuse elsewhere.
+
 ## Run Locally
 
 Open `index.html` directly in a browser for the basic dictionary.
