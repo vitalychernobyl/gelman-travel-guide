@@ -1,10 +1,10 @@
-const CACHE = "gelman-travel-guide-v18";
+const CACHE = "gelman-travel-guide-v19";
 const FILES = [
   "./",
   "./index.html",
-  "./index.html?v=18",
+  "./index.html?v=19",
   "./manifest.webmanifest",
-  "./manifest.webmanifest?v=18",
+  "./manifest.webmanifest?v=19",
   "./app-logo.png",
   "./app-logo.png?v=17",
   "./apple-touch-icon.png",
@@ -12,7 +12,11 @@ const FILES = [
   "./app-logo-circle.svg",
   "./app-logo-circle.svg?v=17",
   "./app-logo-circle.png",
-  "./app-logo-circle.png?v=17"
+  "./app-logo-circle.png?v=17",
+  "./vienna-hero.png",
+  "./vienna-hero.png?v=1",
+  "./amsterdam-hotel-key.png",
+  "./amsterdam-hotel-key.png?v=1"
 ];
 
 self.addEventListener("install", event => {
