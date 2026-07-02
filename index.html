@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f7f3ea">
+  <meta name="theme-color" content="#fbf7ef">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -13,28 +13,20 @@
   <style>
     :root {
       --font: 15px;
-      --pad: 7px;
-      --gap: 5px;
-      --bg: #f7f3ea;
-      --ink: #211b14;
-      --muted: #6b6257;
-      --line: #d8d0c3;
-      --panel: #fffdf8;
-      --accent: #9d241f;
-      --accent-ink: #fffaf0;
+      --pad: 8px;
+      --gap: 6px;
+      --bg: #fbf7ef;
+      --ink: #221c16;
+      --muted: #71685d;
+      --line: #e5dccc;
+      --panel: #fffdfa;
+      --soft: #f3eadc;
+      --accent: #b12a24;
+      --accent-soft: #ffe9e4;
+      --accent-ink: #fffaf5;
+      --shadow: 0 10px 24px rgba(92, 64, 31, .08);
     }
-    [data-density="comfortable"] { --pad: 10px; --gap: 8px; }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #171511;
-        --ink: #f3eadc;
-        --muted: #b7aa99;
-        --line: #3d362c;
-        --panel: #211d18;
-        --accent: #ff756d;
-        --accent-ink: #211210;
-      }
-    }
+    [data-density="comfortable"] { --pad: 11px; --gap: 9px; }
     * { box-sizing: border-box; }
     html {
       scroll-behavior: smooth;
@@ -50,29 +42,75 @@
     .app {
       width: min(780px, 100%);
       margin: 0 auto;
-      padding: calc(env(safe-area-inset-top) + 8px) 8px calc(env(safe-area-inset-bottom) + 18px);
+      padding: calc(env(safe-area-inset-top) + 10px) 10px calc(env(safe-area-inset-bottom) + 92px);
     }
     header {
-      position: sticky;
-      top: 0;
-      z-index: 2;
-      margin: -8px -8px 8px;
-      padding: calc(env(safe-area-inset-top) + 8px) 8px 8px;
-      background: var(--bg);
-      background: color-mix(in srgb, var(--bg) 94%, transparent);
-      backdrop-filter: blur(12px);
+      margin: -10px -10px 10px;
+      padding: calc(env(safe-area-inset-top) + 10px) 10px 10px;
       border-bottom: 1px solid var(--line);
+    }
+    .brand {
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      gap: 6px;
+      text-align: center;
+    }
+    .logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      box-shadow: var(--shadow);
+    }
+    .brand-text {
+      display: grid;
+      gap: 2px;
     }
     h1 {
       margin: 0;
-      font-size: 1.18rem;
+      font-size: 1.2rem;
       line-height: 1.05;
       font-weight: 800;
     }
     .sub {
-      margin: 2px 0 7px;
+      margin: 3px 0 0;
       color: var(--muted);
       font-size: .78rem;
+    }
+    .trip-pill {
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--accent);
+      font-size: .76rem;
+      font-weight: 800;
+    }
+    .page {
+      display: grid;
+      gap: 10px;
+    }
+    [hidden] { display: none !important; }
+    .page-head {
+      display: grid;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .page-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: 1rem;
+      line-height: 1.05;
+      text-transform: none;
+    }
+    .page-copy {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: .82rem;
     }
     .tools {
       display: grid;
@@ -83,13 +121,14 @@
     input, button {
       min-height: 34px;
       border: 1px solid var(--line);
-      border-radius: 7px;
+      border-radius: 9px;
       background: var(--panel);
       color: var(--ink);
       font: inherit;
     }
     input {
       width: 100%;
+      min-width: 0;
       padding: 6px 8px;
       font-size: .95rem;
     }
@@ -103,17 +142,16 @@
       border-color: var(--accent);
       color: var(--accent-ink);
     }
-    nav {
+    .section-nav {
       display: flex;
       gap: 5px;
-      margin-top: 7px;
       padding-bottom: 1px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
-    nav::-webkit-scrollbar { display: none; }
-    nav a {
+    .section-nav::-webkit-scrollbar { display: none; }
+    .section-nav a {
       flex: 0 0 auto;
       padding: 5px 7px;
       border: 1px solid var(--line);
@@ -124,15 +162,14 @@
       font-size: .78rem;
       font-weight: 700;
     }
-    main { display: grid; gap: 10px; }
-    section {
-      scroll-margin-top: 126px;
-      border-top: 2px solid var(--ink);
-      padding-top: 5px;
+    .dict-section {
+      scroll-margin-top: 10px;
+      padding-top: 3px;
     }
-    h2 {
+    .dict-section h2 {
       margin: 0 0 5px;
-      font-size: .86rem;
+      padding-left: 2px;
+      font-size: .78rem;
       line-height: 1;
       text-transform: uppercase;
       color: var(--accent);
@@ -140,29 +177,120 @@
     .list { display: grid; gap: var(--gap); }
     .phrase {
       display: grid;
-      grid-template-columns: minmax(0, 1fr);
-      gap: 2px;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      column-gap: 9px;
+      row-gap: 2px;
       padding: var(--pad);
       border: 1px solid var(--line);
-      border-radius: 7px;
+      border-radius: 9px;
       background: var(--panel);
+      box-shadow: 0 1px 0 rgba(92, 64, 31, .03);
     }
     .de {
+      grid-column: 2;
+      grid-row: 1;
       font-size: 1.03rem;
       font-weight: 800;
       line-height: 1.18;
     }
     .en {
+      grid-column: 1;
+      grid-row: 1;
       color: var(--muted);
       font-size: .84rem;
       line-height: 1.16;
     }
     .pr {
+      grid-column: 2;
       color: var(--accent);
       font-size: .8rem;
       line-height: 1.15;
     }
-    .hide, section.empty { display: none; }
+    .hide, .dict-section.empty { display: none; }
+    .cards {
+      display: grid;
+      gap: 9px;
+    }
+    .card {
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .card h2, .card h3 {
+      margin: 0;
+      color: var(--ink);
+      font-size: .98rem;
+      line-height: 1.1;
+      text-transform: none;
+    }
+    .meta, .card p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+    .timeline {
+      display: grid;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .plan-item {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      gap: 9px;
+      align-items: start;
+      padding: 9px;
+      border-radius: 10px;
+      background: var(--soft);
+    }
+    .time {
+      color: var(--accent);
+      font-size: .78rem;
+      font-weight: 850;
+    }
+    .status {
+      display: inline-block;
+      margin-top: 5px;
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: .72rem;
+      font-weight: 800;
+    }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .photo {
+      min-height: 112px;
+      padding: 9px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background:
+        linear-gradient(140deg, rgba(177, 42, 36, .14), transparent 48%),
+        linear-gradient(320deg, rgba(44, 111, 104, .12), transparent 52%),
+        var(--soft);
+      display: flex;
+      align-items: end;
+      color: var(--ink);
+      font-size: .82rem;
+      font-weight: 800;
+    }
+    .message {
+      display: grid;
+      gap: 3px;
+      margin-top: 8px;
+      padding: 9px;
+      border-radius: 10px;
+      background: var(--soft);
+    }
+    .message strong {
+      font-size: .86rem;
+    }
     .note {
       margin: 12px 0 0;
       padding: 8px;
@@ -170,30 +298,84 @@
       border-top: 1px solid var(--line);
       font-size: .82rem;
     }
+    .bottom-tabs {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      width: min(780px, 100%);
+      margin: 0 auto;
+      padding: 8px 10px calc(env(safe-area-inset-bottom) + 8px);
+      background: color-mix(in srgb, var(--bg) 94%, transparent);
+      border-top: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+    .tab {
+      display: grid;
+      place-items: center;
+      gap: 2px;
+      min-height: 48px;
+      border-radius: 13px;
+      border: 1px solid transparent;
+      background: transparent;
+      font-size: .75rem;
+      color: var(--muted);
+    }
+    .tab svg {
+      width: 19px;
+      height: 19px;
+      stroke-width: 2.3;
+    }
+    .tab[aria-current="page"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-ink);
+    }
     @media (min-width: 560px) {
-      .phrase {
-        grid-template-columns: 1.08fr 1fr;
-        align-items: baseline;
+      .app { padding-inline: 14px; }
+      .brand {
+        grid-template-columns: auto 1fr auto;
+        justify-items: start;
+        text-align: left;
       }
-      .de { grid-column: 2; grid-row: 1; }
-      .en { grid-column: 1; grid-row: 1; }
-      .pr { grid-column: 2; }
+      .page-head, .card { border-radius: 14px; }
+      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .cards .wide { grid-column: 1 / -1; }
     }
   </style>
 </head>
 <body>
   <div class="app">
     <header>
-      <h1>Gelman Travel Guide</h1>
-      <p class="sub">Austria Travel Dictionary</p>
-      <div class="tools">
-        <input id="search" type="search" placeholder="Search English or German" autocomplete="off" aria-label="Search phrases">
-        <button id="smaller" type="button" aria-label="Decrease font size">A−</button>
-        <button id="larger" type="button" aria-label="Increase font size">A+</button>
-        <button id="density" type="button" aria-pressed="false">Compact</button>
-        <button id="reset" type="button">Reset</button>
+      <div class="brand">
+        <img class="logo" src="icon.svg" alt="Gelman Travel Guide logo">
+        <div class="brand-text">
+          <h1>Gelman Travel Guide</h1>
+          <p class="sub">Austria pocket guide</p>
+        </div>
+        <span class="trip-pill">Vienna</span>
       </div>
-      <nav aria-label="Sections">
+    </header>
+
+    <main id="dictionary" class="page" data-page="dictionary">
+      <div class="page-head">
+        <div>
+          <h2 class="page-title">Austria Travel Dictionary</h2>
+          <p class="page-copy">Quick phrases with English and German side by side.</p>
+        </div>
+        <div class="tools">
+          <input id="search" type="search" placeholder="Search" autocomplete="off" aria-label="Search phrases">
+          <button id="smaller" type="button" aria-label="Decrease font size">A−</button>
+          <button id="larger" type="button" aria-label="Increase font size">A+</button>
+          <button id="density" type="button" aria-pressed="false">Compact</button>
+          <button id="reset" type="button">Reset</button>
+        </div>
+      </div>
+      <nav class="section-nav" aria-label="Dictionary sections">
         <a href="#essentials">Essentials</a>
         <a href="#restaurant">Restaurant</a>
         <a href="#getting-around">Getting Around</a>
@@ -205,10 +387,8 @@
         <a href="#vienna-coffee">Vienna Coffee</a>
         <a href="#handy-phrases">Handy Phrases</a>
       </nav>
-    </header>
 
-    <main id="dictionary">
-      <section id="essentials">
+      <section class="dict-section" id="essentials">
         <h2>Essentials</h2>
         <div class="list">
           <article class="phrase"><div class="en">Hello / good day</div><div class="de">Grüß Gott.</div><div class="pr">groos got</div></article>
@@ -226,7 +406,7 @@
         </div>
       </section>
 
-      <section id="restaurant">
+      <section class="dict-section" id="restaurant">
         <h2>Restaurant</h2>
         <div class="list">
           <article class="phrase"><div class="en">A table for two, please.</div><div class="de">Einen Tisch für zwei, bitte.</div><div class="pr">EYE-nen tish fuer tsvy</div></article>
@@ -244,7 +424,7 @@
         </div>
       </section>
 
-      <section id="getting-around">
+      <section class="dict-section" id="getting-around">
         <h2>Getting Around</h2>
         <div class="list">
           <article class="phrase"><div class="en">Where is the subway?</div><div class="de">Wo ist die U-Bahn?</div><div class="pr">vo ist dee OO-bahn</div></article>
@@ -260,7 +440,7 @@
         </div>
       </section>
 
-      <section id="shopping">
+      <section class="dict-section" id="shopping">
         <h2>Shopping</h2>
         <div class="list">
           <article class="phrase"><div class="en">How much does it cost?</div><div class="de">Wie viel kostet das?</div><div class="pr">vee feel KOS-tet das</div></article>
@@ -274,7 +454,7 @@
         </div>
       </section>
 
-      <section id="hotel">
+      <section class="dict-section" id="hotel">
         <h2>Hotel</h2>
         <div class="list">
           <article class="phrase"><div class="en">I have a reservation.</div><div class="de">Ich habe eine Reservierung.</div><div class="pr">ikh HAH-buh EYE-nuh reh-zer-VEE-roong</div></article>
@@ -288,7 +468,7 @@
         </div>
       </section>
 
-      <section id="emergency">
+      <section class="dict-section" id="emergency">
         <h2>Emergency</h2>
         <div class="list">
           <article class="phrase"><div class="en">Help!</div><div class="de">Hilfe!</div><div class="pr">HIL-fuh</div></article>
@@ -302,7 +482,7 @@
         </div>
       </section>
 
-      <section id="numbers">
+      <section class="dict-section" id="numbers">
         <h2>Numbers</h2>
         <div class="list">
           <article class="phrase"><div class="en">0 / 1 / 2</div><div class="de">null / eins / zwei</div><div class="pr">nool / ines / tsvy</div></article>
@@ -316,7 +496,7 @@
         </div>
       </section>
 
-      <section id="austrian-words">
+      <section class="dict-section" id="austrian-words">
         <h2>Austrian Words</h2>
         <div class="list">
           <article class="phrase"><div class="en">Austrian hello / goodbye</div><div class="de">Servus.</div><div class="pr">SEHR-voos</div></article>
@@ -332,7 +512,7 @@
         </div>
       </section>
 
-      <section id="vienna-coffee">
+      <section class="dict-section" id="vienna-coffee">
         <h2>Vienna Coffee</h2>
         <div class="list">
           <article class="phrase"><div class="en">Black coffee, espresso-like</div><div class="de">Ein kleiner Schwarzer.</div><div class="pr">ine KLY-ner SHVAR-tser</div></article>
@@ -346,7 +526,7 @@
         </div>
       </section>
 
-      <section id="handy-phrases">
+      <section class="dict-section" id="handy-phrases">
         <h2>Handy Phrases</h2>
         <div class="list">
           <article class="phrase"><div class="en">Where is the restroom?</div><div class="de">Wo ist die Toilette?</div><div class="pr">vo ist dee toy-LET-tuh</div></article>
@@ -359,9 +539,108 @@
           <article class="phrase"><div class="en">See you later.</div><div class="de">Bis später.</div><div class="pr">bis SHTAY-ter</div></article>
         </div>
       </section>
+
+      <p class="note">Edit this guide by changing the phrase rows directly in this HTML file. Search works offline after the page is loaded; full installable offline mode needs the service worker file and a local or HTTPS host.</p>
     </main>
 
-    <p class="note">Edit this guide by changing the phrase rows directly in this HTML file. Search works offline after the page is loaded; full installable offline mode needs the service worker file and a local or HTTPS host.</p>
+    <main id="plans" class="page" data-page="plans" hidden>
+      <div class="page-head">
+        <div>
+          <h2 class="page-title">Upcoming Flights & Activities</h2>
+          <p class="page-copy">A tiny trip board for the next things to check.</p>
+        </div>
+      </div>
+      <div class="cards">
+        <article class="card wide">
+          <h2>Travel Timeline</h2>
+          <p>Replace these sample items with real flight and activity details.</p>
+          <div class="timeline">
+            <div class="plan-item">
+              <div class="time">Day 1</div>
+              <div>
+                <h3>Flight to Vienna</h3>
+                <p>Arrival, airport train, hotel check-in.</p>
+                <span class="status">Confirm time</span>
+              </div>
+            </div>
+            <div class="plan-item">
+              <div class="time">Day 2</div>
+              <div>
+                <h3>Old Town Walk</h3>
+                <p>Stephansplatz, Graben, Hofburg, coffee break.</p>
+                <span class="status">Morning</span>
+              </div>
+            </div>
+            <div class="plan-item">
+              <div class="time">Day 3</div>
+              <div>
+                <h3>Schönbrunn & Naschmarkt</h3>
+                <p>Palace gardens, lunch, evening reservations.</p>
+                <span class="status">Booked</span>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="card">
+          <h2>Flight Notes</h2>
+          <p class="meta">Airline, record locator, terminal, baggage, seat.</p>
+        </article>
+        <article class="card">
+          <h2>Activity Notes</h2>
+          <p class="meta">Tickets, meeting points, opening hours, backups.</p>
+        </article>
+      </div>
+    </main>
+
+    <main id="memories" class="page" data-page="memories" hidden>
+      <div class="page-head">
+        <div>
+          <h2 class="page-title">Photos & Messages</h2>
+          <p class="page-copy">A light place to keep favorite moments and notes.</p>
+        </div>
+      </div>
+      <div class="cards">
+        <article class="card wide">
+          <h2>Photo Spots</h2>
+          <div class="photo-grid">
+            <div class="photo">Stephansplatz</div>
+            <div class="photo">Café Central</div>
+            <div class="photo">Schönbrunn</div>
+            <div class="photo">Belvedere</div>
+          </div>
+        </article>
+        <article class="card">
+          <h2>Messages</h2>
+          <div class="message">
+            <strong>Hotel address</strong>
+            <span class="meta">Paste the address and check-in notes here.</span>
+          </div>
+          <div class="message">
+            <strong>Family update</strong>
+            <span class="meta">Short message draft for arrival day.</span>
+          </div>
+        </article>
+        <article class="card">
+          <h2>Keepers</h2>
+          <p>Favorite meal, best walk, new phrase, and the photo you want to print.</p>
+        </article>
+      </div>
+    </main>
+
+    <nav class="bottom-tabs" aria-label="App pages">
+      <button class="tab" type="button" data-target="dictionary" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M5 4h10a4 4 0 0 1 4 4v12H9a4 4 0 0 0-4-4z"/><path d="M5 4v16"/><path d="M9 8h6M9 12h4"/></svg>
+        <span>Dictionary</span>
+      </button>
+      <button class="tab" type="button" data-target="plans">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M7 3v4M17 3v4"/><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 12h3M13 12h3M8 16h3"/></svg>
+        <span>Plans</span>
+      </button>
+      <button class="tab" type="button" data-target="memories">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="3"/><circle cx="9" cy="10" r="1.5"/><path d="m7 17 4-4 3 3 2-2 3 3"/></svg>
+        <span>Memories</span>
+      </button>
+    </nav>
   </div>
 
   <script>
@@ -369,7 +648,9 @@
       const root = document.documentElement;
       const search = document.querySelector("#search");
       const rows = [...document.querySelectorAll(".phrase")];
-      const sections = [...document.querySelectorAll("section")];
+      const sections = [...document.querySelectorAll(".dict-section")];
+      const pages = [...document.querySelectorAll("[data-page]")];
+      const tabs = [...document.querySelectorAll(".tab")];
       let size = Number(localStorage.gelmanFont || 15);
       let density = localStorage.gelmanDensity || "compact";
 
@@ -385,13 +666,21 @@
         rows.forEach(row => row.classList.toggle("hide", q && !row.textContent.toLowerCase().includes(q)));
         sections.forEach(sec => sec.classList.toggle("empty", !sec.querySelector(".phrase:not(.hide)")));
       }
+      function showPage(name) {
+        pages.forEach(page => { page.hidden = page.dataset.page !== name; });
+        tabs.forEach(tab => tab.setAttribute("aria-current", tab.dataset.target === name ? "page" : "false"));
+        localStorage.gelmanPage = name;
+        scrollTo(0, 0);
+      }
 
       document.querySelector("#smaller").onclick = () => { size = Math.max(12, size - 1); localStorage.gelmanFont = size; applyPrefs(); };
       document.querySelector("#larger").onclick = () => { size = Math.min(22, size + 1); localStorage.gelmanFont = size; applyPrefs(); };
       document.querySelector("#density").onclick = () => { density = density === "compact" ? "comfortable" : "compact"; localStorage.gelmanDensity = density; applyPrefs(); };
       document.querySelector("#reset").onclick = () => { size = 15; density = "compact"; search.value = ""; localStorage.removeItem("gelmanFont"); localStorage.removeItem("gelmanDensity"); applyPrefs(); filter(); };
       search.addEventListener("input", filter);
+      tabs.forEach(tab => tab.addEventListener("click", () => showPage(tab.dataset.target)));
       applyPrefs();
+      showPage(localStorage.gelmanPage || "dictionary");
       if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js");
     })();
   </script>

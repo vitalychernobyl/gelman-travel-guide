@@ -1,6 +1,12 @@
 # Gelman Travel Guide
 
-A tiny mobile-first Austria travel dictionary. The app is plain HTML/CSS with a small amount of vanilla JavaScript and no build step.
+A tiny mobile-first Austria travel guide. The app is plain HTML/CSS with a small amount of vanilla JavaScript and no build step.
+
+It includes three bottom-tab pages:
+
+- Dictionary: side-by-side English/German travel phrases.
+- Plans: upcoming flights and activities.
+- Memories: photo spots and message notes.
 
 ## Run Locally
 
@@ -16,6 +22,18 @@ Then open:
 
 ```text
 http://127.0.0.1:4173/
+```
+
+The GitHub Pages version is:
+
+```text
+https://vitalychernobyl.github.io/gelman-travel-guide/
+```
+
+The Cloudflare Pages version is:
+
+```text
+https://gelman-travel-guide.pages.dev/
 ```
 
 ## Add To iPhone Home Screen
