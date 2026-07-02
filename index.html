@@ -15,16 +15,17 @@
       --font: 15px;
       --pad: 8px;
       --gap: 6px;
-      --bg: #f7f7f7;
+      --bg: #ffffff;
       --ink: #222222;
       --muted: #717171;
       --line: #dddddd;
       --panel: #ffffff;
       --soft: #f7f7f7;
       --accent: #ff385c;
-      --accent-soft: #fff0f3;
+      --accent-deep: #e31c5f;
+      --accent-soft: #fff8fa;
       --accent-ink: #ffffff;
-      --shadow: 0 8px 24px rgba(0, 0, 0, .08);
+      --shadow: 0 6px 18px rgba(34, 34, 34, .08);
     }
     [data-density="comfortable"] { --pad: 11px; --gap: 9px; }
     * { box-sizing: border-box; }
@@ -34,7 +35,7 @@
     }
     body {
       margin: 0;
-      background: var(--bg);
+      background: linear-gradient(180deg, #ffffff 0%, #ffffff 52%, #f7f7f7 100%);
       color: var(--ink);
       font: var(--font)/1.25 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
       letter-spacing: 0;
@@ -46,21 +47,25 @@
     }
     header {
       margin: -10px -10px 10px;
-      padding: calc(env(safe-area-inset-top) + 10px) 10px 10px;
-      background: var(--panel);
-      border-bottom: 1px solid var(--line);
+      padding: calc(env(safe-area-inset-top) + 14px) 16px 12px;
+      background: rgba(255, 255, 255, .92);
+      border-bottom: 1px solid rgba(221, 221, 221, .85);
+      backdrop-filter: blur(18px);
+      position: sticky;
+      top: 0;
+      z-index: 2;
     }
     .brand {
       display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
       align-items: center;
-      justify-items: center;
-      gap: 6px;
-      text-align: center;
+      gap: 10px;
+      text-align: left;
     }
     .logo {
-      width: 54px;
-      height: 54px;
-      border-radius: 16px;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
       box-shadow: var(--shadow);
     }
     .brand-text {
@@ -69,7 +74,7 @@
     }
     h1 {
       margin: 0;
-      font-size: 1.2rem;
+      font-size: 1.08rem;
       line-height: 1.05;
       font-weight: 800;
     }
@@ -79,13 +84,14 @@
       font-size: .78rem;
     }
     .trip-pill {
-      padding: 5px 10px;
+      padding: 7px 11px;
       border: 1px solid var(--line);
       border-radius: 999px;
       background: var(--panel);
-      color: var(--accent);
+      color: var(--ink);
       font-size: .76rem;
       font-weight: 800;
+      box-shadow: 0 2px 8px rgba(34, 34, 34, .06);
     }
     .page {
       display: grid;
@@ -95,16 +101,16 @@
     .page-head {
       display: grid;
       gap: 8px;
-      padding: 10px;
+      padding: 12px;
       border: 1px solid var(--line);
-      border-radius: 14px;
+      border-radius: 24px;
       background: var(--panel);
       box-shadow: var(--shadow);
     }
     .page-title {
       margin: 0;
       color: var(--ink);
-      font-size: 1rem;
+      font-size: 1.08rem;
       line-height: 1.05;
       text-transform: none;
     }
@@ -115,14 +121,14 @@
     }
     .tools {
       display: grid;
-      grid-template-columns: 1fr auto auto auto auto;
-      gap: 5px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 6px;
       align-items: center;
     }
     input, button {
-      min-height: 34px;
+      min-height: 38px;
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 999px;
       background: var(--panel);
       color: var(--ink);
       font: inherit;
@@ -130,11 +136,14 @@
     input {
       width: 100%;
       min-width: 0;
-      padding: 6px 8px;
+      grid-column: 1 / -1;
+      justify-self: stretch;
+      padding: 8px 13px;
       font-size: .95rem;
+      box-shadow: inset 0 0 0 1px rgba(34, 34, 34, .02);
     }
     button {
-      padding: 4px 8px;
+      padding: 5px 10px;
       font-weight: 700;
       white-space: nowrap;
     }
@@ -146,7 +155,7 @@
     .section-nav {
       display: flex;
       gap: 5px;
-      padding-bottom: 1px;
+      padding: 1px 1px 3px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
@@ -154,7 +163,7 @@
     .section-nav::-webkit-scrollbar { display: none; }
     .section-nav a {
       flex: 0 0 auto;
-      padding: 5px 7px;
+      padding: 7px 10px;
       border: 1px solid var(--line);
       border-radius: 999px;
       color: var(--ink);
@@ -168,20 +177,21 @@
       padding-top: 3px;
     }
     .dict-section h2 {
-      margin: 0 0 5px;
+      margin: 2px 0 6px;
       padding-left: 2px;
       font-size: .78rem;
       line-height: 1;
       text-transform: uppercase;
-      color: var(--accent);
+      color: var(--ink);
+      letter-spacing: .04em;
     }
     .list { display: grid; gap: var(--gap); }
     .phrase-cols {
       display: grid;
-      grid-template-columns: minmax(0, 1.08fr) minmax(0, 1.02fr) minmax(0, .9fr);
-      gap: 7px;
+      grid-template-columns: minmax(0, 1.12fr) minmax(0, 1.05fr) minmax(0, .9fr);
+      gap: 8px;
       margin: 0 0 4px;
-      padding: 0 8px;
+      padding: 0 10px;
       color: var(--muted);
       font-size: .7rem;
       font-weight: 850;
@@ -189,14 +199,14 @@
     }
     .phrase {
       display: grid;
-      grid-template-columns: minmax(0, 1.08fr) minmax(0, 1.02fr) minmax(0, .9fr);
-      column-gap: 7px;
+      grid-template-columns: minmax(0, 1.12fr) minmax(0, 1.05fr) minmax(0, .9fr);
+      column-gap: 8px;
       row-gap: 2px;
       padding: var(--pad);
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 14px;
       background: var(--panel);
-      box-shadow: 0 1px 0 rgba(92, 64, 31, .03);
+      box-shadow: 0 1px 0 rgba(34, 34, 34, .03);
     }
     .de {
       grid-column: 3;
@@ -204,6 +214,11 @@
       font-size: .98rem;
       font-weight: 800;
       line-height: 1.18;
+    }
+    .en, .pr, .de {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      hyphens: auto;
     }
     .en {
       grid-column: 1;
@@ -216,7 +231,7 @@
     .pr {
       grid-column: 2;
       grid-row: 1;
-      color: var(--accent);
+      color: var(--accent-deep);
       font-size: .84rem;
       font-weight: 700;
       line-height: 1.18;
@@ -227,9 +242,9 @@
       gap: 9px;
     }
     .card {
-      padding: 11px;
+      padding: 14px;
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 24px;
       background: var(--panel);
       box-shadow: var(--shadow);
     }
@@ -239,6 +254,24 @@
       font-size: .98rem;
       line-height: 1.1;
       text-transform: none;
+    }
+    .ticket-board,
+    .photo-board {
+      display: grid;
+      gap: 8px;
+    }
+    .ticket-board h2,
+    .photo-board h2 {
+      margin: 0 2px;
+      color: var(--ink);
+      font-size: .98rem;
+      line-height: 1.1;
+    }
+    .ticket-board p,
+    .photo-board p {
+      margin: -4px 2px 0;
+      color: var(--muted);
+      font-size: .84rem;
     }
     .meta, .card p {
       margin: 4px 0 0;
@@ -256,7 +289,7 @@
       gap: 9px;
       align-items: start;
       padding: 9px;
-      border-radius: 10px;
+      border-radius: 16px;
       background: var(--soft);
     }
     .tickets {
@@ -270,7 +303,7 @@
       grid-template-columns: minmax(0, 1fr) 86px;
       overflow: hidden;
       border: 1px solid var(--line);
-      border-radius: 18px;
+      border-radius: 24px;
       background: var(--panel);
       box-shadow: var(--shadow);
     }
@@ -291,7 +324,7 @@
     .ticket-main {
       display: grid;
       gap: 8px;
-      padding: 12px;
+      padding: 14px;
     }
     .airline {
       display: flex;
@@ -329,7 +362,7 @@
       height: 28px;
       border-radius: 999px;
       background: var(--accent-soft);
-      color: var(--accent);
+      color: var(--accent-deep);
       font-weight: 900;
     }
     .ticket-meta {
@@ -349,7 +382,7 @@
       place-items: center;
       padding: 10px 7px;
       border-left: 1px dashed #c7c7c7;
-      background: linear-gradient(180deg, var(--accent), #e61e4d);
+      background: linear-gradient(180deg, var(--accent), var(--accent-deep));
       color: var(--accent-ink);
       text-align: center;
     }
@@ -366,7 +399,7 @@
       text-transform: uppercase;
     }
     .time {
-      color: var(--accent);
+      color: var(--accent-deep);
       font-size: .78rem;
       font-weight: 850;
     }
@@ -376,7 +409,7 @@
       padding: 3px 6px;
       border-radius: 999px;
       background: var(--accent-soft);
-      color: var(--accent);
+      color: var(--accent-deep);
       font-size: .72rem;
       font-weight: 800;
     }
@@ -390,10 +423,10 @@
       min-height: 112px;
       padding: 9px;
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 20px;
       background:
-        linear-gradient(140deg, rgba(177, 42, 36, .14), transparent 48%),
-        linear-gradient(320deg, rgba(44, 111, 104, .12), transparent 52%),
+        linear-gradient(140deg, rgba(255, 56, 92, .15), transparent 48%),
+        linear-gradient(320deg, rgba(0, 132, 137, .12), transparent 52%),
         var(--soft);
       display: flex;
       align-items: end;
@@ -406,7 +439,7 @@
       gap: 3px;
       margin-top: 8px;
       padding: 9px;
-      border-radius: 10px;
+      border-radius: 16px;
       background: var(--soft);
     }
     .message strong {
@@ -420,7 +453,7 @@
       margin-top: 9px;
       padding: 7px 11px;
       border-radius: 999px;
-      background: var(--accent);
+      background: linear-gradient(90deg, var(--accent), var(--accent-deep));
       color: var(--accent-ink);
       font-size: .82rem;
       font-weight: 850;
@@ -444,8 +477,8 @@
       gap: 6px;
       width: min(780px, 100%);
       margin: 0 auto;
-      padding: 8px 10px calc(env(safe-area-inset-bottom) + 8px);
-      background: color-mix(in srgb, var(--bg) 94%, transparent);
+      padding: 8px 10px calc(env(safe-area-inset-bottom) + 9px);
+      background: rgba(255, 255, 255, .92);
       border-top: 1px solid var(--line);
       backdrop-filter: blur(14px);
     }
@@ -454,7 +487,7 @@
       place-items: center;
       gap: 2px;
       min-height: 48px;
-      border-radius: 13px;
+      border-radius: 999px;
       border: 1px solid transparent;
       background: transparent;
       font-size: .75rem;
@@ -466,12 +499,19 @@
       stroke-width: 2.3;
     }
     .tab[aria-current="page"] {
-      background: var(--accent);
-      border-color: var(--accent);
+      background: var(--ink);
+      border-color: var(--ink);
       color: var(--accent-ink);
+      box-shadow: var(--shadow);
     }
     @media (min-width: 560px) {
       .app { padding-inline: 14px; }
+      .tools {
+        grid-template-columns: 1fr auto auto auto auto;
+      }
+      input {
+        grid-column: auto;
+      }
       .brand {
         grid-template-columns: auto 1fr auto;
         justify-items: start;
@@ -696,7 +736,7 @@
         </div>
       </div>
       <div class="cards">
-        <article class="card wide">
+        <section class="ticket-board wide">
           <h2>Flight Tickets</h2>
           <p>Sample ticket stubs for the upcoming trip legs.</p>
           <div class="tickets">
@@ -752,7 +792,7 @@
               </div>
             </article>
           </div>
-        </article>
+        </section>
         <article class="card">
           <h2>Activity Notes</h2>
           <p class="meta">Tickets, meeting points, opening hours, backups.</p>
@@ -772,7 +812,7 @@
         </div>
       </div>
       <div class="cards">
-        <article class="card wide">
+        <section class="photo-board wide">
           <h2>Photo Spots</h2>
           <div class="photo-grid">
             <div class="photo">Stephansplatz</div>
@@ -780,7 +820,7 @@
             <div class="photo">Schönbrunn</div>
             <div class="photo">Belvedere</div>
           </div>
-        </article>
+        </section>
         <article class="card wide">
           <h2>iCloud Shared Gallery</h2>
           <p>iCloud Shared Albums can publish a public website link. Apple does not reliably allow those pages to be embedded here as an iframe, so use this spot for the public album link when you have it.</p>
