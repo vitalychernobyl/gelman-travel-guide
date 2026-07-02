@@ -8,9 +8,9 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="icon" href="app-logo.png" type="image/png">
+  <link rel="manifest" href="manifest.webmanifest?v=17">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
+  <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
     :root {
       --font: 15px;
@@ -647,7 +647,7 @@
   <div class="app">
     <header>
       <div class="brand">
-        <img class="logo" src="app-logo.png" alt="Gelman Travel Guide logo">
+        <img class="logo" src="app-logo.png?v=17" alt="Gelman Travel Guide logo">
         <div class="brand-text">
           <h1>Gelman Travel Guide</h1>
           <p class="sub">Austria pocket guide</p>
@@ -1199,7 +1199,7 @@
       applyPrefs();
       showCity(localStorage.gelmanCity || "all");
       showPage(localStorage.gelmanPage || "dictionary");
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=17");
     })();
   </script>
 </body>
