@@ -1,4 +1,4 @@
-const CACHE = "gelman-travel-guide-v3";
+const CACHE = "gelman-travel-guide-v4";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg"];
 
 self.addEventListener("install", event => {

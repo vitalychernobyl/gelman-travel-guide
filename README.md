@@ -5,8 +5,8 @@ A tiny mobile-first Austria travel guide. The app is plain HTML/CSS with a small
 It includes three bottom-tab pages:
 
 - Dictionary: English, pronunciation, and German travel phrases in three columns.
-- Plans: upcoming flights and activities.
-- Memories: photo spots and message notes.
+- Tickets: upcoming flight ticket stubs and activity notes.
+- Photos: photo spots, message notes, and a place for an iCloud shared album link.
 
 ## Run Locally
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#fbf7ef">
+  <meta name="theme-color" content="#ffffff">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -15,16 +15,16 @@
       --font: 15px;
       --pad: 8px;
       --gap: 6px;
-      --bg: #fbf7ef;
-      --ink: #221c16;
-      --muted: #71685d;
-      --line: #e5dccc;
-      --panel: #fffdfa;
-      --soft: #f3eadc;
-      --accent: #b12a24;
-      --accent-soft: #ffe9e4;
-      --accent-ink: #fffaf5;
-      --shadow: 0 10px 24px rgba(92, 64, 31, .08);
+      --bg: #f7f7f7;
+      --ink: #222222;
+      --muted: #717171;
+      --line: #dddddd;
+      --panel: #ffffff;
+      --soft: #f7f7f7;
+      --accent: #ff385c;
+      --accent-soft: #fff0f3;
+      --accent-ink: #ffffff;
+      --shadow: 0 8px 24px rgba(0, 0, 0, .08);
     }
     [data-density="comfortable"] { --pad: 11px; --gap: 9px; }
     * { box-sizing: border-box; }
@@ -47,6 +47,7 @@
     header {
       margin: -10px -10px 10px;
       padding: calc(env(safe-area-inset-top) + 10px) 10px 10px;
+      background: var(--panel);
       border-bottom: 1px solid var(--line);
     }
     .brand {
@@ -57,9 +58,9 @@
       text-align: center;
     }
     .logo {
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
       box-shadow: var(--shadow);
     }
     .brand-text {
@@ -78,7 +79,7 @@
       font-size: .78rem;
     }
     .trip-pill {
-      padding: 5px 8px;
+      padding: 5px 10px;
       border: 1px solid var(--line);
       border-radius: 999px;
       background: var(--panel);
@@ -96,7 +97,7 @@
       gap: 8px;
       padding: 10px;
       border: 1px solid var(--line);
-      border-radius: 10px;
+      border-radius: 14px;
       background: var(--panel);
       box-shadow: var(--shadow);
     }
@@ -121,7 +122,7 @@
     input, button {
       min-height: 34px;
       border: 1px solid var(--line);
-      border-radius: 9px;
+      border-radius: 12px;
       background: var(--panel);
       color: var(--ink);
       font: inherit;
@@ -193,7 +194,7 @@
       row-gap: 2px;
       padding: var(--pad);
       border: 1px solid var(--line);
-      border-radius: 9px;
+      border-radius: 12px;
       background: var(--panel);
       box-shadow: 0 1px 0 rgba(92, 64, 31, .03);
     }
@@ -258,6 +259,112 @@
       border-radius: 10px;
       background: var(--soft);
     }
+    .tickets {
+      display: grid;
+      gap: 10px;
+      margin-top: 9px;
+    }
+    .ticket {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 86px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .ticket::before,
+    .ticket::after {
+      content: "";
+      position: absolute;
+      right: 76px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      z-index: 1;
+    }
+    .ticket::before { top: -10px; }
+    .ticket::after { bottom: -10px; }
+    .ticket-main {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+    }
+    .airline {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .route {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+    }
+    .city {
+      min-width: 0;
+    }
+    .city strong {
+      display: block;
+      font-size: 1rem;
+      line-height: 1.05;
+    }
+    .city span {
+      color: var(--muted);
+      font-size: .76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .plane-line {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 900;
+    }
+    .ticket-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      color: var(--muted);
+      font-size: .78rem;
+    }
+    .ticket-meta strong {
+      display: block;
+      color: var(--ink);
+      font-size: .86rem;
+    }
+    .ticket-stub {
+      display: grid;
+      place-items: center;
+      padding: 10px 7px;
+      border-left: 1px dashed #c7c7c7;
+      background: linear-gradient(180deg, var(--accent), #e61e4d);
+      color: var(--accent-ink);
+      text-align: center;
+    }
+    .ticket-stub strong {
+      display: block;
+      font-size: 1rem;
+      line-height: 1;
+    }
+    .ticket-stub span {
+      display: block;
+      margin-top: 4px;
+      font-size: .68rem;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
     .time {
       color: var(--accent);
       font-size: .78rem;
@@ -304,6 +411,20 @@
     }
     .message strong {
       font-size: .86rem;
+    }
+    .link-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      margin-top: 9px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: var(--accent-ink);
+      font-size: .82rem;
+      font-weight: 850;
+      text-decoration: none;
     }
     .note {
       margin: 12px 0 0;
@@ -567,56 +688,83 @@
       <p class="note">Edit this guide by changing the phrase rows directly in this HTML file. Search works offline after the page is loaded; full installable offline mode needs the service worker file and a local or HTTPS host.</p>
     </main>
 
-    <main id="plans" class="page" data-page="plans" hidden>
+    <main id="tickets" class="page" data-page="tickets" hidden>
       <div class="page-head">
         <div>
-          <h2 class="page-title">Upcoming Flights & Activities</h2>
-          <p class="page-copy">A tiny trip board for the next things to check.</p>
+          <h2 class="page-title">Tickets</h2>
+          <p class="page-copy">Upcoming flights and activity reminders.</p>
         </div>
       </div>
       <div class="cards">
         <article class="card wide">
-          <h2>Travel Timeline</h2>
-          <p>Replace these sample items with real flight and activity details.</p>
-          <div class="timeline">
-            <div class="plan-item">
-              <div class="time">Day 1</div>
-              <div>
-                <h3>Flight to Vienna</h3>
-                <p>Arrival, airport train, hotel check-in.</p>
-                <span class="status">Confirm time</span>
+          <h2>Flight Tickets</h2>
+          <p>Sample ticket stubs for the upcoming trip legs.</p>
+          <div class="tickets">
+            <article class="ticket">
+              <div class="ticket-main">
+                <div class="airline"><span>Austrian Airlines</span><span>OS</span></div>
+                <div class="route">
+                  <div class="city"><strong>Vienna</strong><span>VIE</span></div>
+                  <div class="plane-line">→</div>
+                  <div class="city"><strong>Amsterdam</strong><span>AMS</span></div>
+                </div>
+                <div class="ticket-meta">
+                  <div><span>Date</span><strong>Fri, Jul 3, 2026</strong></div>
+                  <div><span>Note</span><strong>Tomorrow</strong></div>
+                </div>
               </div>
-            </div>
-            <div class="plan-item">
-              <div class="time">Day 2</div>
-              <div>
-                <h3>Old Town Walk</h3>
-                <p>Stephansplatz, Graben, Hofburg, coffee break.</p>
-                <span class="status">Morning</span>
+              <div class="ticket-stub">
+                <div><strong>AMS</strong><span>Austrian</span></div>
               </div>
-            </div>
-            <div class="plan-item">
-              <div class="time">Day 3</div>
-              <div>
-                <h3>Schönbrunn & Naschmarkt</h3>
-                <p>Palace gardens, lunch, evening reservations.</p>
-                <span class="status">Booked</span>
+            </article>
+            <article class="ticket">
+              <div class="ticket-main">
+                <div class="airline"><span>British Airways</span><span>BA</span></div>
+                <div class="route">
+                  <div class="city"><strong>Vienna</strong><span>VIE</span></div>
+                  <div class="plane-line">→</div>
+                  <div class="city"><strong>London</strong><span>LHR</span></div>
+                </div>
+                <div class="ticket-meta">
+                  <div><span>Date</span><strong>Thu, Jul 9, 2026</strong></div>
+                  <div><span>Note</span><strong>Next week</strong></div>
+                </div>
               </div>
-            </div>
+              <div class="ticket-stub">
+                <div><strong>LON</strong><span>British</span></div>
+              </div>
+            </article>
+            <article class="ticket">
+              <div class="ticket-main">
+                <div class="airline"><span>United Airlines</span><span>UA</span></div>
+                <div class="route">
+                  <div class="city"><strong>London</strong><span>LHR</span></div>
+                  <div class="plane-line">→</div>
+                  <div class="city"><strong>Washington, DC</strong><span>IAD</span></div>
+                </div>
+                <div class="ticket-meta">
+                  <div><span>Date</span><strong>Sat, Jul 11, 2026</strong></div>
+                  <div><span>Note</span><strong>The 11th</strong></div>
+                </div>
+              </div>
+              <div class="ticket-stub">
+                <div><strong>WDC</strong><span>United</span></div>
+              </div>
+            </article>
           </div>
-        </article>
-        <article class="card">
-          <h2>Flight Notes</h2>
-          <p class="meta">Airline, record locator, terminal, baggage, seat.</p>
         </article>
         <article class="card">
           <h2>Activity Notes</h2>
           <p class="meta">Tickets, meeting points, opening hours, backups.</p>
         </article>
+        <article class="card">
+          <h2>Travel Notes</h2>
+          <p class="meta">Record locators, terminals, baggage, seats.</p>
+        </article>
       </div>
     </main>
 
-    <main id="memories" class="page" data-page="memories" hidden>
+    <main id="photos" class="page" data-page="photos" hidden>
       <div class="page-head">
         <div>
           <h2 class="page-title">Photos & Messages</h2>
@@ -632,6 +780,11 @@
             <div class="photo">Schönbrunn</div>
             <div class="photo">Belvedere</div>
           </div>
+        </article>
+        <article class="card wide">
+          <h2>iCloud Shared Gallery</h2>
+          <p>iCloud Shared Albums can publish a public website link. Apple does not reliably allow those pages to be embedded here as an iframe, so use this spot for the public album link when you have it.</p>
+          <a class="link-button" href="https://support.apple.com/en-us/108314" target="_blank" rel="noopener">Create public iCloud link</a>
         </article>
         <article class="card">
           <h2>Messages</h2>
@@ -656,13 +809,13 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M5 4h10a4 4 0 0 1 4 4v12H9a4 4 0 0 0-4-4z"/><path d="M5 4v16"/><path d="M9 8h6M9 12h4"/></svg>
         <span>Dictionary</span>
       </button>
-      <button class="tab" type="button" data-target="plans">
+      <button class="tab" type="button" data-target="tickets">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M7 3v4M17 3v4"/><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 12h3M13 12h3M8 16h3"/></svg>
-        <span>Plans</span>
+        <span>Tickets</span>
       </button>
-      <button class="tab" type="button" data-target="memories">
+      <button class="tab" type="button" data-target="photos">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="3"/><circle cx="9" cy="10" r="1.5"/><path d="m7 17 4-4 3 3 2-2 3 3"/></svg>
-        <span>Memories</span>
+        <span>Photos</span>
       </button>
     </nav>
   </div>
@@ -691,6 +844,9 @@
         sections.forEach(sec => sec.classList.toggle("empty", !sec.querySelector(".phrase:not(.hide)")));
       }
       function showPage(name) {
+        if (name === "plans") name = "tickets";
+        if (name === "memories") name = "photos";
+        if (!pages.some(page => page.dataset.page === name)) name = "dictionary";
         pages.forEach(page => { page.hidden = page.dataset.page !== name; });
         tabs.forEach(tab => tab.setAttribute("aria-current", tab.dataset.target === name ? "page" : "false"));
         localStorage.gelmanPage = name;
