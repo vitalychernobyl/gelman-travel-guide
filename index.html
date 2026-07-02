@@ -3,29 +3,31 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#f3f3f1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
   <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="app-logo.png" type="image/png">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <style>
     :root {
       --font: 15px;
       --pad: 8px;
       --gap: 6px;
-      --bg: #ffffff;
-      --ink: #222222;
-      --muted: #717171;
-      --line: #dddddd;
-      --panel: #ffffff;
-      --soft: #f7f7f7;
-      --accent: #ff385c;
-      --accent-deep: #e31c5f;
-      --accent-soft: #fff8fa;
+      --bg: #f3f3f1;
+      --ink: #25211c;
+      --muted: #756f67;
+      --line: #ddd8d0;
+      --panel: #fffefa;
+      --soft: #ecebe7;
+      --accent: #d97823;
+      --accent-deep: #a84f15;
+      --accent-soft: #fff1e3;
       --accent-ink: #ffffff;
-      --shadow: 0 6px 18px rgba(34, 34, 34, .08);
+      --shadow: 0 8px 20px rgba(59, 52, 43, .08);
     }
     [data-density="comfortable"] { --pad: 11px; --gap: 9px; }
     * { box-sizing: border-box; }
@@ -35,7 +37,7 @@
     }
     body {
       margin: 0;
-      background: linear-gradient(180deg, #ffffff 0%, #ffffff 52%, #f7f7f7 100%);
+      background: linear-gradient(180deg, #f9f9f7 0%, var(--bg) 62%, #e9e8e4 100%);
       color: var(--ink);
       font: var(--font)/1.25 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
       letter-spacing: 0;
@@ -48,8 +50,8 @@
     header {
       margin: -10px -10px 10px;
       padding: calc(env(safe-area-inset-top) + 14px) 16px 12px;
-      background: rgba(255, 255, 255, .92);
-      border-bottom: 1px solid rgba(221, 221, 221, .85);
+      background: rgba(249, 249, 247, .92);
+      border-bottom: 1px solid rgba(221, 216, 208, .92);
       backdrop-filter: blur(18px);
       position: sticky;
       top: 0;
@@ -63,9 +65,10 @@
       text-align: left;
     }
     .logo {
-      width: 48px;
-      height: 48px;
+      width: 52px;
+      height: 52px;
       border-radius: 14px;
+      background: #ffffff;
       box-shadow: var(--shadow);
     }
     .brand-text {
@@ -87,7 +90,7 @@
       padding: 7px 11px;
       border: 1px solid var(--line);
       border-radius: 999px;
-      background: var(--panel);
+      background: #ffffff;
       color: var(--ink);
       font-size: .76rem;
       font-weight: 800;
@@ -104,7 +107,7 @@
       padding: 12px;
       border: 1px solid var(--line);
       border-radius: 24px;
-      background: var(--panel);
+      background: #ffffff;
       box-shadow: var(--shadow);
     }
     .page-title {
@@ -129,7 +132,7 @@
       min-height: 38px;
       border: 1px solid var(--line);
       border-radius: 999px;
-      background: var(--panel);
+      background: #ffffff;
       color: var(--ink);
       font: inherit;
     }
@@ -146,6 +149,10 @@
       padding: 5px 10px;
       font-weight: 700;
       white-space: nowrap;
+    }
+    .tools button {
+      padding-inline: 6px;
+      font-size: .86rem;
     }
     button[aria-pressed="true"] {
       background: var(--accent);
@@ -167,7 +174,7 @@
       border: 1px solid var(--line);
       border-radius: 999px;
       color: var(--ink);
-      background: var(--panel);
+      background: #ffffff;
       text-decoration: none;
       font-size: .78rem;
       font-weight: 700;
@@ -425,8 +432,8 @@
       border: 1px solid var(--line);
       border-radius: 20px;
       background:
-        linear-gradient(140deg, rgba(255, 56, 92, .15), transparent 48%),
-        linear-gradient(320deg, rgba(0, 132, 137, .12), transparent 52%),
+        linear-gradient(140deg, rgba(217, 120, 35, .18), transparent 48%),
+        linear-gradient(320deg, rgba(103, 120, 109, .13), transparent 52%),
         var(--soft);
       display: flex;
       align-items: end;
@@ -478,7 +485,7 @@
       width: min(780px, 100%);
       margin: 0 auto;
       padding: 8px 10px calc(env(safe-area-inset-bottom) + 9px);
-      background: rgba(255, 255, 255, .92);
+      background: rgba(249, 249, 247, .94);
       border-top: 1px solid var(--line);
       backdrop-filter: blur(14px);
     }
@@ -499,8 +506,8 @@
       stroke-width: 2.3;
     }
     .tab[aria-current="page"] {
-      background: var(--ink);
-      border-color: var(--ink);
+      background: var(--accent);
+      border-color: var(--accent);
       color: var(--accent-ink);
       box-shadow: var(--shadow);
     }
@@ -527,7 +534,7 @@
   <div class="app">
     <header>
       <div class="brand">
-        <img class="logo" src="icon.svg" alt="Gelman Travel Guide logo">
+        <img class="logo" src="app-logo.png" alt="Gelman Travel Guide logo">
         <div class="brand-text">
           <h1>Gelman Travel Guide</h1>
           <p class="sub">Austria pocket guide</p>
