@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=17">
+  <link rel="manifest" href="manifest.webmanifest?v=18">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -33,12 +33,13 @@
     html {
       scroll-behavior: smooth;
       -webkit-text-size-adjust: 100%;
+      font-size: var(--font);
     }
     body {
       margin: 0;
       background: linear-gradient(180deg, #f9f9f7 0%, var(--bg) 62%, #e9e8e4 100%);
       color: var(--ink);
-      font: var(--font)/1.25 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      font: 1rem/1.25 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
       letter-spacing: 0;
     }
     .app {
@@ -121,9 +122,9 @@
       color: var(--muted);
       font-size: .82rem;
     }
-    .tools {
+    .page-actions {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 6px;
       align-items: center;
     }
@@ -149,7 +150,7 @@
       font-weight: 700;
       white-space: nowrap;
     }
-    .tools button {
+    .page-actions button {
       padding-inline: 6px;
       font-size: .86rem;
     }
@@ -591,7 +592,7 @@
       bottom: 0;
       z-index: 3;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(48px, .68fr) minmax(48px, .68fr);
       gap: 6px;
       width: min(780px, 100%);
       margin: 0 auto;
@@ -600,7 +601,8 @@
       border-top: 1px solid var(--line);
       backdrop-filter: blur(14px);
     }
-    .tab {
+    .tab,
+    .font-tab {
       display: grid;
       place-items: center;
       gap: 2px;
@@ -610,6 +612,14 @@
       background: transparent;
       font-size: .75rem;
       color: var(--muted);
+    }
+    .font-tab {
+      background: #ffffff;
+      border-color: var(--line);
+      color: var(--ink);
+      font-size: .9rem;
+      font-weight: 850;
+      box-shadow: 0 2px 8px rgba(34, 34, 34, .05);
     }
     .tab svg {
       width: 19px;
@@ -624,12 +634,6 @@
     }
     @media (min-width: 560px) {
       .app { padding-inline: 14px; }
-      .tools {
-        grid-template-columns: 1fr auto auto auto auto;
-      }
-      input {
-        grid-column: auto;
-      }
       .brand {
         grid-template-columns: auto 1fr auto;
         justify-items: start;
@@ -662,10 +666,7 @@
           <h2 class="page-title">Austria Travel Dictionary</h2>
           <p class="page-copy">Quick phrases in three easy-scan columns.</p>
         </div>
-        <div class="tools">
-          <input id="search" type="search" placeholder="Search" autocomplete="off" aria-label="Search phrases">
-          <button id="smaller" type="button" aria-label="Decrease font size">A−</button>
-          <button id="larger" type="button" aria-label="Increase font size">A+</button>
+        <div class="page-actions">
           <button id="density" type="button" aria-pressed="false">Compact</button>
           <button id="reset" type="button">Reset</button>
         </div>
@@ -845,7 +846,7 @@
         </div>
       </section>
 
-      <p class="note">Edit this guide by changing the phrase rows directly in this HTML file. Search works offline after the page is loaded; full installable offline mode needs the service worker file and a local or HTTPS host.</p>
+      <p class="note">Edit this guide by changing the phrase rows directly in this HTML file. Offline mode needs the service worker file and a local or HTTPS host.</p>
     </main>
 
     <main id="plans" class="page" data-page="plans" hidden>
@@ -1145,15 +1146,14 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="3"/><circle cx="9" cy="10" r="1.5"/><path d="m7 17 4-4 3 3 2-2 3 3"/></svg>
         <span>Photos</span>
       </button>
+      <button class="font-tab" id="smaller" type="button" aria-label="Decrease font size">A−</button>
+      <button class="font-tab" id="larger" type="button" aria-label="Increase font size">A+</button>
     </nav>
   </div>
 
   <script>
     (() => {
       const root = document.documentElement;
-      const search = document.querySelector("#search");
-      const rows = [...document.querySelectorAll(".phrase")];
-      const sections = [...document.querySelectorAll(".dict-section")];
       const pages = [...document.querySelectorAll("[data-page]")];
       const tabs = [...document.querySelectorAll(".tab")];
       const cityTabs = [...document.querySelectorAll(".city-tab")];
@@ -1167,11 +1167,6 @@
         root.dataset.density = density;
         document.querySelector("#density").textContent = density === "compact" ? "Compact" : "Comfort";
         document.querySelector("#density").setAttribute("aria-pressed", density !== "compact");
-      }
-      function filter() {
-        const q = search.value.trim().toLowerCase();
-        rows.forEach(row => row.classList.toggle("hide", q && !row.textContent.toLowerCase().includes(q)));
-        sections.forEach(sec => sec.classList.toggle("empty", !sec.querySelector(".phrase:not(.hide)")));
       }
       function showPage(name) {
         if (name === "tickets") name = "plans";
@@ -1192,14 +1187,13 @@
       document.querySelector("#smaller").onclick = () => { size = Math.max(12, size - 1); localStorage.gelmanFont = size; applyPrefs(); };
       document.querySelector("#larger").onclick = () => { size = Math.min(22, size + 1); localStorage.gelmanFont = size; applyPrefs(); };
       document.querySelector("#density").onclick = () => { density = density === "compact" ? "comfortable" : "compact"; localStorage.gelmanDensity = density; applyPrefs(); };
-      document.querySelector("#reset").onclick = () => { size = 15; density = "compact"; search.value = ""; localStorage.removeItem("gelmanFont"); localStorage.removeItem("gelmanDensity"); applyPrefs(); filter(); };
-      search.addEventListener("input", filter);
+      document.querySelector("#reset").onclick = () => { size = 15; density = "compact"; localStorage.removeItem("gelmanFont"); localStorage.removeItem("gelmanDensity"); applyPrefs(); };
       tabs.forEach(tab => tab.addEventListener("click", () => showPage(tab.dataset.target)));
       cityTabs.forEach(tab => tab.addEventListener("click", () => showCity(tab.dataset.cityTarget)));
       applyPrefs();
       showCity(localStorage.gelmanCity || "all");
       showPage(localStorage.gelmanPage || "dictionary");
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=17");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=18");
     })();
   </script>
 </body>
