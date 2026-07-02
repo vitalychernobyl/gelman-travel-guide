@@ -175,10 +175,21 @@
       color: var(--accent);
     }
     .list { display: grid; gap: var(--gap); }
+    .phrase-cols {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 1.02fr) minmax(0, .9fr);
+      gap: 7px;
+      margin: 0 0 4px;
+      padding: 0 8px;
+      color: var(--muted);
+      font-size: .7rem;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
     .phrase {
       display: grid;
-      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
-      column-gap: 9px;
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 1.02fr) minmax(0, .9fr);
+      column-gap: 7px;
       row-gap: 2px;
       padding: var(--pad);
       border: 1px solid var(--line);
@@ -187,24 +198,27 @@
       box-shadow: 0 1px 0 rgba(92, 64, 31, .03);
     }
     .de {
-      grid-column: 2;
+      grid-column: 3;
       grid-row: 1;
-      font-size: 1.03rem;
+      font-size: .98rem;
       font-weight: 800;
       line-height: 1.18;
     }
     .en {
       grid-column: 1;
       grid-row: 1;
-      color: var(--muted);
-      font-size: .84rem;
-      line-height: 1.16;
+      color: var(--ink);
+      font-size: .88rem;
+      font-weight: 700;
+      line-height: 1.18;
     }
     .pr {
       grid-column: 2;
+      grid-row: 1;
       color: var(--accent);
-      font-size: .8rem;
-      line-height: 1.15;
+      font-size: .84rem;
+      font-weight: 700;
+      line-height: 1.18;
     }
     .hide, .dict-section.empty { display: none; }
     .cards {
@@ -365,7 +379,7 @@
       <div class="page-head">
         <div>
           <h2 class="page-title">Austria Travel Dictionary</h2>
-          <p class="page-copy">Quick phrases with English and German side by side.</p>
+          <p class="page-copy">Quick phrases in three easy-scan columns.</p>
         </div>
         <div class="tools">
           <input id="search" type="search" placeholder="Search" autocomplete="off" aria-label="Search phrases">
@@ -390,6 +404,7 @@
 
       <section class="dict-section" id="essentials">
         <h2>Essentials</h2>
+        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation</span><span>German</span></div>
         <div class="list">
           <article class="phrase"><div class="en">Hello / good day</div><div class="de">Grüß Gott.</div><div class="pr">groos got</div></article>
           <article class="phrase"><div class="en">Hi / bye</div><div class="de">Servus.</div><div class="pr">SEHR-voos</div></article>
@@ -408,6 +423,7 @@
 
       <section class="dict-section" id="restaurant">
         <h2>Restaurant</h2>
+        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation</span><span>German</span></div>
         <div class="list">
           <article class="phrase"><div class="en">A table for two, please.</div><div class="de">Einen Tisch für zwei, bitte.</div><div class="pr">EYE-nen tish fuer tsvy</div></article>
           <article class="phrase"><div class="en">The menu, please.</div><div class="de">Die Speisekarte, bitte.</div><div class="pr">dee SHPY-zuh-kar-tuh</div></article>
@@ -426,6 +442,7 @@
 
       <section class="dict-section" id="getting-around">
         <h2>Getting Around</h2>
+        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation</span><span>German</span></div>
         <div class="list">
           <article class="phrase"><div class="en">Where is the subway?</div><div class="de">Wo ist die U-Bahn?</div><div class="pr">vo ist dee OO-bahn</div></article>
           <article class="phrase"><div class="en">Where is the train station?</div><div class="de">Wo ist der Bahnhof?</div><div class="pr">vo ist dair BAHN-hof</div></article>
@@ -442,6 +459,7 @@
 
       <section class="dict-section" id="shopping">
         <h2>Shopping</h2>
+        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation</span><span>German</span></div>
         <div class="list">
           <article class="phrase"><div class="en">How much does it cost?</div><div class="de">Wie viel kostet das?</div><div class="pr">vee feel KOS-tet das</div></article>
           <article class="phrase"><div class="en">That's too expensive.</div><div class="de">Das ist zu teuer.</div><div class="pr">das ist tsoo TOY-er</div></article>
@@ -456,6 +474,7 @@
 
       <section class="dict-section" id="hotel">
         <h2>Hotel</h2>
+        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation</span><span>German</span></div>
         <div class="list">
           <article class="phrase"><div class="en">I have a reservation.</div><div class="de">Ich habe eine Reservierung.</div><div class="pr">ikh HAH-buh EYE-nuh reh-zer-VEE-roong</div></article>
           <article class="phrase"><div class="en">My name is...</div><div class="de">Mein Name ist...</div><div class="pr">mine NAH-muh ist</div></article>
@@ -470,6 +489,7 @@
 
       <section class="dict-section" id="emergency">
         <h2>Emergency</h2>
+        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation</span><span>German</span></div>
         <div class="list">
           <article class="phrase"><div class="en">Help!</div><div class="de">Hilfe!</div><div class="pr">HIL-fuh</div></article>
           <article class="phrase"><div class="en">Call the police!</div><div class="de">Rufen Sie die Polizei!</div><div class="pr">ROO-fen zee dee po-lee-TSY</div></article>
@@ -484,6 +504,7 @@
 
       <section class="dict-section" id="numbers">
         <h2>Numbers</h2>
+        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation</span><span>German</span></div>
         <div class="list">
           <article class="phrase"><div class="en">0 / 1 / 2</div><div class="de">null / eins / zwei</div><div class="pr">nool / ines / tsvy</div></article>
           <article class="phrase"><div class="en">3 / 4 / 5</div><div class="de">drei / vier / fünf</div><div class="pr">dry / feer / fuenf</div></article>
@@ -498,6 +519,7 @@
 
       <section class="dict-section" id="austrian-words">
         <h2>Austrian Words</h2>
+        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation</span><span>German</span></div>
         <div class="list">
           <article class="phrase"><div class="en">Austrian hello / goodbye</div><div class="de">Servus.</div><div class="pr">SEHR-voos</div></article>
           <article class="phrase"><div class="en">Austrian greeting</div><div class="de">Grüß Gott.</div><div class="pr">groos got</div></article>
@@ -514,6 +536,7 @@
 
       <section class="dict-section" id="vienna-coffee">
         <h2>Vienna Coffee</h2>
+        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation</span><span>German</span></div>
         <div class="list">
           <article class="phrase"><div class="en">Black coffee, espresso-like</div><div class="de">Ein kleiner Schwarzer.</div><div class="pr">ine KLY-ner SHVAR-tser</div></article>
           <article class="phrase"><div class="en">Double black coffee</div><div class="de">Ein großer Schwarzer.</div><div class="pr">ine GROH-ser SHVAR-tser</div></article>
@@ -528,6 +551,7 @@
 
       <section class="dict-section" id="handy-phrases">
         <h2>Handy Phrases</h2>
+        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation</span><span>German</span></div>
         <div class="list">
           <article class="phrase"><div class="en">Where is the restroom?</div><div class="de">Wo ist die Toilette?</div><div class="pr">vo ist dee toy-LET-tuh</div></article>
           <article class="phrase"><div class="en">Can you show me on the map?</div><div class="de">Können Sie es mir auf der Karte zeigen?</div><div class="pr">KOE-nen zee es meer owf dair KAR-tuh TSY-gen</div></article>
