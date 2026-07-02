@@ -279,6 +279,27 @@
       color: var(--muted);
       font-size: .84rem;
     }
+    .city-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 1px 1px 4px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .city-tabs::-webkit-scrollbar { display: none; }
+    .city-tab {
+      flex: 0 0 auto;
+      min-height: 35px;
+      padding: 7px 12px;
+      font-size: .8rem;
+      font-weight: 850;
+    }
+    .city-tab[aria-pressed="true"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-ink);
+    }
     .meta, .card p {
       margin: 4px 0 0;
       color: var(--muted);
@@ -302,6 +323,94 @@
       display: grid;
       gap: 10px;
       margin-top: 9px;
+    }
+    .city-plan {
+      display: grid;
+      gap: 9px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow: var(--shadow);
+    }
+    .city-plan h2 {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.05;
+    }
+    .city-plan h3 {
+      margin: 0 0 7px;
+      font-size: .82rem;
+      line-height: 1;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .city-title-row {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .city-title-row p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+    .plan-grid {
+      display: grid;
+      gap: 8px;
+    }
+    .plan-panel {
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+    }
+    .info-list {
+      display: grid;
+      gap: 7px;
+    }
+    .info-row {
+      display: grid;
+      grid-template-columns: 78px minmax(0, 1fr);
+      gap: 8px;
+      align-items: baseline;
+      font-size: .84rem;
+    }
+    .info-row span:first-child {
+      color: var(--muted);
+      font-size: .76rem;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+    .info-row strong {
+      font-size: .9rem;
+      line-height: 1.15;
+    }
+    .attractions {
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .attractions li {
+      display: grid;
+      gap: 2px;
+      padding: 8px;
+      border-radius: 14px;
+      background: var(--soft);
+    }
+    .attractions a {
+      color: var(--accent-deep);
+      font-size: .9rem;
+      font-weight: 850;
+      text-decoration: none;
+    }
+    .attractions span {
+      color: var(--muted);
+      font-size: .78rem;
     }
     .ticket {
       position: relative;
@@ -526,6 +635,8 @@
       .page-head, .card { border-radius: 14px; }
       .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .cards .wide { grid-column: 1 / -1; }
+      .plan-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .plan-panel.wide { grid-column: 1 / -1; }
     }
   </style>
 </head>
@@ -734,18 +845,33 @@
       <p class="note">Edit this guide by changing the phrase rows directly in this HTML file. Search works offline after the page is loaded; full installable offline mode needs the service worker file and a local or HTTPS host.</p>
     </main>
 
-    <main id="tickets" class="page" data-page="tickets" hidden>
+    <main id="plans" class="page" data-page="plans" hidden>
       <div class="page-head">
         <div>
-          <h2 class="page-title">Tickets</h2>
-          <p class="page-copy">Upcoming flights and activity reminders.</p>
+          <h2 class="page-title">Trip Plans</h2>
+          <p class="page-copy">Flights, hotels, dates, and places to explore by city.</p>
         </div>
       </div>
-      <div class="cards">
-        <section class="ticket-board wide">
-          <h2>Flight Tickets</h2>
-          <p>Sample ticket stubs for the upcoming trip legs.</p>
-          <div class="tickets">
+
+      <div class="city-tabs" aria-label="View plans by city">
+        <button class="city-tab" type="button" data-city-target="all" aria-pressed="true">All</button>
+        <button class="city-tab" type="button" data-city-target="vienna" aria-pressed="false">Vienna</button>
+        <button class="city-tab" type="button" data-city-target="amsterdam" aria-pressed="false">Amsterdam</button>
+        <button class="city-tab" type="button" data-city-target="london" aria-pressed="false">London</button>
+        <button class="city-tab" type="button" data-city-target="washington" aria-pressed="false">Washington, DC</button>
+      </div>
+
+      <section class="city-plan" data-city="vienna">
+        <div class="city-title-row">
+          <div>
+            <h2>Vienna</h2>
+            <p>Thu, Jul 2 - Fri, Jul 3, 2026</p>
+          </div>
+          <span class="status">Start</span>
+        </div>
+        <div class="plan-grid">
+          <article class="plan-panel">
+            <h3>Flight</h3>
             <article class="ticket">
               <div class="ticket-main">
                 <div class="airline"><span>Austrian Airlines</span><span>OS</span></div>
@@ -756,30 +882,100 @@
                 </div>
                 <div class="ticket-meta">
                   <div><span>Date</span><strong>Fri, Jul 3, 2026</strong></div>
-                  <div><span>Note</span><strong>Tomorrow</strong></div>
+                  <div><span>Time</span><strong>TBD</strong></div>
+                  <div><span>Leg</span><strong>To Amsterdam</strong></div>
+                  <div><span>Airline</span><strong>Austrian</strong></div>
                 </div>
               </div>
               <div class="ticket-stub">
                 <div><strong>AMS</strong><span>Austrian</span></div>
               </div>
             </article>
+          </article>
+          <article class="plan-panel">
+            <h3>Hotel</h3>
+            <div class="info-list">
+              <div class="info-row"><span>Name</span><strong>Add Vienna hotel</strong></div>
+              <div class="info-row"><span>Address</span><strong>Add address</strong></div>
+              <div class="info-row"><span>Check-in</span><strong>Thu, Jul 2, time TBD</strong></div>
+              <div class="info-row"><span>Check-out</span><strong>Fri, Jul 3, time TBD</strong></div>
+            </div>
+          </article>
+          <article class="plan-panel wide">
+            <h3>Top Attractions</h3>
+            <ul class="attractions">
+              <li><a href="https://www.schoenbrunn.at/en/" target="_blank" rel="noopener">Schönbrunn Palace</a><span>Imperial palace, gardens, and classic Vienna photos.</span></li>
+              <li><a href="https://www.belvedere.at/en" target="_blank" rel="noopener">Belvedere Museum</a><span>Palace museum and Klimt’s The Kiss.</span></li>
+              <li><a href="https://www.stephanskirche.at/" target="_blank" rel="noopener">St. Stephen’s Cathedral</a><span>Central cathedral and landmark tower views.</span></li>
+              <li><a href="https://www.praterwien.com/en" target="_blank" rel="noopener">Vienna Prater</a><span>Historic amusement park and giant ferris wheel.</span></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="city-plan" data-city="amsterdam">
+        <div class="city-title-row">
+          <div>
+            <h2>Amsterdam</h2>
+            <p>Fri, Jul 3 - Thu, Jul 9, 2026</p>
+          </div>
+          <span class="status">Next</span>
+        </div>
+        <div class="plan-grid">
+          <article class="plan-panel">
+            <h3>Flight</h3>
             <article class="ticket">
               <div class="ticket-main">
                 <div class="airline"><span>British Airways</span><span>BA</span></div>
                 <div class="route">
-                  <div class="city"><strong>Vienna</strong><span>VIE</span></div>
+                  <div class="city"><strong>Amsterdam</strong><span>AMS</span></div>
                   <div class="plane-line">→</div>
                   <div class="city"><strong>London</strong><span>LHR</span></div>
                 </div>
                 <div class="ticket-meta">
                   <div><span>Date</span><strong>Thu, Jul 9, 2026</strong></div>
-                  <div><span>Note</span><strong>Next week</strong></div>
+                  <div><span>Time</span><strong>TBD</strong></div>
+                  <div><span>Leg</span><strong>To London</strong></div>
+                  <div><span>Arrive</span><strong>From Vienna, Jul 3</strong></div>
                 </div>
               </div>
               <div class="ticket-stub">
                 <div><strong>LON</strong><span>British</span></div>
               </div>
             </article>
+          </article>
+          <article class="plan-panel">
+            <h3>Hotel</h3>
+            <div class="info-list">
+              <div class="info-row"><span>Name</span><strong>Add Amsterdam hotel</strong></div>
+              <div class="info-row"><span>Address</span><strong>Add address</strong></div>
+              <div class="info-row"><span>Check-in</span><strong>Fri, Jul 3, time TBD</strong></div>
+              <div class="info-row"><span>Check-out</span><strong>Thu, Jul 9, time TBD</strong></div>
+            </div>
+          </article>
+          <article class="plan-panel wide">
+            <h3>Top Attractions</h3>
+            <ul class="attractions">
+              <li><a href="https://www.rijksmuseum.nl/en" target="_blank" rel="noopener">Rijksmuseum</a><span>Dutch masters, design, and the museum garden.</span></li>
+              <li><a href="https://www.vangoghmuseum.nl/en" target="_blank" rel="noopener">Van Gogh Museum</a><span>Van Gogh works, letters, and special exhibitions.</span></li>
+              <li><a href="https://www.annefrank.org/en/" target="_blank" rel="noopener">Anne Frank House</a><span>Timed-entry museum in the original canal house.</span></li>
+              <li><a href="https://www.iamsterdam.com/en/whats-on/calendar/attractions-and-sights/nature-and-active/vondelpark" target="_blank" rel="noopener">Vondelpark</a><span>Easy walk, picnic, and reset spot near museums.</span></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="city-plan" data-city="london">
+        <div class="city-title-row">
+          <div>
+            <h2>London</h2>
+            <p>Thu, Jul 9 - Sat, Jul 11, 2026</p>
+          </div>
+          <span class="status">Weekend</span>
+        </div>
+        <div class="plan-grid">
+          <article class="plan-panel">
+            <h3>Flight</h3>
             <article class="ticket">
               <div class="ticket-main">
                 <div class="airline"><span>United Airlines</span><span>UA</span></div>
@@ -790,24 +986,75 @@
                 </div>
                 <div class="ticket-meta">
                   <div><span>Date</span><strong>Sat, Jul 11, 2026</strong></div>
-                  <div><span>Note</span><strong>The 11th</strong></div>
+                  <div><span>Time</span><strong>TBD</strong></div>
+                  <div><span>Leg</span><strong>To Washington, DC</strong></div>
+                  <div><span>Arrive</span><strong>From Amsterdam, Jul 9</strong></div>
                 </div>
               </div>
               <div class="ticket-stub">
                 <div><strong>WDC</strong><span>United</span></div>
               </div>
             </article>
+          </article>
+          <article class="plan-panel">
+            <h3>Hotel</h3>
+            <div class="info-list">
+              <div class="info-row"><span>Name</span><strong>Add London hotel</strong></div>
+              <div class="info-row"><span>Address</span><strong>Add address</strong></div>
+              <div class="info-row"><span>Check-in</span><strong>Thu, Jul 9, time TBD</strong></div>
+              <div class="info-row"><span>Check-out</span><strong>Sat, Jul 11, time TBD</strong></div>
+            </div>
+          </article>
+          <article class="plan-panel wide">
+            <h3>Top Attractions</h3>
+            <ul class="attractions">
+              <li><a href="https://www.britishmuseum.org/" target="_blank" rel="noopener">British Museum</a><span>Global collections and major galleries.</span></li>
+              <li><a href="https://www.hrp.org.uk/tower-of-london/" target="_blank" rel="noopener">Tower of London</a><span>Historic fortress, Crown Jewels, and river views.</span></li>
+              <li><a href="https://www.westminster-abbey.org/" target="_blank" rel="noopener">Westminster Abbey</a><span>Royal church, poets, coronations, and history.</span></li>
+              <li><a href="https://www.londoneye.com/" target="_blank" rel="noopener">London Eye</a><span>Big skyline view beside the Thames.</span></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="city-plan" data-city="washington">
+        <div class="city-title-row">
+          <div>
+            <h2>Washington, DC</h2>
+            <p>Sat, Jul 11, 2026 onward</p>
           </div>
-        </section>
-        <article class="card">
-          <h2>Activity Notes</h2>
-          <p class="meta">Tickets, meeting points, opening hours, backups.</p>
-        </article>
-        <article class="card">
-          <h2>Travel Notes</h2>
-          <p class="meta">Record locators, terminals, baggage, seats.</p>
-        </article>
-      </div>
+          <span class="status">Home leg</span>
+        </div>
+        <div class="plan-grid">
+          <article class="plan-panel">
+            <h3>Flight</h3>
+            <div class="info-list">
+              <div class="info-row"><span>Arrive</span><strong>United Airlines from London</strong></div>
+              <div class="info-row"><span>Date</span><strong>Sat, Jul 11, 2026</strong></div>
+              <div class="info-row"><span>Time</span><strong>TBD</strong></div>
+              <div class="info-row"><span>Airport</span><strong>IAD / add actual airport</strong></div>
+            </div>
+          </article>
+          <article class="plan-panel">
+            <h3>Hotel</h3>
+            <div class="info-list">
+              <div class="info-row"><span>Name</span><strong>Add DC hotel or home base</strong></div>
+              <div class="info-row"><span>Address</span><strong>Add address</strong></div>
+              <div class="info-row"><span>Check-in</span><strong>Sat, Jul 11, time TBD</strong></div>
+              <div class="info-row"><span>Check-out</span><strong>Add date/time</strong></div>
+            </div>
+          </article>
+          <article class="plan-panel wide">
+            <h3>Top Attractions</h3>
+            <ul class="attractions">
+              <li><a href="https://washington.org/dc-neighborhoods/national-mall" target="_blank" rel="noopener">National Mall</a><span>Monuments, museums, and the classic DC walk.</span></li>
+              <li><a href="https://www.si.edu/museums" target="_blank" rel="noopener">Smithsonian Museums</a><span>Free museums across the Mall and the city.</span></li>
+              <li><a href="https://www.nps.gov/linc/index.htm" target="_blank" rel="noopener">Lincoln Memorial</a><span>Iconic memorial and Reflecting Pool views.</span></li>
+              <li><a href="https://www.nga.gov/" target="_blank" rel="noopener">National Gallery of Art</a><span>Major art collections, sculpture garden, and exhibitions.</span></li>
+            </ul>
+          </article>
+        </div>
+      </section>
     </main>
 
     <main id="photos" class="page" data-page="photos" hidden>
@@ -855,9 +1102,9 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M5 4h10a4 4 0 0 1 4 4v12H9a4 4 0 0 0-4-4z"/><path d="M5 4v16"/><path d="M9 8h6M9 12h4"/></svg>
         <span>Dictionary</span>
       </button>
-      <button class="tab" type="button" data-target="tickets">
+      <button class="tab" type="button" data-target="plans">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M7 3v4M17 3v4"/><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 12h3M13 12h3M8 16h3"/></svg>
-        <span>Tickets</span>
+        <span>Plans</span>
       </button>
       <button class="tab" type="button" data-target="photos">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="3"/><circle cx="9" cy="10" r="1.5"/><path d="m7 17 4-4 3 3 2-2 3 3"/></svg>
@@ -874,6 +1121,8 @@
       const sections = [...document.querySelectorAll(".dict-section")];
       const pages = [...document.querySelectorAll("[data-page]")];
       const tabs = [...document.querySelectorAll(".tab")];
+      const cityTabs = [...document.querySelectorAll(".city-tab")];
+      const cityPlans = [...document.querySelectorAll(".city-plan")];
       let size = Number(localStorage.gelmanFont || 15);
       let density = localStorage.gelmanDensity || "compact";
 
@@ -890,13 +1139,19 @@
         sections.forEach(sec => sec.classList.toggle("empty", !sec.querySelector(".phrase:not(.hide)")));
       }
       function showPage(name) {
-        if (name === "plans") name = "tickets";
+        if (name === "tickets") name = "plans";
         if (name === "memories") name = "photos";
         if (!pages.some(page => page.dataset.page === name)) name = "dictionary";
         pages.forEach(page => { page.hidden = page.dataset.page !== name; });
         tabs.forEach(tab => tab.setAttribute("aria-current", tab.dataset.target === name ? "page" : "false"));
         localStorage.gelmanPage = name;
         scrollTo(0, 0);
+      }
+      function showCity(city) {
+        if (!cityPlans.some(plan => plan.dataset.city === city)) city = "all";
+        cityTabs.forEach(tab => tab.setAttribute("aria-pressed", tab.dataset.cityTarget === city));
+        cityPlans.forEach(plan => { plan.hidden = city !== "all" && plan.dataset.city !== city; });
+        localStorage.gelmanCity = city;
       }
 
       document.querySelector("#smaller").onclick = () => { size = Math.max(12, size - 1); localStorage.gelmanFont = size; applyPrefs(); };
@@ -905,7 +1160,9 @@
       document.querySelector("#reset").onclick = () => { size = 15; density = "compact"; search.value = ""; localStorage.removeItem("gelmanFont"); localStorage.removeItem("gelmanDensity"); applyPrefs(); filter(); };
       search.addEventListener("input", filter);
       tabs.forEach(tab => tab.addEventListener("click", () => showPage(tab.dataset.target)));
+      cityTabs.forEach(tab => tab.addEventListener("click", () => showCity(tab.dataset.cityTarget)));
       applyPrefs();
+      showCity(localStorage.gelmanCity || "all");
       showPage(localStorage.gelmanPage || "dictionary");
       if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js");
     })();

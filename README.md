@@ -5,7 +5,7 @@ A tiny mobile-first Austria travel guide. The app is plain HTML/CSS with a small
 It includes three bottom-tab pages:
 
 - Dictionary: English, pronunciation, and German travel phrases in three columns.
-- Tickets: upcoming flight ticket stubs and activity notes.
+- Trip Plans: city-by-city plans with flights, hotel placeholders, dates, times, and attraction links.
 - Photos: photo spots, message notes, and a place for an iCloud shared album link.
 
 Logo files:
@@ -13,6 +13,7 @@ Logo files:
 - `app-logo.png`: square app/Home Screen icon.
 - `apple-touch-icon.png`: iPhone Home Screen icon.
 - `app-logo-circle.svg`: circular logo version for reuse elsewhere.
+- `app-logo-circle.png`: circular transparent PNG logo version for reuse elsewhere.
 
 ## Run Locally
 

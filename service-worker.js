@@ -1,5 +1,5 @@
-const CACHE = "gelman-travel-guide-v11";
-const FILES = ["./", "./index.html", "./manifest.webmanifest", "./app-logo.png", "./apple-touch-icon.png", "./app-logo-circle.svg"];
+const CACHE = "gelman-travel-guide-v12";
+const FILES = ["./", "./index.html", "./manifest.webmanifest", "./app-logo.png", "./apple-touch-icon.png", "./app-logo-circle.svg", "./app-logo-circle.png"];
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES)));
