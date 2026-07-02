@@ -1,4 +1,4 @@
-const CACHE = "gelman-travel-guide-v12";
+const CACHE = "gelman-travel-guide-v13";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./app-logo.png", "./apple-touch-icon.png", "./app-logo-circle.svg", "./app-logo-circle.png"];
 
 self.addEventListener("install", event => {

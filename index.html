@@ -492,6 +492,9 @@
       color: var(--ink);
       font-size: .86rem;
     }
+    .ticket + .info-list {
+      margin-top: 9px;
+    }
     .ticket-stub {
       display: grid;
       place-items: center;
@@ -881,16 +884,27 @@
                   <div class="city"><strong>Amsterdam</strong><span>AMS</span></div>
                 </div>
                 <div class="ticket-meta">
-                  <div><span>Date</span><strong>Fri, Jul 3, 2026</strong></div>
-                  <div><span>Time</span><strong>TBD</strong></div>
-                  <div><span>Leg</span><strong>To Amsterdam</strong></div>
-                  <div><span>Airline</span><strong>Austrian</strong></div>
+                  <div><span>Flight</span><strong>OS315</strong></div>
+                  <div><span>Date</span><strong>Jul 3, 2026</strong></div>
+                  <div><span>Depart</span><strong>2:55 PM</strong></div>
+                  <div><span>Arrive</span><strong>4:50 PM</strong></div>
                 </div>
               </div>
               <div class="ticket-stub">
                 <div><strong>AMS</strong><span>Austrian</span></div>
               </div>
             </article>
+            <div class="info-list">
+              <div class="info-row"><span>Code</span><strong>B94UZE</strong></div>
+              <div class="info-row"><span>Class</span><strong>Economy</strong></div>
+              <div class="info-row"><span>Duration</span><strong>1h 55m, direct</strong></div>
+              <div class="info-row"><span>Operated</span><strong>Austrian Airlines</strong></div>
+              <div class="info-row"><span>VIE</span><strong>Terminal 3, Gate Area F</strong></div>
+              <div class="info-row"><span>AMS</span><strong>Gate -, Terminal -</strong></div>
+              <div class="info-row"><span>Bag drop</span><strong>Area 3, Counter no. 361-368</strong></div>
+              <div class="info-row"><span>Deadline</span><strong>2:05 PM</strong></div>
+              <div class="info-row"><span>Seats</span><strong>7F, 7E, 7D, 7C</strong></div>
+            </div>
           </article>
           <article class="plan-panel">
             <h3>Hotel</h3>
@@ -917,7 +931,7 @@
         <div class="city-title-row">
           <div>
             <h2>Amsterdam</h2>
-            <p>Fri, Jul 3 - Thu, Jul 9, 2026</p>
+            <p>Fri, Jul 3 - Mon, Jul 6, 2026</p>
           </div>
           <span class="status">Next</span>
         </div>
@@ -930,19 +944,27 @@
                 <div class="route">
                   <div class="city"><strong>Amsterdam</strong><span>AMS</span></div>
                   <div class="plane-line">→</div>
-                  <div class="city"><strong>London</strong><span>LHR</span></div>
+                  <div class="city"><strong>London City</strong><span>LCY</span></div>
                 </div>
                 <div class="ticket-meta">
-                  <div><span>Date</span><strong>Thu, Jul 9, 2026</strong></div>
-                  <div><span>Time</span><strong>TBD</strong></div>
-                  <div><span>Leg</span><strong>To London</strong></div>
-                  <div><span>Arrive</span><strong>From Vienna, Jul 3</strong></div>
+                  <div><span>Flight</span><strong>BA8454</strong></div>
+                  <div><span>Date</span><strong>Jul 6, 2026</strong></div>
+                  <div><span>Depart</span><strong>14:20</strong></div>
+                  <div><span>Arrive</span><strong>14:25</strong></div>
                 </div>
               </div>
               <div class="ticket-stub">
-                <div><strong>LON</strong><span>British</span></div>
+                <div><strong>LCY</strong><span>British</span></div>
               </div>
             </article>
+            <div class="info-list">
+              <div class="info-row"><span>Duration</span><strong>1h 5m, direct</strong></div>
+              <div class="info-row"><span>Operated</span><strong>BA Cityflyer</strong></div>
+              <div class="info-row"><span>Aircraft</span><strong>Embraer 190</strong></div>
+              <div class="info-row"><span>Class</span><strong>Economy, Selling Class O</strong></div>
+              <div class="info-row"><span>From</span><strong>Amsterdam, Amsterdam (AMS)</strong></div>
+              <div class="info-row"><span>To</span><strong>City Airport, London (LCY)</strong></div>
+            </div>
           </article>
           <article class="plan-panel">
             <h3>Hotel</h3>
@@ -950,7 +972,7 @@
               <div class="info-row"><span>Name</span><strong>Add Amsterdam hotel</strong></div>
               <div class="info-row"><span>Address</span><strong>Add address</strong></div>
               <div class="info-row"><span>Check-in</span><strong>Fri, Jul 3, time TBD</strong></div>
-              <div class="info-row"><span>Check-out</span><strong>Thu, Jul 9, time TBD</strong></div>
+              <div class="info-row"><span>Check-out</span><strong>Mon, Jul 6, time TBD</strong></div>
             </div>
           </article>
           <article class="plan-panel wide">
@@ -969,9 +991,9 @@
         <div class="city-title-row">
           <div>
             <h2>London</h2>
-            <p>Thu, Jul 9 - Sat, Jul 11, 2026</p>
+            <p>Mon, Jul 6 - Sat, Jul 11, 2026</p>
           </div>
-          <span class="status">Weekend</span>
+          <span class="status">Stay</span>
         </div>
         <div class="plan-grid">
           <article class="plan-panel">
@@ -985,23 +1007,33 @@
                   <div class="city"><strong>Washington, DC</strong><span>IAD</span></div>
                 </div>
                 <div class="ticket-meta">
-                  <div><span>Date</span><strong>Sat, Jul 11, 2026</strong></div>
-                  <div><span>Time</span><strong>TBD</strong></div>
-                  <div><span>Leg</span><strong>To Washington, DC</strong></div>
-                  <div><span>Arrive</span><strong>From Amsterdam, Jul 9</strong></div>
+                  <div><span>Flight</span><strong>UA925</strong></div>
+                  <div><span>Date</span><strong>Jul 11, 2026</strong></div>
+                  <div><span>Depart</span><strong>4:40 PM</strong></div>
+                  <div><span>Arrive</span><strong>8:00 PM</strong></div>
                 </div>
               </div>
               <div class="ticket-stub">
-                <div><strong>WDC</strong><span>United</span></div>
+                <div><strong>IAD</strong><span>United</span></div>
               </div>
             </article>
+            <div class="info-list">
+              <div class="info-row"><span>Code</span><strong>I3VRZG</strong></div>
+              <div class="info-row"><span>Duration</span><strong>8h 20m</strong></div>
+              <div class="info-row"><span>Operated</span><strong>United Airlines</strong></div>
+              <div class="info-row"><span>From</span><strong>LHR, London, GB</strong></div>
+              <div class="info-row"><span>To</span><strong>IAD, Washington, DC</strong></div>
+              <div class="info-row"><span>Anton</span><strong>Seat 44L, Travel Options Bundle</strong></div>
+              <div class="info-row"><span>Slava</span><strong>Seat 44C, Travel Options Bundle</strong></div>
+              <div class="info-row"><span>Alex</span><strong>Seat 44B, Travel Options Bundle</strong></div>
+            </div>
           </article>
           <article class="plan-panel">
             <h3>Hotel</h3>
             <div class="info-list">
               <div class="info-row"><span>Name</span><strong>Add London hotel</strong></div>
               <div class="info-row"><span>Address</span><strong>Add address</strong></div>
-              <div class="info-row"><span>Check-in</span><strong>Thu, Jul 9, time TBD</strong></div>
+              <div class="info-row"><span>Check-in</span><strong>Mon, Jul 6, time TBD</strong></div>
               <div class="info-row"><span>Check-out</span><strong>Sat, Jul 11, time TBD</strong></div>
             </div>
           </article>
@@ -1029,10 +1061,11 @@
           <article class="plan-panel">
             <h3>Flight</h3>
             <div class="info-list">
-              <div class="info-row"><span>Arrive</span><strong>United Airlines from London</strong></div>
+              <div class="info-row"><span>Arrive</span><strong>United UA925 from London</strong></div>
               <div class="info-row"><span>Date</span><strong>Sat, Jul 11, 2026</strong></div>
-              <div class="info-row"><span>Time</span><strong>TBD</strong></div>
-              <div class="info-row"><span>Airport</span><strong>IAD / add actual airport</strong></div>
+              <div class="info-row"><span>Time</span><strong>8:00 PM</strong></div>
+              <div class="info-row"><span>Airport</span><strong>IAD, Washington, DC</strong></div>
+              <div class="info-row"><span>Code</span><strong>I3VRZG</strong></div>
             </div>
           </article>
           <article class="plan-panel">
