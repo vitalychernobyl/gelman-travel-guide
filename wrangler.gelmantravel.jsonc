@@ -1,0 +1,16 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "gelmantravel-antonreport",
+  "main": "cloudflare/gelmantravel-worker.js",
+  "compatibility_date": "2026-07-03",
+  "workers_dev": false,
+  "routes": [
+    {
+      "pattern": "antonreport.com/gelmantravel*",
+      "zone_name": "antonreport.com"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}
