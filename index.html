@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=42">
+  <link rel="manifest" href="manifest.webmanifest?v=43">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -55,6 +55,28 @@
       margin: 0;
       padding: 0;
     }
+    .hero-brand.pin-boost { z-index: 80; }
+    .app-top.pinned {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 60;
+      width: auto;
+      display: flex;
+      justify-content: center;
+      padding: calc(env(safe-area-inset-top, 0px) + 6px) 18px 8px;
+      background: rgba(37, 33, 28, .8);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .22);
+    }
+    .app-top.pinned .trip-city-tabs {
+      margin-inline: 0;
+      width: min(100vw - 36px, 780px);
+    }
+    .app-top-placeholder { display: none; }
+    .app-top-placeholder.active { display: block; }
     .app-title {
       margin: 0;
       color: #fffefa;
@@ -427,6 +449,32 @@
       background: var(--accent);
       border-color: var(--accent);
       color: var(--accent-ink);
+    }
+    .attraction-filters {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 2px 1px 8px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .attraction-filters::-webkit-scrollbar { display: none; }
+    .attraction-filter {
+      flex: 0 0 auto;
+      min-height: 33px;
+      padding: 6px 12px;
+      font-size: .8rem;
+      font-weight: 850;
+    }
+    .attraction-filter[aria-pressed="true"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--accent-ink);
+    }
+    .rating-tag {
+      background: var(--accent) !important;
+      color: var(--accent-ink) !important;
+      font-weight: 900;
     }
     .city-mark {
       display: inline-grid;
@@ -1592,7 +1640,7 @@
             </div>
           </details>
           <article class="hotel-key">
-            <img src="london-boot-house.png?v=2" alt="Magical boot house for London stay">
+            <img src="london-stay-house.webp?v=1" alt="Boot house on the moors for London stay">
             <div class="hotel-key-body">
               <h3>London stay</h3>
               <div class="info-list">
@@ -1761,6 +1809,7 @@
         <button id="larger" type="button" aria-label="Increase font size">A+</button>
         <button id="density" type="button" aria-pressed="false">Compact</button>
         <button id="reset" type="button">Reset</button>
+        <button id="famShare" type="button" hidden>💬 Fam</button>
       </div>
       <button class="float-toggle" id="controlsToggle" type="button" aria-expanded="false" aria-controls="controlMenu">Aa</button>
     </div>
@@ -1813,7 +1862,7 @@
       let deferredInstallPrompt = null;
       let size = Number(localStorage.gelmanFont || 15);
       let density = localStorage.gelmanDensity || "compact";
-      let activeCity = localStorage.gelmanTripCity || "vienna";
+      let activeCity = "vienna";
       const HEROES = {
         vienna: "vienna-hero.png?v=1",
         amsterdam: "amsterdam-hero.png?v=1",
@@ -1986,14 +2035,58 @@
           code: "AMS",
           city: "Amsterdam",
           hotel: "Avani Museum Quarter",
+          filters: ["Museum", "Fish", "Coffee", "Nightlife", "Outdoors"],
           items: [
-            { title: "Rijksmuseum", category: "Museum", location: "Museumplein", price: "About €25", distance: "5 min from hotel", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/South_facade_of_the_Rijksmuseum_Amsterdam_%28DSCF0528%29.jpg/960px-South_facade_of_the_Rijksmuseum_Amsterdam_%28DSCF0528%29.jpg", description: "Amsterdam's major art museum, close enough to Avani that it can be a proper visit or a short greatest-hits strike: Rembrandt, Vermeer, ship models, Delftware, and a grand building.", why: "Best nearby heavyweight museum. It is polished, easy to navigate from the hotel, and the garden/cafe make it less punishing than a pure march through paintings.", details: "Book a timed ticket if the group cares about avoiding friction. The Gallery of Honour and Night Watch area are the obvious core route if attention spans are limited.", link: "https://www.rijksmuseum.nl/en", tickets: "https://www.rijksmuseum.nl/en/visit/practical-info/opening-hours-and-prices", map: "https://www.google.com/maps/search/?api=1&query=Rijksmuseum%2C%20Amsterdam" },
-            ["Van Gogh Museum", "Museum", "Museumplein", "About €24", "6 min from hotel", "Van Gogh paintings, drawings, and letters.", "Good because it is close and emotionally direct.", "Timed tickets are usually essential.", "https://www.vangoghmuseum.nl/en"],
-            ["Anne Frank House", "History", "Jordaan", "About €16", "20-25 min from hotel", "Timed-entry museum in the original canal house.", "Important and memorable, but needs booking discipline.", "Reserve ahead; walk-up is not the plan.", "https://www.annefrank.org/en/"],
-            ["Vondelpark", "Park", "Amsterdam-Zuid", "Free", "12 min from hotel", "Big urban park near the museum district.", "Good reset walk near the hotel.", "Useful between museum slots.", "https://www.google.com/search?q=Vondelpark+Amsterdam"],
-            { title: "Stubbe's Haring", category: "Food", location: "Singel canal", price: "Snack prices", distance: "20-25 min from hotel", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Haring_04.jpg/960px-Haring_04.jpg", description: "A tiny classic herring stand near the canals. This is the quick Amsterdam fish stop: herring with onions and pickles, eaten standing up like you suddenly understand Dutch weather.", why: "Best for the actual herring ritual without making dinner complicated. It is fast, memorable, and very Amsterdam in the best slightly-briny way.", details: "Order herring with onions and pickles if you want the canonical version. If raw herring is a hard no, use it as a photo/snack stop and keep moving.", link: "https://www.google.com/search?q=Stubbe%27s+Haring+Amsterdam", tickets: "https://www.google.com/search?q=Stubbe%27s+Haring+Amsterdam", map: "https://www.google.com/maps/search/?api=1&query=Stubbe%27s%20Haring%20Amsterdam" },
-            { title: "Vishuisje Herengracht", category: "Food", location: "Herengracht", price: "Snack / casual meal", distance: "20-25 min from hotel", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/2021-10-13-Kibbeling-4943.jpg/960px-2021-10-13-Kibbeling-4943.jpg", description: "Canal-side fish counter energy: herring if you are feeling traditional, fried fish if the group wants something warmer and less philosophically slippery.", why: "Good compromise fish stop because not everyone has to commit to raw herring. It keeps the seafood mission casual and easy to fold into canal wandering.", details: "Use it as a snack stop rather than a formal restaurant plan. Herring, kibbeling, and simple fish plates are the point.", link: "https://www.google.com/search?q=Vishuisje+Herengracht+Amsterdam", tickets: "https://www.google.com/search?q=Vishuisje+Herengracht+Amsterdam", map: "https://www.google.com/maps/search/?api=1&query=Vishuisje%20Herengracht%20Amsterdam" },
-            { title: "The Seafood Bar", category: "Food", location: "Amsterdam", price: "Restaurant prices", distance: "10-25 min from hotel", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Plateau_van_zeevruchten.jpg/960px-Plateau_van_zeevruchten.jpg", description: "A polished seafood restaurant option when the group wants a real sit-down meal: oysters, fish, shellfish platters, fries, and enough non-herring choices to preserve family peace.", why: "Best when you want seafood without gambling on a tiny stand being enough food for everyone. It feels like an actual dinner plan, not just a snack mission.", details: "Reserve if aiming for dinner. Check the nearest branch from where you are that day; Amsterdam has multiple locations.", link: "https://www.theseafoodbar.com/", tickets: "https://www.theseafoodbar.com/reservations", map: "https://www.google.com/maps/search/?api=1&query=The%20Seafood%20Bar%20Amsterdam" }
+            { title: "Rijksmuseum", category: "Museum", rating: 4.7, location: "Museumplein", price: "About €25", distance: "5 min walk from hotel", description: "Amsterdam's heavyweight art museum: Rembrandt, Vermeer, ship models, Delftware, and a grand building five minutes from the hotel.", why: "Best nearby museum anchor. The Gallery of Honour works even as a short greatest-hits strike.", details: "Book a timed ticket. Night Watch room plus Gallery of Honour is the core route if attention spans are limited.", link: "https://www.rijksmuseum.nl/en" },
+            { title: "Van Gogh Museum", category: "Museum", rating: 4.6, location: "Museumplein", price: "About €24", distance: "3 min walk from hotel", description: "The world's largest Van Gogh collection: paintings, drawings, and letters arranged chronologically.", why: "Close, emotionally direct, and doable in 90 minutes without museum fatigue.", details: "Timed tickets are essentially mandatory; book days ahead in July.", link: "https://www.vangoghmuseum.nl/en" },
+            { title: "Anne Frank House", category: "Museum", rating: 4.5, location: "Jordaan", price: "About €16", distance: "20-25 min from hotel", description: "Timed-entry museum in the original canal house with the secret annex.", why: "Important and memorable; the most affecting hour in Amsterdam.", details: "Tickets release online in advance and sell out; walk-up is not a plan.", link: "https://www.annefrank.org/en/" },
+            { title: "NEMO Science Museum", category: "Museum", rating: 4.5, location: "Oosterdok", price: "About €17.50", distance: "25-30 min from hotel", description: "Hands-on science museum in the big green ship-shaped building, with a free rooftop terrace.", why: "Best pick if anyone in the group is under 16 or over-museumed; everything is touchable.", details: "The rooftop square is free even without a museum ticket and has wide harbor views.", link: "https://www.nemosciencemuseum.nl/en/" },
+            { title: "Rembrandt House Museum", category: "Museum", rating: 4.5, location: "Jodenbreestraat", price: "About €17.50", distance: "20-25 min from hotel", description: "Rembrandt's actual house and studio, restored with his etchings and daily demonstrations.", why: "Small, personal, and quick — the anti-blockbuster museum stop.", details: "Etching and paint-making demos run through the day and are worth timing.", link: "https://www.rembrandthuis.nl/en/" },
+            { title: "National Maritime Museum", category: "Museum", rating: 4.5, location: "Kattenburgerplein", price: "About €17.50", distance: "25-30 min from hotel", description: "Dutch seafaring history in a grand arsenal building, with a replica East Indiaman ship to board.", why: "The replica ship keeps it fun; the courtyard roof is architectural dessert.", details: "Combine with NEMO next door; both share the harbor area.", link: "https://www.hetscheepvaartmuseum.com/" },
+            { title: "Stedelijk Museum", category: "Museum", rating: 4.4, location: "Museumplein", price: "About €22.50", distance: "3 min walk from hotel", description: "Modern and contemporary art in the building locals call the bathtub: Mondrian, Malevich, design classics.", why: "Right next to the hotel and the palate cleanser after the old masters.", details: "The design wing is the sleeper hit if paintings are wearing thin.", link: "https://www.stedelijk.nl/en" },
+            { title: "Micropia", category: "Museum", rating: 4.4, location: "Artis, Plantage", price: "About €16", distance: "25-30 min from hotel", description: "The world's only microbe museum: kiss-o-meter, glowing bacteria, and cheerful body-horror.", why: "Genuinely unlike any other museum and reliably wins over teenagers.", details: "Compact — pair it with the Artis zoo next door or the Plantage neighborhood.", link: "https://www.micropia.nl/en/" },
+            { title: "H'ART Museum", category: "Museum", rating: 4.4, location: "Amstel", price: "About €17.50", distance: "20-25 min from hotel", description: "Canal-side exhibition palace (the former Hermitage) hosting rotating world-class loans.", why: "Beautiful Amstel building and rarely crowded; check the current show.", details: "Exhibitions rotate — look up what is on before committing.", link: "https://hartmuseum.nl/en/" },
+            { title: "Moco Museum", category: "Museum", rating: 4.2, location: "Museumplein", price: "About €22", distance: "4 min walk from hotel", description: "Small townhouse museum of Banksy, Warhol, and immersive digital rooms.", why: "The Instagram-friendly counterweight to the serious Museumplein neighbors.", details: "It is small for the price; go for the vibe, not for depth.", link: "https://mocomuseum.com/" },
+            { title: "John Dory", category: "Fish", rating: 4.7, location: "Prinsengracht", price: "Tasting menus from about €48", distance: "15-20 min from hotel", description: "Canal-side fish restaurant doing refined multi-course seafood without stiffness.", why: "The strongest pure-fish kitchen in town for a proper sit-down dinner.", details: "Reserve ahead; the chef's menu is the move.", link: "https://www.johndory.nl/" },
+            { title: "Stubbe's Haring", category: "Fish", rating: 4.6, location: "Singel bridge", price: "Snack prices", distance: "20-25 min from hotel", description: "The classic herring stand on the Singel: herring, onions, pickles, done standing up.", why: "The canonical Amsterdam fish ritual — fast, memorable, slightly briny.", details: "If raw herring is a hard no, treat it as a photo stop and keep moving.", link: "https://www.google.com/search?q=Stubbe%27s+Haring+Amsterdam" },
+            { title: "Vishuisje Herengracht", category: "Fish", rating: 4.6, location: "Herengracht", price: "Snack / casual", distance: "20-25 min from hotel", description: "Canal-side fish counter: herring for the traditionalists, kibbeling for everyone else.", why: "The compromise fish stop — nobody has to commit to raw herring.", details: "Kibbeling (fried cod bites) is the crowd-pleaser order.", link: "https://www.google.com/search?q=Vishuisje+Herengracht+Amsterdam" },
+            { title: "Pesca", category: "Fish", rating: 4.6, location: "Rozengracht", price: "Market pricing", distance: "20-25 min from hotel", description: "Theatre-of-fish concept: pick your fish and sides at the market counter, they cook it.", why: "Interactive dinner that keeps a group entertained and everyone choosing their own fish.", details: "Walk-ins queue; book online to skip the wait.", link: "https://www.google.com/search?q=Pesca+Theatre+of+Fish+Amsterdam" },
+            { title: "Bar Fisk", category: "Fish", rating: 4.5, location: "De Pijp", price: "Sharing plates", distance: "12-18 min from hotel", description: "Tel Aviv-style fish bar in De Pijp: crudo, grilled whole fish, warm pita energy.", why: "Loudest fun-per-fish ratio in town and close to the hotel side of the city.", details: "Sharing-style — order broadly and argue over the last crudo.", link: "https://barfisk.nl/" },
+            { title: "The Seafood Bar", category: "Fish", rating: 4.5, location: "Van Baerlestraat", price: "Restaurant prices", distance: "5 min walk from hotel", description: "Polished seafood brasserie: oysters, platters, fish and chips, and enough non-fish outs to keep the peace.", why: "The no-drama family seafood dinner five minutes from the hotel.", details: "Reserve for dinner; the fruits de mer platter is the centerpiece move.", link: "https://www.theseafoodbar.com/" },
+            { title: "Visaandeschelde", category: "Fish", rating: 4.5, location: "Scheldeplein", price: "Fine dining", distance: "15-20 min from hotel", description: "White-tablecloth fish institution opposite the RAI, running since 1999.", why: "The grown-up fish dinner: oysters, sole meunière, serious wine list.", details: "Better for a longer dinner than a quick bite; reserve.", link: "https://visaandeschelde.nl/" },
+            { title: "Bridges", category: "Fish", rating: 4.5, location: "Oudezijds Voorburgwal", price: "Fine dining", distance: "20-25 min from hotel", description: "Seafood-focused fine dining inside the Sofitel Grand, courtyard included.", why: "The special-occasion option if one night deserves an upgrade.", details: "Smart-casual works; the raw bar is the signature.", link: "https://bridgesrestaurant.nl/" },
+            { title: "Mos", category: "Fish", rating: 4.4, location: "IJdock", price: "Menus from about €45", distance: "20-25 min from hotel", description: "Waterfront restaurant on the IJ with fish-leaning menus and harbor views.", why: "Best water view of the fish options, especially at sunset.", details: "Ask for a window table when booking.", link: "https://mosamsterdam.nl/" },
+            { title: "Lucius", category: "Fish", rating: 4.4, location: "Spuistraat", price: "Restaurant prices", distance: "18-25 min from hotel", description: "Old-school fish restaurant serving classics since 1975: Dover sole, oysters, no reinvention.", why: "Zero-gimmick seafood for traditionalists in the group.", details: "The daily catch on the blackboard is the safe call.", link: "https://www.lucius.nl/" },
+            { title: "Back to Black", category: "Coffee", rating: 4.7, location: "Weteringstraat", price: "Coffee prices", distance: "10-12 min from hotel", description: "Tiny specialty roaster with house-roasted beans, homemade cakes, and a resident cat.", why: "Best pure coffee quality within walking range of the hotel.", details: "Small inside — aim for off-peak or take a canal bench.", link: "https://www.backtoblackcoffee.nl/" },
+            { title: "Monks Coffee Roasters", category: "Coffee", rating: 4.6, location: "Bilderdijkstraat", price: "Coffee + brunch", distance: "15-20 min from hotel", description: "Australian-style roastery cafe with serious flat whites and a proper brunch menu.", why: "The best coffee-plus-breakfast combination if mornings need food too.", details: "Weekend brunch queues; weekdays are calm.", link: "https://www.monkscoffee.nl/" },
+            { title: "White Label Coffee", category: "Coffee", rating: 4.6, location: "Jan Evertsenstraat", price: "Coffee prices", distance: "20-25 min from hotel", description: "Neighborhood roastery loved by the city's baristas, minimal and unfussy.", why: "The locals' pick — worth it if the coffee mission is serious.", details: "They roast on-site; take beans home as souvenirs.", link: "https://whitelabelcoffee.nl/" },
+            { title: "Lot Sixty One", category: "Coffee", rating: 4.6, location: "Kinkerstraat", price: "Coffee prices", distance: "18-22 min from hotel", description: "Hole-in-the-wall roaster with the roasting machine in the window and standing-room espresso.", why: "Widely rated the city's best espresso shot, full stop.", details: "Mostly takeaway; grab a stoop seat and watch the bikes.", link: "https://lotsixtyonecoffee.com/" },
+            { title: "Winkel 43", category: "Coffee", rating: 4.5, location: "Noordermarkt, Jordaan", price: "Cafe prices", distance: "20-25 min from hotel", description: "Corner cafe famous for the city's definitive apple pie with whipped cream.", why: "Coffee is the excuse; the appeltaart is the actual attraction.", details: "Busiest on Saturday market mornings — which is also the best time.", link: "https://winkel43.nl/" },
+            { title: "Screaming Beans", category: "Coffee", rating: 4.5, location: "Hartenstraat, 9 Streets", price: "Coffee prices", distance: "18-22 min from hotel", description: "Compact specialty bar in the Nine Streets shopping maze.", why: "The natural caffeine stop mid canal-belt wandering.", details: "Pairs perfectly with a 9 Streets browse loop.", link: "https://screamingbeans.nl/" },
+            { title: "Bocca Coffee", category: "Coffee", rating: 4.5, location: "Kerkstraat", price: "Coffee prices", distance: "12-15 min from hotel", description: "Spacious flagship of one of the original Dutch specialty roasters.", why: "Room to actually sit down as a group, unlike the tiny bars.", details: "Filter flights if anyone wants to taste-compare origins.", link: "https://bocca.nl/" },
+            { title: "Toki", category: "Coffee", rating: 4.5, location: "Binnen Dommersstraat, Jordaan", price: "Coffee + pastry", distance: "20-25 min from hotel", description: "Bright Jordaan corner cafe with excellent espresso and Japanese-leaning pastries.", why: "Best-looking room of the coffee list and never a bad bake.", details: "The matcha and yuzu items are the differentiators.", link: "https://www.google.com/search?q=Toki+coffee+Jordaan+Amsterdam" },
+            { title: "Scandinavian Embassy", category: "Coffee", rating: 4.4, location: "Sarphatipark", price: "Coffee + brunch", distance: "12-18 min from hotel", description: "Nordic cafe opposite Sarphatipark: light-roast coffee, salmon on rye, cardamom buns.", why: "Combines with a Sarphatipark walk for a compact De Pijp morning.", details: "Light Scandinavian roasts — expect brighter, fruitier cups.", link: "https://scandinavianembassy.nl/" },
+            { title: "Coffee & Coconuts", category: "Coffee", rating: 4.4, location: "Ceintuurbaan, De Pijp", price: "Cafe prices", distance: "12-18 min from hotel", description: "Three-story tropical cafe inside a converted 1920s cinema.", why: "The big-group-friendly option — space is never the problem here.", details: "Go for the building and brunch; coconut everything is on theme.", link: "https://coffeeandcoconuts.com/" },
+            { title: "Jordaan brown cafés", category: "Nightlife", rating: 4.7, location: "Jordaan", price: "Bar prices", distance: "20-25 min from hotel", description: "The old neighborhood of candle-lit brown cafés: creaky wood, local beer, three centuries of gossip.", why: "The most Amsterdam night out possible without a single velvet rope.", details: "Café Chris and 't Smalle are canonical starting points.", link: "https://www.iamsterdam.com/en/see-and-do/neighbourhoods/jordaan" },
+            { title: "Paradiso", category: "Nightlife", rating: 4.6, location: "Weteringschans", price: "Show tickets vary", distance: "8-10 min from hotel", description: "Legendary concert hall in a converted church — the Rolling Stones played here, so can your evening.", why: "World-class venue ten minutes from the hotel; check the program first.", details: "Membership fee (a few euros) is added at the door — normal, not a scam.", link: "https://www.paradiso.nl/" },
+            { title: "Westergas", category: "Nightlife", rating: 4.6, location: "Westerpark", price: "Varies by venue", distance: "25-30 min from hotel", description: "Former gasworks turned culture yard: bars, breweries, clubs, and outdoor terraces in Westerpark.", why: "Daytime park rolls straight into evening terraces without relocating.", details: "Brouwerij Troost brews on-site; summer evenings are terrace gold.", link: "https://westergas.nl/" },
+            { title: "De Pijp bars", category: "Nightlife", rating: 4.6, location: "De Pijp", price: "Bar prices", distance: "12-18 min from hotel", description: "The city's liveliest neighborhood bar scene around Gerard Douplein and the Albert Cuyp.", why: "Closest genuine nightlife cluster to the hotel with actual locals in it.", details: "Start at Gerard Douplein and drift; no plan required.", link: "https://www.iamsterdam.com/en/see-and-do/neighbourhoods/de-pijp" },
+            { title: "Melkweg", category: "Nightlife", rating: 4.5, location: "Lijnbaansgracht", price: "Show tickets vary", distance: "10-12 min from hotel", description: "Multi-room music venue and club in a former dairy next to Leidseplein.", why: "If Paradiso's program misses, Melkweg usually catches.", details: "Two halls plus cinema — check what is on across all rooms.", link: "https://www.melkweg.nl/en/" },
+            { title: "NDSM Wharf", category: "Nightlife", rating: 4.5, location: "Amsterdam-Noord", price: "Free ferry; venues vary", distance: "35-40 min incl. ferry", description: "Shipyard-turned-culture-wharf across the IJ: street art, container bars, waterfront beach clubs.", why: "The adventurous pick — the free ferry ride is half the fun.", details: "Pllek and Noorderlicht are the waterfront anchors; ferries run all night.", link: "https://www.ndsm.nl/en/" },
+            { title: "Nieuwmarkt", category: "Nightlife", rating: 4.5, location: "Nieuwmarkt", price: "Bar prices", distance: "20-25 min from hotel", description: "Square around the medieval Waag with relaxed cafe terraces that run late.", why: "Nightlife for people who want conversation volume, not club volume.", details: "In de Waag sits inside the 15th-century weigh house itself.", link: "https://www.iamsterdam.com/en/see-and-do/neighbourhoods/nieuwmarkt" },
+            { title: "Leidseplein", category: "Nightlife", rating: 4.4, location: "Leidseplein", price: "Varies", distance: "8-10 min from hotel", description: "The classic entertainment square: theaters, comedy, big cafes, and late-night everything.", why: "Walking distance home is the killer feature at 1am.", details: "Boom Chicago comedy is the reliable non-drinking option.", link: "https://www.iamsterdam.com/en/see-and-do/neighbourhoods/leidseplein" },
+            { title: "Rembrandtplein", category: "Nightlife", rating: 4.3, location: "Rembrandtplein", price: "Varies", distance: "15-20 min from hotel", description: "The glossier nightlife square: clubs, grand cafes, and the 3D Night Watch statue group.", why: "Bigger and brasher than Leidseplein if the night wants an upgrade.", details: "The bronze Night Watch figures make the obligatory group photo.", link: "https://www.iamsterdam.com/en/see-and-do/neighbourhoods/rembrandtplein" },
+            { title: "Red Light District walk", category: "Nightlife", rating: 4.2, location: "De Wallen", price: "Free to wander", distance: "20-25 min from hotel", description: "The infamous medieval quarter — canals, neon, and the oldest architecture in the city.", why: "Historically fascinating at dusk; the buildings predate the reputation.", details: "Go early evening for atmosphere without the stag-party tide; no photos of windows.", link: "https://www.iamsterdam.com/en/see-and-do/neighbourhoods/red-light-district" },
+            { title: "Vondelpark", category: "Outdoors", rating: 4.7, location: "Vondelpark", price: "Free", distance: "5 min walk from hotel", description: "Amsterdam's central park: ponds, rose garden, open-air theatre, and the whole city on wheels.", why: "Five minutes from the hotel — the default morning walk and evening decompress.", details: "Free open-air theatre shows summer weekends; the rose garden peaks in July.", link: "https://www.hetvondelpark.net/" },
+            { title: "Amsterdamse Bos", category: "Outdoors", rating: 4.6, location: "Amstelveen", price: "Free", distance: "25-35 min from hotel", description: "A forest three times Central Park's size: rowing lake, goat farm, open-air theatre.", why: "The full nature reset when the canals start feeling small.", details: "Rent bikes or a canoe; the goat farm is the family magnet.", link: "https://www.amsterdamsebos.nl/" },
+            { title: "Westerpark", category: "Outdoors", rating: 4.6, location: "Westerpark", price: "Free", distance: "25-30 min from hotel", description: "Landscaped park flowing into the Westergas culture yard — green space with espresso backup.", why: "Park walk and lunch terraces in one stop.", details: "Sunday markets at Westergas some weekends; check the agenda.", link: "https://westergas.nl/" },
+            { title: "Amstelpark", category: "Outdoors", rating: 4.6, location: "Buitenveldert", price: "Free", distance: "20-25 min from hotel", description: "Manicured park from the 1972 Floriade: rosarium, rhododendron valley, mini-train.", why: "The quietest, most flower-dense park on the list.", details: "The Rosarium peaks exactly in early July — good timing.", link: "https://www.amsterdam.nl/parkeninamsterdam/amstelpark/" },
+            { title: "Hortus Botanicus", category: "Outdoors", rating: 4.5, location: "Plantage", price: "About €12.50", distance: "22-28 min from hotel", description: "One of the world's oldest botanical gardens (1638), with butterfly and palm greenhouses.", why: "Outdoors with a roof option — the rain-proof garden pick.", details: "The 350-year-old Eastern Cape cycad is the celebrity resident.", link: "https://www.dehortus.nl/en/" },
+            { title: "Sarphatipark", category: "Outdoors", rating: 4.5, location: "De Pijp", price: "Free", distance: "12-18 min from hotel", description: "Compact English-style park in the middle of De Pijp with a grand central fountain.", why: "Perfect picnic pairing with Albert Cuyp market snacks two streets over.", details: "Grab stroopwafels at the market and eat them here.", link: "https://www.amsterdam.nl/parkeninamsterdam/sarphatipark/" },
+            { title: "Flevopark", category: "Outdoors", rating: 4.5, location: "Amsterdam-Oost", price: "Free", distance: "30-35 min from hotel", description: "Wilder east-side park with swimming lake and a genever distillery in the old cemetery gatehouse.", why: "Locals-only atmosphere and the distillery terrace is a proper reward.", details: "Distilleerderij 't Nieuwe Diep pours house genever until early evening.", link: "https://www.amsterdam.nl/parkeninamsterdam/flevopark/" },
+            { title: "Frankendael Park", category: "Outdoors", rating: 4.5, location: "Watergraafsmeer", price: "Free", distance: "25-30 min from hotel", description: "Gardens around the last surviving country estate inside the city, with a restaurant in the greenhouse.", why: "Feels like leaving the city without actually doing so.", details: "De Kas restaurant grows its own menu in the greenhouses — book for lunch.", link: "https://www.huizefrankendael.nl/" },
+            { title: "Oosterpark", category: "Outdoors", rating: 4.4, location: "Amsterdam-Oost", price: "Free", distance: "25-30 min from hotel", description: "Grand 19th-century park with herons, monuments, and a multicultural east-side crowd.", why: "Pairs with the Tropenmuseum and Dappermarkt for an Oost afternoon.", details: "The herons here are shameless; guard your herring.", link: "https://www.amsterdam.nl/parkeninamsterdam/oosterpark/" },
+            { title: "Rembrandtpark", category: "Outdoors", rating: 4.4, location: "Amsterdam-West", price: "Free", distance: "18-25 min from hotel", description: "Rambling west-side park with ponds, willows, and a petting zoo.", why: "The low-agenda park: no sights, just green.", details: "Connects toward Vondelpark via a green corridor if you want a long loop.", link: "https://www.amsterdam.nl/parkeninamsterdam/rembrandtpark/" }
           ]
         },
         london: {
@@ -2111,6 +2204,28 @@
         "Stubbe's Haring": "attractions/amsterdam-stubbes-haring.jpg?v=1",
         "Vishuisje Herengracht": "attractions/amsterdam-vishuisje-herengracht.jpg?v=1",
         "The Seafood Bar": "attractions/amsterdam-the-seafood-bar.jpg?v=1",
+        "NEMO Science Museum": "attractions/amsterdam-nemo-science-museum.jpg?v=1",
+        "Stedelijk Museum": "attractions/amsterdam-stedelijk-museum.jpg?v=1",
+        "Rembrandt House Museum": "attractions/amsterdam-rembrandt-house-museum.jpg?v=1",
+        "National Maritime Museum": "attractions/amsterdam-scheepvaartmuseum.jpg?v=1",
+        "Micropia": "attractions/amsterdam-micropia.jpg?v=1",
+        "H'ART Museum": "attractions/amsterdam-hart-museum.jpg?v=1",
+        "John Dory": "attractions/amsterdam-john-dory.jpg?v=1",
+        "Mos": "attractions/amsterdam-mos.jpg?v=1",
+        "Lucius": "attractions/amsterdam-lucius.jpg?v=1",
+        "Monks Coffee Roasters": "attractions/amsterdam-monks-coffee.jpg?v=1",
+        "White Label Coffee": "attractions/amsterdam-white-label-coffee.jpg?v=1",
+        "Winkel 43": "attractions/amsterdam-winkel-43.jpg?v=1",
+        "Screaming Beans": "attractions/amsterdam-screaming-beans.jpg?v=1",
+        "Bocca Coffee": "attractions/amsterdam-bocca-coffee.jpg?v=1",
+        "Coffee & Coconuts": "attractions/amsterdam-coffee-and-coconuts.jpg?v=1",
+        "Paradiso": "attractions/amsterdam-paradiso.jpg?v=1",
+        "Westergas": "attractions/amsterdam-westergas.jpg?v=1",
+        "Melkweg": "attractions/amsterdam-melkweg.jpg?v=1",
+        "NDSM Wharf": "attractions/amsterdam-ndsm.jpg?v=1",
+        "Amsterdamse Bos": "attractions/amsterdam-amsterdamse-bos.jpg?v=1",
+        "Hortus Botanicus": "attractions/amsterdam-hortus-botanicus.jpg?v=1",
+        "Frankendael Park": "attractions/amsterdam-huize-frankendael.jpg?v=1",
         "British Museum": "attractions/london-british-museum.jpg?v=1",
         "Tower of London": "attractions/london-tower-of-london.jpg?v=1",
         "Westminster Abbey": "attractions/london-westminster-abbey.jpg?v=1",
@@ -2137,13 +2252,17 @@
           Cafe: ["#f6e5d5", "#8a5838"],
           Park: ["#e4f1dc", "#587a45"],
           History: ["#eee4d7", "#765a40"],
-          Beach: ["#d9f1f2", "#2f8390"]
+          Beach: ["#d9f1f2", "#2f8390"],
+          Fish: ["#dcecf2", "#1f6f8f"],
+          Coffee: ["#f0e2d2", "#6f4b2d"],
+          Nightlife: ["#e6def2", "#5a3f85"]
         }[category] || ["#ecebe7", "#d97823"];
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 144"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="${palette[0]}"/><stop offset="1" stop-color="${palette[1]}"/></linearGradient></defs><rect width="144" height="144" rx="26" fill="url(#g)"/><circle cx="108" cy="34" r="22" fill="rgba(255,255,255,.36)"/><path d="M18 112c25-38 48-45 69-20 14-18 28-21 43 20" fill="rgba(255,255,255,.42)"/><text x="18" y="52" fill="#25211c" font-size="18" font-family="Arial, sans-serif" font-weight="800">${escapeHTML(category)}</text><text x="20" y="100" fill="#fffefa" font-size="34" font-family="Arial, sans-serif" font-weight="900">${escapeHTML(initials)}</text></svg>`;
         return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
       }
       function attractionActionLabel(category, price) {
-        if (category === "Food" || category === "Cafe") return "Menu";
+        if (category === "Food" || category === "Cafe" || category === "Fish" || category === "Coffee") return "Menu";
+        if (category === "Nightlife") return "Explore";
         if (/free/i.test(price || "") || ["Park", "Beach", "Outdoors", "Landmark", "Architecture"].includes(category)) return "Visit";
         return "Tickets";
       }
@@ -2166,6 +2285,8 @@
           </section>
         `).join("");
       }
+      const ATTRACTION_FILTER_LABELS = { Museum: "Museums", Fish: "Fish", Coffee: "Coffee", Nightlife: "Nightlife", Outdoors: "Outdoors" };
+      const attractionFilterChoice = {};
       function renderAttractions(city) {
         const data = ATTRACTIONS[city] || ATTRACTIONS.vienna;
         const normalizeAttraction = item => {
@@ -2173,12 +2294,22 @@
           const [title, category, location, price, distance, description, why, details, link] = item;
           return { title, category, location, price, distance, description, why, details, link };
         };
+        let items = data.items.map(normalizeAttraction);
+        if (items.some(item => item.rating)) items = items.slice().sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        const filters = data.filters || [];
+        const activeFilter = filters.includes(attractionFilterChoice[city]) ? attractionFilterChoice[city] : "All";
+        const shown = activeFilter === "All" ? items : items.filter(item => item.category === activeFilter);
+        const filterChips = filters.length ? `
+          <div class="attraction-filters" role="tablist" aria-label="Filter attractions">
+            ${["All", ...filters].map(filter => `<button type="button" class="attraction-filter" data-filter="${escapeHTML(filter)}" aria-pressed="${filter === activeFilter}">${escapeHTML(filter === "All" ? "All" : ATTRACTION_FILTER_LABELS[filter] || filter)}</button>`).join("")}
+          </div>` : "";
         attractionContent.innerHTML = `
           <section class="card wide attraction-city" data-attraction-city="${escapeHTML(city)}">
-            <h2><span class="city-mark">${escapeHTML(data.code)}</span> ${escapeHTML(data.city)} <span class="meta">${data.items.length} picks near ${escapeHTML(data.hotel)}</span></h2>
+            <h2><span class="city-mark">${escapeHTML(data.code)}</span> ${escapeHTML(data.city)} <span class="meta">${shown.length} picks near ${escapeHTML(data.hotel)}</span></h2>
+            ${filterChips}
             <div class="attraction-stack">
-              ${data.items.map((item, index) => {
-                const attraction = normalizeAttraction(item);
+              ${shown.map((item, index) => {
+                const attraction = item;
                 const title = attraction.title;
                 const category = attraction.category;
                 const location = attraction.location;
@@ -2200,6 +2331,7 @@
                       <h3>${escapeHTML(title)}</h3>
                       <p>${escapeHTML(description)}</p>
                       <div class="attraction-tags">
+                        ${attraction.rating ? `<span class="rating-tag">★ ${attraction.rating.toFixed(1)}</span>` : ""}
                         <span>${escapeHTML(category)}</span>
                         <span>${escapeHTML(price)}</span>
                         <span>${escapeHTML(distance)}</span>
@@ -2221,10 +2353,31 @@
             </div>
           </section>
         `;
+        attractionContent.querySelectorAll(".attraction-filter").forEach(chip => chip.addEventListener("click", () => {
+          attractionFilterChoice[city] = chip.dataset.filter;
+          renderAttractions(city);
+          attractionContent.scrollIntoView({ block: "start", behavior: "smooth" });
+        }));
       }
       function currentNow() {
         const testToday = new URLSearchParams(location.search).get("today");
         return testToday ? new Date(`${testToday}T08:00:00`) : new Date();
+      }
+      const CITY_ORDER = ["vienna", "amsterdam", "london", "washington", "sarasota"];
+      function cityForToday() {
+        const now = currentNow();
+        for (const city of CITY_ORDER) {
+          const leaveAt = CITY_META[city] && CITY_META[city].leaveAt;
+          if (leaveAt && now.getTime() <= new Date(leaveAt).getTime()) return city;
+        }
+        return CITY_ORDER[CITY_ORDER.length - 1];
+      }
+      function rememberedCityChoice() {
+        try {
+          const choice = JSON.parse(localStorage.gelmanTripCityChoice || "null");
+          if (choice && choice.day === todayKey(currentNow()) && DICTIONARIES[choice.city]) return choice.city;
+        } catch (error) {}
+        return null;
       }
       function updateHeroStatus() {
         const meta = CITY_META[activeCity] || CITY_META.vienna;
@@ -2251,10 +2404,11 @@
         tripCityScroller.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
         setTimeout(() => { cityCentering = false; }, 520);
       }
-      function showTripCity(city, center = true) {
+      function showTripCity(city, center = true, remember = false) {
         if (!DICTIONARIES[city]) city = "vienna";
         activeCity = city;
         localStorage.gelmanTripCity = city;
+        if (remember) localStorage.gelmanTripCityChoice = JSON.stringify({ city, day: todayKey(currentNow()) });
         root.style.setProperty("--hero-image", `url("${HEROES[city] || HEROES.vienna}")`);
         tripCityTabs.forEach(tab => tab.setAttribute("aria-pressed", tab.dataset.tripCity === city));
         updateHeroStatus();
@@ -2301,8 +2455,40 @@
         });
         updateHeroStatus();
       }
+      // Fill with the fam group's phone numbers (comma-separated, e.g. "+12025550101,+12025550102")
+      // to enable the "Text the fam" button. iMessage threads it into the existing group chat
+      // when the numbers match that group's members exactly.
+      const FAM_SMS = "";
+      const famShare = document.querySelector("#famShare");
+      if (famShare && FAM_SMS.trim()) {
+        famShare.hidden = false;
+        famShare.addEventListener("click", () => {
+          const body = encodeURIComponent("From the Gelman Travel Guide: https://antonreport.com/gelmantravel/");
+          location.href = `sms:${FAM_SMS.trim()}&body=${body}`;
+        });
+      }
+      const appTop = document.querySelector(".app-top");
+      if (appTop && "IntersectionObserver" in window) {
+        const sentinel = document.createElement("div");
+        const placeholder = document.createElement("div");
+        placeholder.className = "app-top-placeholder";
+        appTop.before(sentinel);
+        appTop.after(placeholder);
+        new IntersectionObserver(([entry]) => {
+          const pin = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+          if (pin && !appTop.classList.contains("pinned")) placeholder.style.height = `${appTop.offsetHeight}px`;
+          appTop.classList.toggle("pinned", pin);
+          appTop.closest(".hero-brand")?.classList.toggle("pin-boost", pin);
+          placeholder.classList.toggle("active", pin);
+          if (pin) requestAnimationFrame(() => centerTripCity(activeCity));
+        }).observe(sentinel);
+      }
+      let cityTabsTouched = false;
+      ["touchstart", "pointerdown", "wheel"].forEach(type =>
+        tripCityScroller.addEventListener(type, () => { cityTabsTouched = true; }, { passive: true })
+      );
       tripCityScroller.addEventListener("scroll", () => {
-        if (cityCentering) return;
+        if (cityCentering || !cityTabsTouched) return;
         clearTimeout(cityScrollTimer);
         cityScrollTimer = setTimeout(() => {
           const center = tripCityScroller.getBoundingClientRect().left + tripCityScroller.clientWidth / 2;
@@ -2311,7 +2497,7 @@
             const distance = Math.abs(rect.left + rect.width / 2 - center);
             return distance < best.distance ? { tab, distance } : best;
           }, { tab: tripCityTabs[0], distance: Infinity }).tab;
-          if (nearest && nearest.dataset.tripCity !== activeCity) showTripCity(nearest.dataset.tripCity, true);
+          if (nearest && nearest.dataset.tripCity !== activeCity) showTripCity(nearest.dataset.tripCity, true, true);
         }, 120);
       }, { passive: true });
 
@@ -2351,17 +2537,17 @@
         card.querySelector("summary")?.scrollIntoView({ block: "nearest", behavior: "smooth" });
       });
       tabs.forEach(tab => tab.addEventListener("click", () => showPage(tab.dataset.target)));
-      tripCityTabs.forEach(tab => tab.addEventListener("click", () => showTripCity(tab.dataset.tripCity)));
+      tripCityTabs.forEach(tab => tab.addEventListener("click", () => showTripCity(tab.dataset.tripCity, true, true)));
       cityTabs.forEach(tab => tab.addEventListener("click", () => showCity(tab.dataset.cityTarget)));
       enhanceHotelCards();
       applyPrefs();
-      showTripCity(activeCity);
+      showTripCity(rememberedCityChoice() || cityForToday());
       showPage("plans");
       updateFlightCountdowns();
       setTimeout(() => showInstallSheet(false), 900);
       setInterval(updateFlightCountdowns, 60000);
       if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-        navigator.serviceWorker.register("service-worker.js?v=42", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=43", { updateViaCache: "none" }).then(registration => {
           const checkForUpdate = () => registration.update().catch(() => {});
           document.addEventListener("visibilitychange", () => {
             if (document.visibilityState === "visible") checkForUpdate();
