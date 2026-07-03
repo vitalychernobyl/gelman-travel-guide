@@ -4,6 +4,8 @@ const NO_INDEX = "noindex, nofollow, noarchive, noimageindex";
 
 function withNoIndex(response) {
   const headers = new Headers(response.headers);
+  const location = headers.get("Location");
+  if (location) headers.set("Location", rewriteLocation(location));
   headers.set("X-Robots-Tag", NO_INDEX);
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   headers.set("X-Content-Type-Options", "nosniff");
@@ -12,6 +14,13 @@ function withNoIndex(response) {
     statusText: response.statusText,
     headers
   });
+}
+
+function rewriteLocation(location) {
+  const parsed = new URL(location, ORIGIN);
+  if (parsed.origin !== ORIGIN) return location;
+  const path = parsed.pathname === "/" ? `${PREFIX}/` : `${PREFIX}${parsed.pathname}`;
+  return `${path}${parsed.search}${parsed.hash}`;
 }
 
 export default {
