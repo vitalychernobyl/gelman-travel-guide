@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=38">
+  <link rel="manifest" href="manifest.webmanifest?v=39">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -140,6 +140,15 @@
       box-shadow: 0 14px 34px rgba(0, 0, 0, .28);
       background: #ffffff;
       object-fit: cover;
+    }
+    .logo-button {
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
     }
     .hero-status {
       position: absolute;
@@ -536,8 +545,28 @@
       padding: 0;
       list-style: none;
       cursor: pointer;
+      position: relative;
     }
     .attraction-card summary::-webkit-details-marker { display: none; }
+    .attraction-card summary::after {
+      content: "⌄  Details  ⌄";
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 10px;
+      display: grid;
+      place-items: center;
+      min-height: 30px;
+      border: 1px solid #d8d3ca;
+      border-radius: 999px;
+      background: rgba(236, 235, 231, .94);
+      color: #5f5850;
+      font-size: .68rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      box-shadow: 0 5px 14px rgba(59, 52, 43, .08);
+    }
+    .attraction-card[open] summary::after { content: "⌃  Details open  ⌃"; }
     .attraction-thumb {
       width: 100%;
       height: 156px;
@@ -549,7 +578,7 @@
       display: grid;
       gap: 7px;
       min-width: 0;
-      padding: 10px 10px 11px;
+      padding: 10px 10px 48px;
     }
     .attraction-main h3 {
       margin: 0;
@@ -591,21 +620,39 @@
       gap: 6px;
       margin-top: 2px;
     }
-    .attraction-actions a {
+    .attraction-actions a,
+    .attraction-actions button {
       display: grid;
+      grid-auto-flow: column;
+      gap: 5px;
       place-items: center;
       min-height: 38px;
       padding: 6px 7px;
       border-radius: 999px;
+      border: 0;
       background: var(--accent);
       color: var(--accent-ink);
+      font: inherit;
       font-size: .74rem;
       font-weight: 900;
       text-align: center;
       text-decoration: none;
     }
+    .attraction-actions .detail-action {
+      border: 1px solid #d8d3ca;
+      background: #f2f1ee;
+      color: #5f5850;
+    }
     .attraction-actions a:nth-child(2) { background: #25211c; }
     .attraction-actions a:nth-child(3) { background: #6f7d65; }
+    .btn-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 1.1em;
+      height: 1.1em;
+      font-size: 1em;
+      line-height: 1;
+    }
     .ticket {
       position: relative;
       display: grid;
@@ -714,45 +761,32 @@
     }
     details.ticket-card summary::-webkit-details-marker { display: none; }
     details.ticket-card summary::after {
-      content: "Tap for details";
+      content: "⌄  Tap for details  ⌄";
       position: absolute;
-      right: 96px;
+      left: 14px;
+      right: 101px;
       bottom: 11px;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 4px;
       min-height: 27px;
       padding: 0 9px;
       border-radius: 999px;
-      background: rgba(37, 33, 28, .9);
-      color: #fffefa;
+      border: 1px solid #d8d3ca;
+      background: rgba(236, 235, 231, .95);
+      color: #5f5850;
       font-size: .68rem;
       font-weight: 950;
       text-transform: uppercase;
-      box-shadow: 0 8px 16px rgba(37, 33, 28, .18);
+      box-shadow: 0 7px 16px rgba(59, 52, 43, .1);
       pointer-events: none;
       z-index: 2;
     }
     details.ticket-card summary::before {
-      content: "⌄";
-      position: absolute;
-      right: 84px;
-      bottom: 12px;
-      display: grid;
-      place-items: center;
-      width: 27px;
-      height: 27px;
-      border-radius: 999px;
-      background: #fffefa;
-      color: #25211c;
-      font-size: 1rem;
-      font-weight: 950;
-      box-shadow: 0 8px 16px rgba(37, 33, 28, .16);
-      pointer-events: none;
-      z-index: 3;
+      display: none;
     }
-    details.ticket-card[open] summary::after { content: "Details open"; }
-    details.ticket-card[open] summary::before { content: "⌃"; }
+    details.ticket-card[open] summary::after { content: "⌃  Details open  ⌃"; }
     .ticket-extra {
       margin-top: 0;
       padding: 10px 12px 12px;
@@ -923,6 +957,33 @@
       box-shadow: var(--shadow);
       isolation: isolate;
     }
+    details.hotel-key summary {
+      position: relative;
+      display: grid;
+      list-style: none;
+      cursor: pointer;
+    }
+    details.hotel-key summary::-webkit-details-marker { display: none; }
+    details.hotel-key summary::after {
+      content: "⌄  Tap for details  ⌄";
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 12px;
+      display: grid;
+      place-items: center;
+      min-height: 30px;
+      border: 1px solid #d8d3ca;
+      border-radius: 999px;
+      background: rgba(236, 235, 231, .95);
+      color: #5f5850;
+      font-size: .68rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      box-shadow: 0 7px 16px rgba(59, 52, 43, .1);
+      z-index: 3;
+    }
+    details.hotel-key[open] summary::after { content: "⌃  Details open  ⌃"; }
     .hotel-key::before {
       content: "";
       position: absolute;
@@ -937,11 +998,30 @@
       object-fit: cover;
       display: block;
     }
+    .hotel-preview {
+      display: grid;
+      gap: 5px;
+      padding: 11px 15px 50px;
+    }
+    .hotel-preview h3 {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.08;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+    }
+    .hotel-preview p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 800;
+    }
     .hotel-key-body {
       display: grid;
       gap: 9px;
       padding: 13px 15px 15px;
     }
+    details.hotel-key:not([open]) .hotel-key-body { display: none; }
     .hotel-key h3 {
       margin: 0;
       font-size: 1rem;
@@ -949,6 +1029,8 @@
     }
     .directions-button {
       display: grid;
+      grid-auto-flow: column;
+      gap: 6px;
       place-items: center;
       min-height: 44px;
       border-radius: 999px;
@@ -958,6 +1040,10 @@
       text-decoration: none;
       box-shadow: 0 8px 16px rgba(217, 120, 35, .22);
     }
+    .directions-button::before { content: "⌖"; }
+    .app-button::before { content: "▣"; }
+    .site-button::before { content: "↗"; }
+    .ticket-button::before { content: "▤"; }
     .mini-actions {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1171,6 +1257,90 @@
       font-weight: 950;
       box-shadow: 0 12px 28px rgba(217, 120, 35, .28);
     }
+    .install-sheet,
+    .logo-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: end center;
+      padding: 18px 12px calc(env(safe-area-inset-bottom) + 18px);
+      background: rgba(37, 33, 28, .36);
+      backdrop-filter: blur(12px);
+    }
+    .install-sheet[hidden],
+    .logo-lightbox[hidden] { display: none; }
+    .install-card,
+    .logo-card {
+      width: min(480px, 100%);
+      border: 1px solid rgba(216, 211, 202, .95);
+      border-radius: 26px;
+      background: #fffefa;
+      color: var(--ink);
+      box-shadow: 0 24px 60px rgba(37, 33, 28, .28);
+    }
+    .install-card {
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+    }
+    .install-card h2,
+    .install-card p { margin: 0; }
+    .install-card h2 {
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+    .install-card p {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .install-steps {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: .88rem;
+      font-weight: 800;
+    }
+    .install-steps li {
+      padding: 9px 10px;
+      border-radius: 14px;
+      background: var(--soft);
+    }
+    .install-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .plain-button,
+    .primary-button {
+      min-height: 42px;
+      border-radius: 999px;
+      border: 1px solid #d8d3ca;
+      background: #f2f1ee;
+      color: #5f5850;
+      font-weight: 950;
+    }
+    .primary-button {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--accent-ink);
+    }
+    .logo-lightbox { place-items: center; }
+    .logo-card {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .logo-card img {
+      width: min(78vw, 420px);
+      aspect-ratio: 1;
+      border-radius: 26px;
+      object-fit: contain;
+      background: #f6b46f;
+    }
     @media (min-width: 560px) {
       .app { padding-inline: 14px; }
       .page-head, .card { border-radius: 14px; }
@@ -1186,7 +1356,9 @@
     <section class="hero" aria-label="City hero">
       <div class="hero-status" id="heroStatus" aria-live="polite"><span>Stay</span><strong>Jul 2-3</strong></div>
       <div class="hero-brand">
-        <img class="hero-logo" src="app-logo-circle.png?v=17" alt="Gelman Travel Guide logo">
+        <button class="logo-button" id="logoButton" type="button" aria-label="Open Gelman Travel logo">
+          <img class="hero-logo" src="app-logo-circle.png?v=17" alt="Gelman Travel Guide logo">
+        </button>
         <h1 class="app-title">Gelman Travel</h1>
         <header class="app-top">
           <div class="trip-city-tabs" aria-label="Choose city">
@@ -1353,7 +1525,7 @@
               </div>
               <div class="mini-actions">
                 <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=Avani%20Museum%20Quarter%20Amsterdam%20Hotel%2C%20Hobbemakade%2050%2C%201071%20XL%20Amsterdam%2C%20Netherlands" target="_blank" rel="noopener">Directions</a>
-                <a class="directions-button" href="https://www.avanihotels.com/en/museum-quarter-amsterdam" target="_blank" rel="noopener">Hotel Site</a>
+                <a class="directions-button site-button" href="https://www.avanihotels.com/en/museum-quarter-amsterdam" target="_blank" rel="noopener">Hotel Site</a>
               </div>
             </div>
           </article>
@@ -1420,7 +1592,7 @@
             </div>
           </details>
           <article class="hotel-key">
-            <img src="london-building-key.png?v=1" alt="London building exterior">
+            <img src="london-boot-house.svg?v=1" alt="Magical boot house for London stay">
             <div class="hotel-key-body">
               <h3>London stay</h3>
               <div class="info-list">
@@ -1430,7 +1602,7 @@
                 <div class="info-row"><span>Phone</span><strong>+44 (0) 7875 721986</strong></div>
                 <div class="info-row"><span>Dates</span><strong>Mon, Jul 6 - Sat, Jul 11</strong></div>
               </div>
-              <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=41%20Galaxy%20Building%205%20Crews%20Street%2C%20London%20E14%203SP%2C%20United%20Kingdom" target="_blank" rel="noopener">Open Directions</a>
+                <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=41%20Galaxy%20Building%205%20Crews%20Street%2C%20London%20E14%203SP%2C%20United%20Kingdom" target="_blank" rel="noopener">Open Directions</a>
             </div>
           </article>
           <article class="lounge-pass">
@@ -1497,7 +1669,7 @@
             </div>
           </details>
           <article class="hotel-key">
-            <img src="dc-building-key.png?v=1" alt="Arlington building exterior">
+            <img src="dc-taj-mahal-key.jpg?v=1" alt="Taj Mahal image for Washington stay">
             <div class="hotel-key-body">
               <h3>Arlington stay</h3>
               <div class="info-list">
@@ -1592,6 +1764,29 @@
       </div>
       <button class="float-toggle" id="controlsToggle" type="button" aria-expanded="false" aria-controls="controlMenu">Aa</button>
     </div>
+
+    <div class="install-sheet" id="installSheet" hidden role="dialog" aria-modal="true" aria-labelledby="installTitle">
+      <div class="install-card">
+        <h2 id="installTitle">Download Gelman Travel</h2>
+        <p>Save this as a tiny app so the trip guide opens from your Home Screen and keeps working after it loads.</p>
+        <ol class="install-steps">
+          <li>On iPhone: open this page in Safari.</li>
+          <li>Tap Share, then Add to Home Screen.</li>
+          <li>Open Gelman Travel from the new icon.</li>
+        </ol>
+        <div class="install-actions">
+          <button class="plain-button" id="installLater" type="button">Later</button>
+          <button class="primary-button" id="installNow" type="button">Download App</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="logo-lightbox" id="logoLightbox" hidden role="dialog" aria-modal="true" aria-label="Gelman Travel logo">
+      <div class="logo-card">
+        <img src="app-logo-circle.png?v=17" alt="Gelman Travel Guide logo large">
+        <button class="plain-button" id="closeLogo" type="button">Close</button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -1609,6 +1804,13 @@
       const attractionContent = document.querySelector("#attractionContent");
       const heroStatus = document.querySelector("#heroStatus");
       const tripCityScroller = document.querySelector(".trip-city-tabs");
+      const installSheet = document.querySelector("#installSheet");
+      const installLater = document.querySelector("#installLater");
+      const installNow = document.querySelector("#installNow");
+      const logoButton = document.querySelector("#logoButton");
+      const logoLightbox = document.querySelector("#logoLightbox");
+      const closeLogo = document.querySelector("#closeLogo");
+      let deferredInstallPrompt = null;
       let size = Number(localStorage.gelmanFont || 15);
       let density = localStorage.gelmanDensity || "compact";
       let activeCity = localStorage.gelmanTripCity || "vienna";
@@ -1843,6 +2045,41 @@
         localStorage.gelmanPage = name;
         scrollTo(0, 0);
       }
+      function isStandalone() {
+        return window.navigator.standalone || window.matchMedia("(display-mode: standalone)").matches;
+      }
+      function showInstallSheet(force = false) {
+        if (!installSheet || isStandalone()) return;
+        if (!force && localStorage.gelmanInstallSeen) return;
+        installSheet.hidden = false;
+      }
+      function hideInstallSheet(markSeen = true) {
+        if (!installSheet) return;
+        installSheet.hidden = true;
+        if (markSeen) localStorage.gelmanInstallSeen = "1";
+      }
+      function enhanceHotelCards() {
+        document.querySelectorAll("article.hotel-key").forEach(article => {
+          const body = article.querySelector(":scope > .hotel-key-body");
+          const image = article.querySelector(":scope > img");
+          const heading = body?.querySelector("h3");
+          if (!body || !image || !heading) return;
+          const details = document.createElement("details");
+          details.className = article.className;
+          const summary = document.createElement("summary");
+          const preview = document.createElement("div");
+          const firstRows = [...body.querySelectorAll(".info-row")].slice(0, 2).map(row => row.textContent.trim().replace(/\s+/g, " "));
+          preview.className = "hotel-preview";
+          const title = document.createElement("h3");
+          title.textContent = heading.textContent;
+          const meta = document.createElement("p");
+          meta.textContent = firstRows.join(" • ");
+          preview.append(title, meta);
+          summary.append(image, preview);
+          details.append(summary, body);
+          article.replaceWith(details);
+        });
+      }
       function escapeHTML(value) {
         return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
       }
@@ -1974,9 +2211,9 @@
                     <div><strong>Location:</strong> ${escapeHTML(location)}</div>
                     <div><strong>More:</strong> ${escapeHTML(details)}</div>
                     <div class="attraction-actions">
-                      <a href="${escapeHTML(link)}" target="_blank" rel="noopener">Details</a>
-                      <a href="${escapeHTML(ticketLink)}" target="_blank" rel="noopener">${escapeHTML(ticketLabel)}</a>
-                      <a href="${escapeHTML(mapLink)}" target="_blank" rel="noopener">Directions</a>
+                      <button class="detail-action" type="button" data-detail-toggle><span class="btn-icon" aria-hidden="true">⌃</span><span>Details</span></button>
+                      <a href="${escapeHTML(ticketLink)}" target="_blank" rel="noopener"><span class="btn-icon" aria-hidden="true">▤</span><span>${escapeHTML(ticketLabel)}</span></a>
+                      <a href="${escapeHTML(mapLink)}" target="_blank" rel="noopener"><span class="btn-icon" aria-hidden="true">⌖</span><span>Directions</span></a>
                     </div>
                   </div>
                 </details>`;
@@ -2087,15 +2324,43 @@
         floatControls.classList.toggle("open", open);
         controlsToggle.setAttribute("aria-expanded", open);
       });
+      window.addEventListener("beforeinstallprompt", event => {
+        event.preventDefault();
+        deferredInstallPrompt = event;
+      });
+      installLater?.addEventListener("click", () => hideInstallSheet(true));
+      installNow?.addEventListener("click", async () => {
+        if (deferredInstallPrompt) {
+          deferredInstallPrompt.prompt();
+          await deferredInstallPrompt.userChoice.catch(() => null);
+          deferredInstallPrompt = null;
+        }
+        hideInstallSheet(true);
+      });
+      logoButton?.addEventListener("click", () => { logoLightbox.hidden = false; });
+      closeLogo?.addEventListener("click", () => { logoLightbox.hidden = true; });
+      logoLightbox?.addEventListener("click", event => {
+        if (event.target === logoLightbox) logoLightbox.hidden = true;
+      });
+      document.addEventListener("click", event => {
+        const detailButton = event.target.closest("[data-detail-toggle]");
+        if (!detailButton) return;
+        const card = detailButton.closest("details");
+        if (!card) return;
+        card.open = true;
+        card.querySelector("summary")?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      });
       tabs.forEach(tab => tab.addEventListener("click", () => showPage(tab.dataset.target)));
       tripCityTabs.forEach(tab => tab.addEventListener("click", () => showTripCity(tab.dataset.tripCity)));
       cityTabs.forEach(tab => tab.addEventListener("click", () => showCity(tab.dataset.cityTarget)));
+      enhanceHotelCards();
       applyPrefs();
       showTripCity(activeCity);
       showPage("plans");
       updateFlightCountdowns();
+      setTimeout(() => showInstallSheet(false), 900);
       setInterval(updateFlightCountdowns, 60000);
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=38");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=39");
     })();
   </script>
 </body>
