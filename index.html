@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=51">
+  <link rel="manifest" href="manifest.webmanifest?v=52">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -722,8 +722,8 @@
       line-height: 1.3;
     }
     .attraction-actions {
-      display: grid;
-      grid-template-columns: 1.05fr 1fr .9fr;
+      display: flex;
+      align-items: center;
       gap: 6px;
       margin-top: 2px;
     }
@@ -742,17 +742,24 @@
       font-weight: 900;
       text-align: center;
       text-decoration: none;
+      flex: 0 1 auto;
+      min-width: 0;
     }
     .attraction-actions .ticket-link {
       border: 1px solid #c9e4cf;
       background: #eef9ef;
       color: #24502c;
+      padding-inline: 10px;
     }
     .attraction-actions .uber-button {
       background: #090909;
       color: #fffefa;
+      order: 20;
+      flex: 1 1 112px;
+      margin-left: auto;
     }
     .attraction-actions .map-action {
+      flex: 0 0 auto;
       width: auto;
       min-width: 0;
       min-height: 38px;
@@ -1226,17 +1233,22 @@
       margin-left: auto;
     }
     .ticket-actions {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      display: flex;
+      align-items: center;
       gap: 7px;
       margin-top: 3px;
     }
     .ticket-actions .directions-button {
+      flex: 0 1 auto;
+      min-width: 0;
       min-height: 38px;
       padding-inline: 8px;
       font-size: .78rem;
     }
     .ticket-actions .map-action {
+      flex: 0 0 40px;
+      width: 40px;
+      min-width: 40px;
       min-height: 38px;
       padding: 0;
       font-size: 0;
@@ -1244,6 +1256,11 @@
     .ticket-actions .app-button {
       background: #25211c;
       box-shadow: 0 8px 16px rgba(37, 33, 28, .14);
+    }
+    .ticket-actions .uber-button {
+      order: 20;
+      flex: 1 1 112px;
+      margin-left: auto;
     }
     .card-share-button {
       position: absolute;
@@ -2067,7 +2084,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "51";
+      const APP_VERSION = "52";
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
       const UPDATE_RELOAD_AT_KEY = "gelmanLastForcedReloadAt";
@@ -2111,6 +2128,13 @@
         london: { stayLabel: "Jul 6-11", statusLabel: "Stay", flightDate: "2026-07-11", leaveAt: "2026-07-11T12:20:00" },
         washington: { stayLabel: "Jul 11-12", statusLabel: "Stay", flightDate: "2026-07-12", leaveAt: "2026-07-12T04:55:00" },
         sarasota: { stayLabel: "Arrive Jul 12", statusLabel: "Next" }
+      };
+      const PLAN_FALLBACK_DESTINATIONS = {
+        vienna: "Vienna International Airport Terminal 3, Vienna, Austria",
+        amsterdam: "Amsterdam Airport Schiphol, Amsterdam, Netherlands",
+        london: "London Heathrow Airport Terminal 2, London, United Kingdom",
+        washington: "Ronald Reagan Washington National Airport, Arlington, VA",
+        sarasota: "Sarasota Bradenton International Airport, Sarasota, FL"
       };
       const CITY_WEATHER = {
         vienna: { label: "Vienna", short: "VIE", latitude: 48.2082, longitude: 16.3738, fallback: { today: "72/58°", tomorrow: "74/60°" } },
@@ -2453,6 +2477,16 @@
       function googleMapsDirections(destination) {
         return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving&dir_action=navigate`;
       }
+      function googleMapsDestinationFromHref(href) {
+        try {
+          const url = new URL(href, location.href);
+          const isGoogleMaps = url.hostname.includes("google.") && url.pathname.includes("/maps");
+          if (!isGoogleMaps) return "";
+          return url.searchParams.get("destination") || url.searchParams.get("query") || url.searchParams.get("q") || "";
+        } catch {
+          return "";
+        }
+      }
       function normalizeGoogleMapsHref(href, fallbackDestination = "") {
         try {
           const url = new URL(href, location.href);
@@ -2488,6 +2522,33 @@
         link.title = ariaLabel;
         link.textContent = label;
         return link;
+      }
+      function rowTextByLabel(scope, labels) {
+        const wanted = labels.map(label => label.toLowerCase());
+        for (const row of scope.querySelectorAll(".info-row")) {
+          const label = row.querySelector("span")?.textContent.trim().toLowerCase();
+          if (!wanted.includes(label)) continue;
+          const value = row.querySelector("strong")?.textContent.trim();
+          if (value) return value;
+        }
+        return "";
+      }
+      function ensureUberButton(actions, name, destination) {
+        if (!actions || !destination) return;
+        let uber = actions.querySelector(".uber-button");
+        const href = uberDeepLink(name, destination);
+        const label = name ? `Open Uber to ${name}` : `Open Uber to ${destination}`;
+        if (!uber) {
+          uber = actionLink("directions-button uber-button", href, "Uber", label);
+          actions.append(uber);
+        } else {
+          uber.href = href;
+          uber.target = "_blank";
+          uber.rel = "noopener";
+          uber.setAttribute("aria-label", label);
+          uber.title = label;
+          uber.textContent = "Uber";
+        }
       }
       function iconizeMapLink(link, fallbackDestination = "") {
         const label = link.textContent.trim() || "Directions";
@@ -2583,10 +2644,7 @@
           actions.prepend(map);
           iconizeMapLink(map, destination);
         }
-        if (!actions.querySelector(".uber-button")) {
-          const uber = actionLink("directions-button uber-button", uberDeepLink(name, destination), "Uber", `Open Uber to ${name}`);
-          actions.append(uber);
-        }
+        ensureUberButton(actions, name, destination);
       }
       function enhanceHotelCards() {
         document.querySelectorAll("article.hotel-key").forEach(article => {
@@ -2628,6 +2686,43 @@
           enhanceHotelLocation(details);
           article.replaceWith(details);
         });
+      }
+      function actionDestinationFromMaps(actions) {
+        return [...actions.querySelectorAll('a[href*="google."][href*="/maps"]')]
+          .map(link => googleMapsDestinationFromHref(link.href))
+          .find(Boolean) || "";
+      }
+      function planFallbackDestination(card, heading = "") {
+        const city = card.closest(".city-plan")?.dataset.city || activeCity;
+        const rowValue = rowTextByLabel(card, ["address", "location", "where", "best option", "nearest named", "to", "from"]);
+        if (rowValue && !/use the priority pass app|next flight|travel options bundle/i.test(rowValue)) {
+          return heading && !rowValue.toLowerCase().includes(heading.toLowerCase()) ? `${heading}, ${rowValue}` : rowValue;
+        }
+        return PLAN_FALLBACK_DESTINATIONS[city] || heading;
+      }
+      function enhanceTicketActions() {
+        document.querySelectorAll(".ticket-card").forEach(card => {
+          const actions = card.querySelector(".ticket-actions");
+          if (!actions) return;
+          const name = card.querySelector(".airline-logo")?.textContent.trim() || "Trip";
+          const destination = actionDestinationFromMaps(actions) || planFallbackDestination(card, name);
+          actions.querySelectorAll('a[href*="google."][href*="/maps"]').forEach(link => iconizeMapLink(link, destination));
+          ensureUberButton(actions, name, destination);
+        });
+      }
+      function enhanceLoungeActions() {
+        document.querySelectorAll(".lounge-pass").forEach(card => {
+          const actions = card.querySelector(".mini-actions");
+          if (!actions) return;
+          const name = card.querySelector("h3")?.textContent.trim() || "Lounge";
+          const destination = actionDestinationFromMaps(actions) || planFallbackDestination(card, name);
+          actions.querySelectorAll('a[href*="google."][href*="/maps"]').forEach(link => iconizeMapLink(link, destination));
+          ensureUberButton(actions, name, destination);
+        });
+      }
+      function enhancePlanActions() {
+        enhanceTicketActions();
+        enhanceLoungeActions();
       }
       function escapeHTML(value) {
         return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
@@ -3089,6 +3184,7 @@
       tripCityTabs.forEach(tab => tab.addEventListener("click", () => showTripCity(tab.dataset.tripCity, true, true)));
       cityTabs.forEach(tab => tab.addEventListener("click", () => showCity(tab.dataset.cityTarget)));
       enhanceHotelCards();
+      enhancePlanActions();
       enhanceMapLinks();
       prepareCopyAddresses();
       applyPrefs();
@@ -3160,7 +3256,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=51", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=52", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
