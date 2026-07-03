@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=21">
+  <link rel="manifest" href="manifest.webmanifest?v=22">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -64,7 +64,7 @@
       display: flex;
       gap: 7px;
       overflow-x: auto;
-      padding-bottom: 2px;
+      padding: 2px 1px 4px;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
@@ -165,6 +165,8 @@
       background: #ffffff;
       box-shadow: var(--shadow);
     }
+    #plans .page-head,
+    #photos .page-head { display: none; }
     .page-title {
       margin: 0;
       color: var(--ink);
@@ -485,6 +487,35 @@
       background: var(--panel);
       box-shadow: var(--shadow);
     }
+    .airline-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: inherit;
+    }
+    .airline-logo::before {
+      content: "";
+      width: 18px;
+      height: 9px;
+      border-radius: 2px 9px 2px 9px;
+      background: currentColor;
+      transform: skewX(-18deg);
+    }
+    .airline-os .ticket {
+      border-color: rgba(239, 51, 64, .28);
+      background: linear-gradient(135deg, #fff 0%, #fff 60%, #fff2f3 100%);
+    }
+    .airline-os .airline {
+      color: #c9002b;
+      font-weight: 950;
+    }
+    .airline-os .plane-line {
+      background: #ffe3e6;
+      color: #c9002b;
+    }
+    .airline-os .ticket-main {
+      border-top: 5px solid #ef3340;
+    }
     details.ticket-card {
       border: 0;
       background: transparent;
@@ -502,6 +533,31 @@
       border-radius: 0 0 20px 20px;
       background: #ffffff;
       box-shadow: 0 8px 18px rgba(59, 52, 43, .06);
+    }
+    details.ticket-card:not([open]) .ticket-extra { display: none; }
+    .ticket-hints {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 2px;
+    }
+    .ticket-hint {
+      padding: 7px 8px;
+      border-radius: 13px;
+      background: var(--accent-soft);
+      color: var(--accent-deep);
+    }
+    .ticket-hint span {
+      display: block;
+      font-size: .64rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .ticket-hint strong {
+      display: block;
+      margin-top: 1px;
+      font-size: .9rem;
+      line-height: 1.05;
     }
     .ticket::before,
     .ticket::after {
@@ -654,6 +710,43 @@
       text-decoration: none;
       box-shadow: 0 8px 16px rgba(217, 120, 35, .22);
     }
+    .mini-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+    }
+    .mini-actions .directions-button {
+      min-height: 38px;
+      font-size: .78rem;
+    }
+    .lounge-pass {
+      overflow: hidden;
+      border: 1px solid #2f2a25;
+      border-radius: 26px;
+      background: #181512;
+      color: #fff7ec;
+      box-shadow: var(--shadow);
+    }
+    .lounge-pass img {
+      width: 100%;
+      height: 126px;
+      object-fit: cover;
+      display: block;
+    }
+    .lounge-pass-body {
+      display: grid;
+      gap: 8px;
+      padding: 12px 14px 14px;
+    }
+    .lounge-pass h3 {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.05;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+    .lounge-pass .info-row span:first-child { color: #d2b38b; }
+    .lounge-pass .info-row strong { color: #fff7ec; }
     .ticket-stub strong {
       display: block;
       font-size: 1rem;
@@ -825,6 +918,11 @@
   <div class="app">
     <header class="app-top">
       <h1 class="app-title">Gelman Travel</h1>
+    </header>
+    <section class="hero" aria-label="City hero">
+      <img class="hero-logo" src="app-logo-circle.png?v=17" alt="Gelman Travel Guide logo">
+    </section>
+    <header class="app-top">
       <div class="trip-city-tabs" aria-label="Choose city">
         <button class="trip-city-tab" type="button" data-trip-city="vienna" aria-pressed="true">Vienna</button>
         <button class="trip-city-tab" type="button" data-trip-city="amsterdam" aria-pressed="false">Amsterdam</button>
@@ -834,9 +932,6 @@
       </div>
     </header>
     <main id="dictionary" class="page" data-page="dictionary">
-      <section class="hero" aria-label="City hero">
-        <img class="hero-logo" src="app-logo-circle.png?v=17" alt="Gelman Travel Guide logo">
-      </section>
       <nav class="section-nav" aria-label="Dictionary sections" id="dictionaryNav"></nav>
       <div id="dictionaryContent" class="dictionary-content" aria-live="polite"></div>
       <p class="note">Edit city phrase lists in the tiny JavaScript data block near the bottom of this HTML file. Offline mode needs the service worker file and a local or HTTPS host.</p>
@@ -864,11 +959,11 @@
           <div><h2>Vienna</h2><p>Thu, Jul 2 - Fri, Jul 3, 2026</p></div>
         </div>
         <div class="plan-grid">
-          <details class="ticket-card airline-os" open>
+          <details class="ticket-card airline-os">
             <summary>
               <article class="ticket">
                 <div class="ticket-main">
-                  <div class="airline"><span>Austrian Airlines</span><span>OS315</span></div>
+                  <div class="airline"><span class="airline-logo">Austrian Airlines</span><span>OS315</span></div>
                   <div class="route">
                     <div class="city"><strong>Vienna</strong><span>VIE</span></div>
                     <div class="plane-line">→</div>
@@ -880,6 +975,10 @@
                     <div><span>Arrive</span><strong>4:50 PM</strong></div>
                     <div><span>Class</span><strong>Economy</strong></div>
                   </div>
+                  <div class="ticket-hints">
+                    <div class="ticket-hint"><span>Leave by</span><strong>11:15 AM</strong></div>
+                    <div class="ticket-hint"><span>Boarding</span><strong>2:10 PM</strong></div>
+                  </div>
                 </div>
                 <div class="ticket-stub"><div><span class="wordmark">Austrian</span><strong>AMS</strong><span class="brand-sash"></span></div></div>
               </article>
@@ -887,18 +986,36 @@
             <div class="ticket-extra info-list">
               <div class="info-row"><span>Code</span><strong>B94UZE</strong></div>
               <div class="info-row"><span>Duration</span><strong>1h 55m, direct</strong></div>
+              <div class="info-row"><span>Arrive VIE</span><strong>11:55 AM, 3 hours before departure</strong></div>
               <div class="info-row"><span>Bag drop</span><strong>Area 3, Counter no. 361-368</strong></div>
               <div class="info-row"><span>Deadline</span><strong>2:05 PM</strong></div>
               <div class="info-row"><span>Seats</span><strong>7F, 7E, 7D, 7C</strong></div>
+              <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=Vienna%20International%20Airport%20Terminal%203%2C%20Vienna%2C%20Austria" target="_blank" rel="noopener">Directions to VIE Terminal 3</a>
             </div>
           </details>
           <article class="hotel-key">
+            <img src="nh-danube-hotel.png?v=1" alt="NH Danube City hotel exterior">
             <div class="hotel-key-body">
-              <h3>Vienna hotel</h3>
+              <h3>NH Danube City</h3>
               <div class="info-list">
-                <div class="info-row"><span>Name</span><strong>Add Vienna hotel</strong></div>
-                <div class="info-row"><span>Address</span><strong>Add address</strong></div>
+                <div class="info-row"><span>Address</span><strong>Wagramer Strasse 21, 1220 Vienna</strong></div>
                 <div class="info-row"><span>Dates</span><strong>Thu, Jul 2 - Fri, Jul 3</strong></div>
+                <div class="info-row"><span>Airport</span><strong>Leave by 11:15 AM for VIE Terminal 3</strong></div>
+              </div>
+              <div class="mini-actions">
+                <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=NH%20Danube%20City%2C%20Wagramer%20Strasse%2021%2C%201220%20Vienna%2C%20Austria" target="_blank" rel="noopener">Hotel Map</a>
+                <a class="directions-button" href="https://www.google.com/maps/dir/?api=1&amp;origin=NH%20Danube%20City%2C%20Wagramer%20Strasse%2021%2C%201220%20Vienna%2C%20Austria&amp;destination=Vienna%20International%20Airport%20Terminal%203%2C%20Vienna%2C%20Austria" target="_blank" rel="noopener">To Airport</a>
+              </div>
+            </div>
+          </article>
+          <article class="lounge-pass">
+            <img src="priority-pass-sky-lounge.png?v=1" alt="Priority Pass SKY Lounge pass">
+            <div class="lounge-pass-body">
+              <h3>Priority Pass: SKY Lounge</h3>
+              <div class="info-list">
+                <div class="info-row"><span>Where</span><strong>Vienna Airport, Terminal 3, Level 2</strong></div>
+                <div class="info-row"><span>Hours</span><strong>Daily 4:30 AM - 11:00 PM</strong></div>
+                <div class="info-row"><span>Use</span><strong>After security, before OS315 to Amsterdam</strong></div>
               </div>
             </div>
           </article>
@@ -911,7 +1028,7 @@
           <div><h2>Amsterdam</h2><p>Fri, Jul 3 - Mon, Jul 6, 2026</p></div>
         </div>
         <div class="plan-grid">
-          <details class="ticket-card airline-ba" open>
+          <details class="ticket-card airline-ba">
             <summary>
               <article class="ticket">
                 <div class="ticket-main">
@@ -951,6 +1068,16 @@
               <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=Avani%20Museum%20Quarter%20Amsterdam%20Hotel%2C%20Hobbemakade%2050%2C%201071%20XL%20Amsterdam%2C%20Netherlands" target="_blank" rel="noopener">Open Directions</a>
             </div>
           </article>
+          <article class="lounge-pass">
+            <img src="priority-pass-sky-lounge.png?v=1" alt="Priority Pass lounge pass">
+            <div class="lounge-pass-body">
+              <h3>Priority Pass Lounges</h3>
+              <div class="info-list">
+                <div class="info-row"><span>Check</span><strong>Open Priority Pass app for AMS options before security.</strong></div>
+                <div class="info-row"><span>Trip</span><strong>BA8454 departs AMS for London City.</strong></div>
+              </div>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -960,7 +1087,7 @@
           <div><h2>London</h2><p>Mon, Jul 6 - Sat, Jul 11, 2026</p></div>
         </div>
         <div class="plan-grid">
-          <details class="ticket-card airline-ua" open>
+          <details class="ticket-card airline-ua">
             <summary>
               <article class="ticket">
                 <div class="ticket-main">
@@ -1001,6 +1128,16 @@
               <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=41%20Galaxy%20Building%205%20Crews%20Street%2C%20London%20E14%203SP%2C%20United%20Kingdom" target="_blank" rel="noopener">Open Directions</a>
             </div>
           </article>
+          <article class="lounge-pass">
+            <img src="priority-pass-sky-lounge.png?v=1" alt="Priority Pass lounge pass">
+            <div class="lounge-pass-body">
+              <h3>Priority Pass Lounges</h3>
+              <div class="info-list">
+                <div class="info-row"><span>Check</span><strong>Open Priority Pass app for LHR options and terminal rules.</strong></div>
+                <div class="info-row"><span>Trip</span><strong>UA925 departs LHR for Washington.</strong></div>
+              </div>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -1023,6 +1160,16 @@
               <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=1111%20Arlington%20Blvd%2C%20Arlington%2C%20VA%2022209" target="_blank" rel="noopener">Open Directions</a>
             </div>
           </article>
+          <article class="lounge-pass">
+            <img src="priority-pass-sky-lounge.png?v=1" alt="Priority Pass lounge pass">
+            <div class="lounge-pass-body">
+              <h3>Priority Pass Lounges</h3>
+              <div class="info-list">
+                <div class="info-row"><span>Check</span><strong>Open Priority Pass app for IAD options before the next flight.</strong></div>
+                <div class="info-row"><span>Arrival</span><strong>UA925 lands at IAD around 8:00 PM.</strong></div>
+              </div>
+            </div>
+          </article>
         </div>
       </section>
 
@@ -1033,12 +1180,24 @@
         </div>
         <div class="plan-grid">
           <article class="hotel-key">
-            <img src="sarasota-hero.png?v=1" alt="Sarasota waterfront">
+            <img src="sarasota-home-key.png?v=1" alt="Sarasota house exterior">
             <div class="hotel-key-body">
-              <h3>Sarasota notes</h3>
+              <h3>Sarasota stay</h3>
               <div class="info-list">
-                <div class="info-row"><span>Status</span><strong>Add flights, stays, and beach plans here.</strong></div>
-                <div class="info-row"><span>Airport</span><strong>SRQ - Sarasota Bradenton</strong></div>
+                <div class="info-row"><span>Address</span><strong>8337 Eagle Lake Dr, Sarasota, FL 34241</strong></div>
+                <div class="info-row"><span>Airport</span><strong>Arriving Jul 13 at SRQ - details to come</strong></div>
+                <div class="info-row"><span>Status</span><strong>Add flight number and arrival time here.</strong></div>
+              </div>
+              <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=8337%20Eagle%20Lake%20Dr%2C%20Sarasota%2C%20FL%2034241" target="_blank" rel="noopener">Open Directions</a>
+            </div>
+          </article>
+          <article class="lounge-pass">
+            <img src="priority-pass-sky-lounge.png?v=1" alt="Priority Pass lounge pass">
+            <div class="lounge-pass-body">
+              <h3>Priority Pass Lounges</h3>
+              <div class="info-list">
+                <div class="info-row"><span>Check</span><strong>Open Priority Pass app for SRQ or connection airport options.</strong></div>
+                <div class="info-row"><span>Arrival</span><strong>SRQ on Jul 13, details to come.</strong></div>
               </div>
             </div>
           </article>
@@ -1340,7 +1499,7 @@
       applyPrefs();
       showTripCity(activeCity);
       showPage(localStorage.gelmanPage || "dictionary");
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=21");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=22");
     })();
   </script>
 </body>
