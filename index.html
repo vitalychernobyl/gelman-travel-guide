@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=46">
+  <link rel="manifest" href="manifest.webmanifest?v=47">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -501,15 +501,12 @@
     }
     .attraction-filters {
       display: flex;
+      flex-wrap: wrap;
       gap: 6px;
-      overflow-x: auto;
       padding: 2px 1px 8px;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
     }
-    .attraction-filters::-webkit-scrollbar { display: none; }
     .attraction-filter {
-      flex: 0 0 auto;
+      flex: 0 1 auto;
       min-height: 33px;
       padding: 6px 12px;
       font-size: .8rem;
@@ -524,6 +521,11 @@
       background: var(--accent) !important;
       color: var(--accent-ink) !important;
       font-weight: 900;
+    }
+    .recommended-tag {
+      background: #25211c !important;
+      color: #fffefa !important;
+      font-weight: 950 !important;
     }
     .city-mark {
       display: inline-grid;
@@ -628,57 +630,16 @@
       display: grid;
       gap: 9px;
     }
-    .featured-attractions {
-      display: grid;
-      gap: 8px;
-      margin: 8px 0 10px;
-    }
-    .featured-attractions h3 {
-      margin: 0;
-      color: #6b6359;
-      font-size: .74rem;
-      font-weight: 950;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-    .featured-rail {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
-      gap: 8px;
-    }
-    .featured-card {
-      display: grid;
-      gap: 7px;
-      padding: 10px;
-      border: 1px solid #ded7cc;
-      border-radius: 16px;
-      background: #fffdfa;
-      box-shadow: 0 8px 18px rgba(83, 68, 50, .08);
-    }
-    .featured-card b {
-      color: var(--accent-deep);
-      font-size: .92rem;
-      line-height: 1.05;
-    }
-    .featured-card span {
-      color: var(--muted);
-      font-size: .72rem;
-      font-weight: 850;
-      line-height: 1.18;
-    }
-    .featured-card a {
-      justify-self: start;
-      color: var(--ink);
-      font-size: .7rem;
-      font-weight: 950;
-      text-decoration: none;
-    }
     .attraction-card {
       overflow: hidden;
       border: 1px solid var(--line);
       border-radius: 18px;
       background: var(--panel);
       box-shadow: 0 3px 12px rgba(59, 52, 43, .05);
+    }
+    .shared-target {
+      outline: 3px solid rgba(217, 120, 35, .55);
+      outline-offset: 3px;
     }
     .attraction-card summary {
       display: grid;
@@ -1199,10 +1160,11 @@
       font-size: 0;
       box-shadow: none;
     }
-    .map-action::before {
-      content: "⌖";
-      font-size: 1rem;
-      line-height: 1;
+    .map-action::before { content: none; }
+    .map-action .map-icon {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2.7;
     }
     .map-action .action-label { display: none; }
     .uber-button {
@@ -1215,13 +1177,23 @@
     .site-button::before { content: "↗"; }
     .ticket-button::before { content: "▤"; }
     .mini-actions {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+      display: flex;
+      align-items: center;
       gap: 7px;
     }
     .mini-actions .directions-button {
       min-height: 38px;
+      padding: 0 13px;
       font-size: .78rem;
+    }
+    .mini-actions .map-action {
+      flex: 0 0 40px;
+      padding: 0;
+    }
+    .mini-actions .uber-button {
+      order: 20;
+      flex: 1 1 120px;
+      margin-left: auto;
     }
     .ticket-actions {
       display: grid;
@@ -1242,6 +1214,29 @@
     .ticket-actions .app-button {
       background: #25211c;
       box-shadow: 0 8px 16px rgba(37, 33, 28, .14);
+    }
+    .card-share-button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      z-index: 3;
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      min-height: 34px;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, .72);
+      border-radius: 999px;
+      background: rgba(255, 254, 250, .9);
+      color: #5f5850;
+      box-shadow: 0 8px 20px rgba(37, 33, 28, .18);
+      backdrop-filter: blur(12px);
+    }
+    .card-share-button svg {
+      width: 17px;
+      height: 17px;
+      stroke-width: 2.6;
     }
     .copy-address {
       cursor: pointer;
@@ -1445,7 +1440,6 @@
       font-weight: 950;
       box-shadow: 0 12px 28px rgba(217, 120, 35, .28);
     }
-    .install-sheet,
     .logo-lightbox {
       position: fixed;
       inset: 0;
@@ -1456,9 +1450,7 @@
       background: rgba(37, 33, 28, .36);
       backdrop-filter: blur(12px);
     }
-    .install-sheet[hidden],
     .logo-lightbox[hidden] { display: none; }
-    .install-card,
     .logo-card {
       width: min(480px, 100%);
       border: 1px solid rgba(216, 211, 202, .95);
@@ -1466,40 +1458,6 @@
       background: #fffefa;
       color: var(--ink);
       box-shadow: 0 24px 60px rgba(37, 33, 28, .28);
-    }
-    .install-card {
-      display: grid;
-      gap: 12px;
-      padding: 18px;
-    }
-    .install-card h2,
-    .install-card p { margin: 0; }
-    .install-card h2 {
-      font-size: 1.25rem;
-      line-height: 1;
-    }
-    .install-card p {
-      color: var(--muted);
-      font-size: .9rem;
-    }
-    .install-steps {
-      display: grid;
-      gap: 8px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      font-size: .88rem;
-      font-weight: 800;
-    }
-    .install-steps li {
-      padding: 9px 10px;
-      border-radius: 14px;
-      background: var(--soft);
-    }
-    .install-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
     }
     .plain-button,
     .primary-button {
@@ -1514,6 +1472,63 @@
       border-color: var(--accent);
       background: var(--accent);
       color: var(--accent-ink);
+    }
+    .install-banner {
+      display: grid;
+      grid-template-columns: 36px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 8px;
+      padding: 8px;
+      border: 1px solid rgba(216, 211, 202, .95);
+      border-radius: 18px;
+      background: #fffefa;
+      box-shadow: 0 8px 22px rgba(59, 52, 43, .1);
+    }
+    .install-banner[hidden] { display: none; }
+    .install-banner img {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      object-fit: cover;
+      background: #f6b46f;
+    }
+    .install-banner-text {
+      display: grid;
+      gap: 1px;
+      min-width: 0;
+    }
+    .install-banner-text strong {
+      font-size: .84rem;
+      line-height: 1.05;
+    }
+    .install-banner-text span {
+      overflow: hidden;
+      color: var(--muted);
+      font-size: .68rem;
+      font-weight: 800;
+      line-height: 1.1;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .install-banner button {
+      display: inline-grid;
+      grid-auto-flow: column;
+      align-items: center;
+      gap: 5px;
+      min-height: 34px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 999px;
+      background: #25211c;
+      color: #fffefa;
+      font-size: .72rem;
+      font-weight: 950;
+    }
+    .install-banner button svg {
+      width: 15px;
+      height: 15px;
+      stroke-width: 2.7;
     }
     .logo-lightbox { place-items: center; }
     .logo-card {
@@ -1541,6 +1556,17 @@
 </head>
 <body>
   <div class="app">
+    <div class="install-banner" id="installBanner" hidden>
+      <img src="apple-touch-icon.png?v=17" alt="">
+      <div class="install-banner-text">
+        <strong>Gelman Travel app</strong>
+        <span>Add this guide to your Home Screen.</span>
+      </div>
+      <button id="installBannerButton" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        <span>Add app</span>
+      </button>
+    </div>
     <section class="hero" aria-label="City hero">
       <div class="hero-status" id="heroStatus" aria-live="polite"><span>AMS · Stay</span><strong>Jul 3-6</strong><small>66/57° · Sat: 72/62°</small></div>
       <button class="share-button" id="shareButton" type="button" aria-label="Share current Gelman Travel page">
@@ -1958,22 +1984,6 @@
       <button class="float-toggle" id="controlsToggle" type="button" aria-expanded="false" aria-controls="controlMenu">Aa</button>
     </div>
 
-    <div class="install-sheet" id="installSheet" hidden role="dialog" aria-modal="true" aria-labelledby="installTitle">
-      <div class="install-card">
-        <h2 id="installTitle">Add Gelman Travel to your Home Screen</h2>
-        <p>Make this feel like a tiny app: one tap from your phone, full-screen, and cached after it loads.</p>
-        <ol class="install-steps">
-          <li>On iPhone: open this page in Safari.</li>
-          <li>Tap the Share button, then Add to Home Screen.</li>
-          <li>Open Gelman Travel from the new icon.</li>
-        </ol>
-        <div class="install-actions">
-          <button class="plain-button" id="installLater" type="button">Later</button>
-          <button class="primary-button" id="installNow" type="button">Show Me How</button>
-        </div>
-      </div>
-    </div>
-
     <div class="logo-lightbox" id="logoLightbox" hidden role="dialog" aria-modal="true" aria-label="Gelman Travel logo">
       <div class="logo-card">
         <img src="app-logo-circle.png?v=17" alt="Gelman Travel Guide logo large">
@@ -1998,9 +2008,8 @@
       const attractionContent = document.querySelector("#attractionContent");
       const heroStatus = document.querySelector("#heroStatus");
       const tripCityScroller = document.querySelector(".trip-city-tabs");
-      const installSheet = document.querySelector("#installSheet");
-      const installLater = document.querySelector("#installLater");
-      const installNow = document.querySelector("#installNow");
+      const installBanner = document.querySelector("#installBanner");
+      const installBannerButton = document.querySelector("#installBannerButton");
       const logoButton = document.querySelector("#logoButton");
       const logoLightbox = document.querySelector("#logoLightbox");
       const closeLogo = document.querySelector("#closeLogo");
@@ -2012,6 +2021,7 @@
       const startParams = new URLSearchParams(location.search);
       let activeCity = "amsterdam";
       let activePage = normalizePage(startParams.get("page") || "plans");
+      const startHash = location.hash;
       let weatherByCity = {};
       const HEROES = {
         vienna: "vienna-hero.png?v=1",
@@ -2314,12 +2324,13 @@
       function shareCityLabel(city) {
         return { vienna: "Vienna", amsterdam: "Amsterdam", london: "London", washington: "Washington", sarasota: "Sarasota" }[city] || "Amsterdam";
       }
-      function buildShareUrl(page = activePage, city = activeCity) {
-        const url = new URL(location.href);
+      function buildShareUrl(page = activePage, city = activeCity, hash = "", canonical = false) {
+        const url = new URL(canonical ? "https://antonreport.com/gelmantravel/" : location.href);
         url.searchParams.set("city", city);
         url.searchParams.set("page", normalizePage(page));
         url.searchParams.delete("qa");
         url.searchParams.delete("today");
+        url.hash = hash ? `#${hash.replace(/^#/, "")}` : "";
         return url.toString();
       }
       function syncShareUrl() {
@@ -2332,6 +2343,48 @@
         shareStatus.hidden = false;
         clearTimeout(showShareStatus.timer);
         showShareStatus.timer = setTimeout(() => { shareStatus.hidden = true; }, 2200);
+      }
+      function shareIconHTML() {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 16V3"/><path d="m7 8 5-5 5 5"/></svg>';
+      }
+      function mapIconHTML() {
+        return '<svg class="map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m12 3 7 18-7-4-7 4 7-18Z"/><path d="M12 3v14"/></svg>';
+      }
+      function slugify(value) {
+        return String(value).toLowerCase().replace(/&/g, " and ").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      }
+      function familySmsUrl(url, text) {
+        const numbers = ["+12026410072", "+12404470927", "+12406877739", "+4407875721986"];
+        const body = encodeURIComponent(`${text}\n${url}`);
+        const addresses = numbers.map(encodeURIComponent).join(",");
+        const apple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+        return apple ? `sms://open?addresses=${addresses}&body=${body}` : `sms:${addresses}?body=${body}`;
+      }
+      async function shareUrl(url, title, text, preferMessages = false) {
+        if (preferMessages) {
+          location.href = familySmsUrl(url, text);
+          showShareStatus("Opening Messages");
+          return;
+        }
+        try {
+          if (navigator.share) {
+            await navigator.share({ title, text, url });
+            return;
+          }
+          await navigator.clipboard.writeText(url);
+          showShareStatus("Link copied");
+        } catch (error) {
+          if (error && error.name === "AbortError") return;
+          try {
+            await navigator.clipboard.writeText(url);
+            showShareStatus("Link copied");
+          } catch {
+            showShareStatus(url);
+          }
+        }
+      }
+      function shareTargetButton(id, page, city, label) {
+        return `<button class="card-share-button" type="button" data-share-target="${escapeHTML(id)}" data-share-page="${escapeHTML(page)}" data-share-city="${escapeHTML(city)}" data-share-label="${escapeHTML(label)}" aria-label="Share ${escapeHTML(label)}">${shareIconHTML()}</button>`;
       }
       function googleMapsDirections(destination) {
         return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving`;
@@ -2378,7 +2431,7 @@
         link.classList.add("map-action");
         link.setAttribute("aria-label", `${label} in Google Maps`);
         link.title = `${label} in Google Maps`;
-        link.innerHTML = `<span class="action-label">${escapeHTML(label)}</span>`;
+        link.innerHTML = `${mapIconHTML()}<span class="action-label">${escapeHTML(label)}</span>`;
       }
       function addressRowIn(scope) {
         return [...scope.querySelectorAll(".info-row")].find(row => row.querySelector("span")?.textContent.trim().toLowerCase() === "address");
@@ -2417,40 +2470,29 @@
         scope.querySelectorAll('a.directions-button[href*="google."][href*="/maps"]').forEach(link => iconizeMapLink(link));
       }
       async function shareCurrentPage() {
-        const url = buildShareUrl();
+        const url = buildShareUrl(activePage, activeCity, "", true);
         const city = shareCityLabel(activeCity);
         const page = sharePageLabel(activePage);
         const title = `Gelman Travel - ${city} ${page}`;
         const text = `${city} ${page} in Gelman Travel`;
-        try {
-          if (navigator.share) {
-            await navigator.share({ title, text, url });
-            return;
-          }
-          await navigator.clipboard.writeText(url);
-          showShareStatus("Link copied");
-        } catch (error) {
-          if (error && error.name === "AbortError") return;
-          try {
-            await navigator.clipboard.writeText(url);
-            showShareStatus("Link copied");
-          } catch {
-            showShareStatus(url);
-          }
-        }
+        shareUrl(url, title, text, true);
       }
       function isStandalone() {
         return window.navigator.standalone || window.matchMedia("(display-mode: standalone)").matches;
       }
-      function showInstallSheet(force = false) {
-        if (!installSheet || isStandalone()) return;
-        if (!force && localStorage.gelmanInstallSeenV46) return;
-        installSheet.hidden = false;
+      function showInstallBanner() {
+        if (!installBanner) return;
+        installBanner.hidden = isStandalone();
       }
-      function hideInstallSheet(markSeen = true) {
-        if (!installSheet) return;
-        installSheet.hidden = true;
-        if (markSeen) localStorage.gelmanInstallSeenV46 = "1";
+      async function installFromBanner() {
+        if (deferredInstallPrompt) {
+          deferredInstallPrompt.prompt();
+          await deferredInstallPrompt.userChoice.catch(() => null);
+          deferredInstallPrompt = null;
+          showInstallBanner();
+          return;
+        }
+        showShareStatus("iPhone: Safari Share → Add to Home Screen");
       }
       function enhanceHotelLocation(card) {
         const body = card.querySelector(".hotel-key-body");
@@ -2473,12 +2515,13 @@
         if (mapLinks.length) {
           mapLinks.forEach(link => iconizeMapLink(link, destination));
         } else {
-          actions.prepend(actionLink("directions-button map-action", googleMapsDirections(destination), "Map", `Google Maps directions to ${name}`));
+          const map = actionLink("directions-button map-action", googleMapsDirections(destination), "Map", `Google Maps directions to ${name}`);
+          actions.prepend(map);
+          iconizeMapLink(map, destination);
         }
         if (!actions.querySelector(".uber-button")) {
           const uber = actionLink("directions-button uber-button", uberDeepLink(name, destination), "Uber", `Open Uber to ${name}`);
-          const site = actions.querySelector(".site-button");
-          actions.insertBefore(uber, site || null);
+          actions.append(uber);
         }
       }
       function enhanceHotelCards() {
@@ -2487,8 +2530,11 @@
           const image = article.querySelector(":scope > img");
           const heading = body?.querySelector("h3");
           if (!body || !image || !heading) return;
+          const city = article.closest(".city-plan")?.dataset.city || activeCity;
+          const id = `hotel-${city}-${slugify(heading.textContent)}`;
           const details = document.createElement("details");
           details.className = article.className;
+          details.id = id;
           const summary = document.createElement("summary");
           const preview = document.createElement("div");
           const address = addressRowIn(body)?.querySelector("strong")?.textContent.trim();
@@ -2513,6 +2559,7 @@
           }
           preview.append(title, meta);
           summary.append(image, preview);
+          summary.insertAdjacentHTML("beforeend", shareTargetButton(id, "plans", city, heading.textContent.trim()));
           details.append(summary, body);
           enhanceHotelLocation(details);
           article.replaceWith(details);
@@ -2666,27 +2713,15 @@
           <div class="attraction-filters" role="tablist" aria-label="Filter attractions">
             ${["All", ...filters].map(filter => `<button type="button" class="attraction-filter" data-filter="${escapeHTML(filter)}" aria-pressed="${filter === activeFilter}">${escapeHTML(filter === "All" ? "All" : ATTRACTION_FILTER_LABELS[filter] || filter)}</button>`).join("")}
           </div>` : "";
-        const featuredItems = featuredTitles.map(title => items.find(item => item.title === title)).filter(Boolean);
-        const featuredPanel = featuredItems.length ? `
-          <div class="featured-attractions" aria-label="Featured Amsterdam picks">
-            <h3>Recommended first</h3>
-            <div class="featured-rail">
-              ${featuredItems.map(item => `<article class="featured-card">
-                <b>${escapeHTML(item.title)}</b>
-                <span>${escapeHTML(item.distance)} • ${escapeHTML(item.price)}</span>
-                <a href="${escapeHTML(item.link)}" target="_blank" rel="noopener">Open details</a>
-              </article>`).join("")}
-            </div>
-          </div>` : "";
         attractionContent.innerHTML = `
           <section class="card wide attraction-city" data-attraction-city="${escapeHTML(city)}">
             <h2><span class="city-mark">${escapeHTML(data.code)}</span> ${escapeHTML(data.city)} <span class="meta">${shown.length} picks near ${escapeHTML(data.hotel)}</span></h2>
-            ${featuredPanel}
             ${filterChips}
             <div class="attraction-stack">
               ${shown.map((item, index) => {
                 const attraction = item;
                 const title = attraction.title;
+                const cardId = `attraction-${city}-${slugify(title)}`;
                 const category = attraction.category;
                 const location = attraction.location;
                 const price = attraction.price;
@@ -2702,13 +2737,16 @@
                 const uberLink = uberDeepLink(title, destination);
                 const fallbackImage = attractionThumb(title, category);
                 const image = ATTRACTION_IMAGES[title] || attraction.image || fallbackImage;
-                return `<details class="attraction-card"${index === 0 ? " open" : ""}>
+                const recommended = attraction.featured || attraction._featuredRank >= 0;
+                return `<details class="attraction-card" id="${escapeHTML(cardId)}"${index === 0 ? " open" : ""}>
                   <summary>
                     <img class="attraction-thumb" src="${escapeHTML(image)}" data-fallback-src="${escapeHTML(fallbackImage)}" alt="${escapeHTML(title)}">
+                    ${shareTargetButton(cardId, "photos", city, title)}
                     <div class="attraction-main">
                       <h3>${escapeHTML(title)}</h3>
                       <p>${escapeHTML(description)}</p>
                       <div class="attraction-tags">
+                        ${recommended ? `<span class="recommended-tag">Recommended</span>` : ""}
                         ${attraction.rating ? `<span class="rating-tag">★ ${attraction.rating.toFixed(1)}</span>` : ""}
                         <span>${escapeHTML(category)}</span>
                         <span>${escapeHTML(price)}</span>
@@ -2723,7 +2761,7 @@
                     <div class="attraction-actions">
                       <button class="detail-action" type="button" data-detail-toggle><span class="btn-icon" aria-hidden="true">⌃</span><span>Details</span></button>
                       <a class="ticket-link" href="${escapeHTML(ticketLink)}" target="_blank" rel="noopener"><span class="btn-icon" aria-hidden="true">▤</span><span>${escapeHTML(ticketLabel)}</span></a>
-                      <a class="map-action" href="${escapeHTML(mapLink)}" target="_blank" rel="noopener" aria-label="Google Maps directions to ${escapeHTML(title)}" title="Google Maps directions to ${escapeHTML(title)}"><span class="action-label">Directions</span></a>
+                      <a class="map-action" href="${escapeHTML(mapLink)}" target="_blank" rel="noopener" aria-label="Google Maps directions to ${escapeHTML(title)}" title="Google Maps directions to ${escapeHTML(title)}">${mapIconHTML()}<span class="action-label">Directions</span></a>
                       <a class="uber-button" href="${escapeHTML(uberLink)}" target="_blank" rel="noopener" aria-label="Open Uber to ${escapeHTML(title)}" title="Open Uber to ${escapeHTML(title)}"><span class="btn-icon" aria-hidden="true">U</span><span>Uber</span></a>
                     </div>
                   </div>
@@ -2854,6 +2892,15 @@
         cityPlans.forEach(plan => { plan.hidden = plan.dataset.city !== city; });
         localStorage.gelmanCity = city;
       }
+      function scrollToHashTarget() {
+        if (!location.hash) return;
+        const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (!target) return;
+        if ("open" in target) target.open = true;
+        target.scrollIntoView({ block: "start", behavior: "smooth" });
+        target.classList.add("shared-target");
+        setTimeout(() => target.classList.remove("shared-target"), 1800);
+      }
       function showAttractions(city) {
         renderAttractions(ATTRACTIONS[city] ? city : "amsterdam");
         localStorage.gelmanAttractionsCity = city;
@@ -2944,16 +2991,13 @@
       window.addEventListener("beforeinstallprompt", event => {
         event.preventDefault();
         deferredInstallPrompt = event;
+        showInstallBanner();
       });
-      installLater?.addEventListener("click", () => hideInstallSheet(true));
-      installNow?.addEventListener("click", async () => {
-        if (deferredInstallPrompt) {
-          deferredInstallPrompt.prompt();
-          await deferredInstallPrompt.userChoice.catch(() => null);
-          deferredInstallPrompt = null;
-        }
-        hideInstallSheet(true);
+      window.addEventListener("appinstalled", () => {
+        if (installBanner) installBanner.hidden = true;
+        showShareStatus("Installed");
       });
+      installBannerButton?.addEventListener("click", installFromBanner);
       logoButton?.addEventListener("click", () => { logoLightbox.hidden = false; });
       closeLogo?.addEventListener("click", () => { logoLightbox.hidden = true; });
       logoLightbox?.addEventListener("click", event => {
@@ -2961,6 +3005,19 @@
       });
       shareButton?.addEventListener("click", shareCurrentPage);
       document.addEventListener("click", event => {
+        const shareTarget = event.target.closest("[data-share-target]");
+        if (shareTarget) {
+          event.preventDefault();
+          event.stopPropagation();
+          const id = shareTarget.dataset.shareTarget;
+          const page = shareTarget.dataset.sharePage || activePage;
+          const city = shareTarget.dataset.shareCity || activeCity;
+          const label = shareTarget.dataset.shareLabel || "Gelman Travel";
+          const cityLabel = shareCityLabel(city);
+          const pageLabel = sharePageLabel(page);
+          shareUrl(buildShareUrl(page, city, id, true), `Gelman Travel - ${label}`, `${label} in ${cityLabel} ${pageLabel}`, false);
+          return;
+        }
         const address = event.target.closest("[data-copy-address]");
         if (address) {
           event.preventDefault();
@@ -2994,10 +3051,12 @@
       showTripCity(DICTIONARIES[sharedCity] ? sharedCity : (rememberedCityChoice() || cityForToday()));
       showPage(activePage);
       updateFlightCountdowns();
-      setTimeout(() => showInstallSheet(false), 900);
+      if (startHash) history.replaceState(null, "", buildShareUrl(activePage, activeCity, startHash));
+      showInstallBanner();
+      setTimeout(scrollToHashTarget, 320);
       setInterval(updateFlightCountdowns, 60000);
       if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-        navigator.serviceWorker.register("service-worker.js?v=46", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=47", { updateViaCache: "none" }).then(registration => {
           const checkForUpdate = () => registration.update().catch(() => {});
           document.addEventListener("visibilitychange", () => {
             if (document.visibilityState === "visible") checkForUpdate();
