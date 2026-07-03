@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=52">
+  <link rel="manifest" href="manifest.webmanifest?v=53">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -2084,7 +2084,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "52";
+      const APP_VERSION = "53";
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
       const UPDATE_RELOAD_AT_KEY = "gelmanLastForcedReloadAt";
@@ -2136,6 +2136,7 @@
         washington: "Ronald Reagan Washington National Airport, Arlington, VA",
         sarasota: "Sarasota Bradenton International Airport, Sarasota, FL"
       };
+      const MAP_LINK_SELECTOR = 'a[href*="google."][href*="/maps"], a[href^="comgooglemaps:"], a[data-web-map-url], a.map-action';
       const CITY_WEATHER = {
         vienna: { label: "Vienna", short: "VIE", latitude: 48.2082, longitude: 16.3738, fallback: { today: "72/58°", tomorrow: "74/60°" } },
         amsterdam: { label: "Amsterdam", short: "AMS", latitude: 52.3676, longitude: 4.9041, fallback: { today: "66/57°", tomorrow: "72/62°" } },
@@ -2474,35 +2475,50 @@
       function shareTargetButton(id, page, city, label) {
         return `<button class="card-share-button" type="button" data-share-target="${escapeHTML(id)}" data-share-page="${escapeHTML(page)}" data-share-city="${escapeHTML(city)}" data-share-label="${escapeHTML(label)}" aria-label="Share ${escapeHTML(label)}">${shareIconHTML()}</button>`;
       }
-      function googleMapsDirections(destination) {
-        return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving&dir_action=navigate`;
+      function cleanMapsMode(mode) {
+        return ["driving", "walking", "transit", "bicycling"].includes(mode) ? mode : "driving";
+      }
+      function googleMapsWebDirections(destination, mode = "driving") {
+        return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=${cleanMapsMode(mode)}&dir_action=navigate`;
+      }
+      function googleMapsDirections(destination, mode = "driving") {
+        const params = new URLSearchParams({
+          saddr: "Current Location",
+          daddr: destination,
+          directionsmode: cleanMapsMode(mode)
+        });
+        return `comgooglemaps://?${params.toString()}`;
+      }
+      function googleMapsInfoFromHref(href, fallbackDestination = "") {
+        const info = { destination: "", mode: "driving", isMap: false };
+        try {
+          const url = new URL(href, location.href);
+          const protocol = url.protocol.toLowerCase();
+          const isNativeGoogleMaps = protocol === "comgooglemaps:" || protocol === "comgooglemaps-x-callback:";
+          const isGoogleMaps = url.hostname.includes("google.") && url.pathname.includes("/maps");
+          if (!isNativeGoogleMaps && !isGoogleMaps) return info;
+          info.isMap = true;
+          info.mode = cleanMapsMode(url.searchParams.get("directionsmode") || url.searchParams.get("travelmode") || info.mode);
+          info.destination = url.searchParams.get("daddr") || url.searchParams.get("destination") || url.searchParams.get("query") || url.searchParams.get("q") || fallbackDestination;
+          return info;
+        } catch {
+          return info;
+        }
       }
       function googleMapsDestinationFromHref(href) {
-        try {
-          const url = new URL(href, location.href);
-          const isGoogleMaps = url.hostname.includes("google.") && url.pathname.includes("/maps");
-          if (!isGoogleMaps) return "";
-          return url.searchParams.get("destination") || url.searchParams.get("query") || url.searchParams.get("q") || "";
-        } catch {
-          return "";
-        }
+        return googleMapsInfoFromHref(href).destination;
+      }
+      function normalizeGoogleMapsWebHref(href, fallbackDestination = "") {
+        const info = googleMapsInfoFromHref(href, fallbackDestination);
+        if (!info.isMap && !fallbackDestination) return href;
+        const destination = info.destination || fallbackDestination;
+        return destination ? googleMapsWebDirections(destination, info.mode) : href;
       }
       function normalizeGoogleMapsHref(href, fallbackDestination = "") {
-        try {
-          const url = new URL(href, location.href);
-          const isGoogleMaps = url.hostname.includes("google.") && url.pathname.includes("/maps");
-          if (!isGoogleMaps) return href;
-          if (url.pathname.includes("/dir/")) {
-            url.searchParams.set("api", "1");
-            if (!url.searchParams.get("destination") && fallbackDestination) url.searchParams.set("destination", fallbackDestination);
-            if (!url.searchParams.get("travelmode")) url.searchParams.set("travelmode", "driving");
-            return url.toString();
-          }
-          const destination = url.searchParams.get("query") || fallbackDestination;
-          return destination ? googleMapsDirections(destination) : href;
-        } catch {
-          return fallbackDestination ? googleMapsDirections(fallbackDestination) : href;
-        }
+        const info = googleMapsInfoFromHref(href, fallbackDestination);
+        if (!info.isMap && !fallbackDestination) return href;
+        const destination = info.destination || fallbackDestination;
+        return destination ? googleMapsDirections(destination, info.mode) : href;
       }
       function uberDeepLink(name, destination) {
         const url = new URL("https://m.uber.com/ul/");
@@ -2552,10 +2568,19 @@
       }
       function iconizeMapLink(link, fallbackDestination = "") {
         const label = link.textContent.trim() || "Directions";
-        link.href = normalizeGoogleMapsHref(link.href, fallbackDestination);
+        const sourceHref = link.dataset.webMapUrl || link.getAttribute("href") || "";
+        const info = googleMapsInfoFromHref(sourceHref, fallbackDestination);
+        const destination = info.destination || fallbackDestination;
+        if (!destination) return;
+        const appHref = googleMapsDirections(destination, info.mode);
+        link.href = appHref;
+        link.dataset.mapsAppHref = appHref;
+        link.dataset.webMapUrl = normalizeGoogleMapsWebHref(sourceHref, destination);
+        link.dataset.mapsDestination = destination;
+        link.removeAttribute("target");
         link.classList.add("map-action");
-        link.setAttribute("aria-label", `${label} in Google Maps`);
-        link.title = `${label} in Google Maps`;
+        link.setAttribute("aria-label", `${label} in the Google Maps app`);
+        link.title = `${label} in the Google Maps app`;
         link.innerHTML = `${mapIconHTML()}<span class="action-label">${escapeHTML(label)}</span>`;
       }
       function addressRowIn(scope) {
@@ -2592,7 +2617,7 @@
         showShareStatus("Copied");
       }
       function enhanceMapLinks(scope = document) {
-        scope.querySelectorAll('a.directions-button[href*="google."][href*="/maps"]').forEach(link => iconizeMapLink(link));
+        scope.querySelectorAll(MAP_LINK_SELECTOR).forEach(link => iconizeMapLink(link));
       }
       async function shareCurrentPage() {
         const url = buildShareUrl(activePage, activeCity, "", true);
@@ -2636,7 +2661,7 @@
           body.querySelectorAll(":scope > a.directions-button").forEach(link => actions.append(link));
           body.append(actions);
         }
-        const mapLinks = [...actions.querySelectorAll('a[href*="google."][href*="/maps"]')];
+        const mapLinks = [...actions.querySelectorAll(MAP_LINK_SELECTOR)];
         if (mapLinks.length) {
           mapLinks.forEach(link => iconizeMapLink(link, destination));
         } else {
@@ -2688,7 +2713,7 @@
         });
       }
       function actionDestinationFromMaps(actions) {
-        return [...actions.querySelectorAll('a[href*="google."][href*="/maps"]')]
+        return [...actions.querySelectorAll(MAP_LINK_SELECTOR)]
           .map(link => googleMapsDestinationFromHref(link.href))
           .find(Boolean) || "";
       }
@@ -2706,7 +2731,7 @@
           if (!actions) return;
           const name = card.querySelector(".airline-logo")?.textContent.trim() || "Trip";
           const destination = actionDestinationFromMaps(actions) || planFallbackDestination(card, name);
-          actions.querySelectorAll('a[href*="google."][href*="/maps"]').forEach(link => iconizeMapLink(link, destination));
+          actions.querySelectorAll(MAP_LINK_SELECTOR).forEach(link => iconizeMapLink(link, destination));
           ensureUberButton(actions, name, destination);
         });
       }
@@ -2716,7 +2741,7 @@
           if (!actions) return;
           const name = card.querySelector("h3")?.textContent.trim() || "Lounge";
           const destination = actionDestinationFromMaps(actions) || planFallbackDestination(card, name);
-          actions.querySelectorAll('a[href*="google."][href*="/maps"]').forEach(link => iconizeMapLink(link, destination));
+          actions.querySelectorAll(MAP_LINK_SELECTOR).forEach(link => iconizeMapLink(link, destination));
           ensureUberButton(actions, name, destination);
         });
       }
@@ -2892,6 +2917,7 @@
                 const ticketLink = attraction.tickets || link;
                 const ticketLabel = attraction.ticketLabel || attractionActionLabel(category, price);
                 const destination = attraction.address || `${title}, ${location}, ${data.city}`;
+                const mapWebLink = attraction.map ? normalizeGoogleMapsWebHref(attraction.map, destination) : googleMapsWebDirections(destination);
                 const mapLink = attraction.map ? normalizeGoogleMapsHref(attraction.map, destination) : googleMapsDirections(destination);
                 const uberLink = uberDeepLink(title, destination);
                 const fallbackImage = attractionThumb(title, category);
@@ -2919,7 +2945,7 @@
                     <div><strong>More:</strong> ${escapeHTML(details)}</div>
                     <div class="attraction-actions">
                       <a class="ticket-link" href="${escapeHTML(ticketLink)}" target="_blank" rel="noopener">${escapeHTML(ticketLabel)}</a>
-                      <a class="map-action" href="${escapeHTML(mapLink)}" target="_blank" rel="noopener" aria-label="Google Maps directions to ${escapeHTML(title)}" title="Google Maps directions to ${escapeHTML(title)}"><span class="action-label">Directions</span></a>
+                      <a class="map-action" href="${escapeHTML(mapLink)}" data-maps-app-href="${escapeHTML(mapLink)}" data-web-map-url="${escapeHTML(mapWebLink)}" data-maps-destination="${escapeHTML(destination)}" aria-label="Open Google Maps app directions to ${escapeHTML(title)}" title="Open Google Maps app directions to ${escapeHTML(title)}"><span class="action-label">Directions</span></a>
                       <a class="uber-button" href="${escapeHTML(uberLink)}" target="_blank" rel="noopener" aria-label="Open Uber to ${escapeHTML(title)}" title="Open Uber to ${escapeHTML(title)}">Uber</a>
                     </div>
                   </div>
@@ -3151,6 +3177,14 @@
       });
       shareButton?.addEventListener("click", shareCurrentPage);
       document.addEventListener("click", event => {
+        const mapLink = event.target.closest(".map-action[data-maps-app-href], a[href^='comgooglemaps:']");
+        if (mapLink) {
+          event.preventDefault();
+          event.stopPropagation();
+          showShareStatus("Opening Google Maps");
+          window.location.href = mapLink.dataset.mapsAppHref || mapLink.href;
+          return;
+        }
         const shareTarget = event.target.closest("[data-share-target]");
         if (shareTarget) {
           event.preventDefault();
@@ -3256,7 +3290,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=52", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=53", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
