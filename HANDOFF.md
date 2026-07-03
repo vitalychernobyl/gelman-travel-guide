@@ -9,9 +9,9 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            75b9fa4 (v54) — merged, NOT yet deployed
-live:            v53 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
-pending action:  DEPLOY v54 (see task below)
+main:            60ab595 (v54) — merged and deployed
+live:            v54 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+pending action:  none
 ```
 
 ## Standing facts
