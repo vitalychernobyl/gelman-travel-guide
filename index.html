@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=26">
+  <link rel="manifest" href="manifest.webmanifest?v=27">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -579,6 +579,45 @@
     .airline-os .ticket-main {
       border-top: 5px solid #ef3340;
     }
+    .airline-ba .ticket {
+      border-color: rgba(20, 59, 117, .28);
+      background: linear-gradient(135deg, #fff 0%, #fff 58%, #eef4ff 100%);
+    }
+    .airline-ba .ticket-main {
+      border-top: 5px solid #143b75;
+    }
+    .airline-ba .airline {
+      color: #143b75;
+      font-weight: 950;
+    }
+    .airline-ba .airline-logo::before {
+      width: 20px;
+      height: 6px;
+      background: linear-gradient(90deg, #143b75 0 55%, #c8102e 55% 100%);
+      border-radius: 999px;
+      transform: skewX(-24deg);
+    }
+    .airline-ua .ticket {
+      border-color: rgba(22, 75, 154, .28);
+      background: linear-gradient(135deg, #fff 0%, #fff 58%, #eef4ff 100%);
+    }
+    .airline-ua .ticket-main {
+      border-top: 5px solid #164b9a;
+    }
+    .airline-ua .airline {
+      color: #164b9a;
+      font-weight: 950;
+    }
+    .airline-ua .airline-logo::before {
+      width: 16px;
+      height: 16px;
+      border: 3px solid currentColor;
+      border-radius: 50%;
+      background:
+        linear-gradient(currentColor 0 0) center / 100% 3px no-repeat,
+        linear-gradient(90deg, transparent 35%, currentColor 35% 65%, transparent 65%);
+      transform: none;
+    }
     details.ticket-card {
       border: 0;
       background: transparent;
@@ -620,6 +659,29 @@
       display: block;
       margin-top: 1px;
       font-size: .9rem;
+      line-height: 1.05;
+    }
+    .ticket-countdown {
+      display: none;
+      padding: 8px 10px;
+      border-radius: 14px;
+      background: #25211c;
+      color: #fffefa;
+      font-weight: 900;
+    }
+    .ticket-card.flight-today .ticket-countdown {
+      display: block;
+    }
+    .ticket-countdown span {
+      display: block;
+      color: #f7c99e;
+      font-size: .64rem;
+      text-transform: uppercase;
+    }
+    .ticket-countdown strong {
+      display: block;
+      margin-top: 1px;
+      font-size: .98rem;
       line-height: 1.05;
     }
     .ticket::before,
@@ -776,6 +838,21 @@
     .mini-actions .directions-button {
       min-height: 38px;
       font-size: .78rem;
+    }
+    .ticket-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 3px;
+    }
+    .ticket-actions .directions-button {
+      min-height: 38px;
+      padding-inline: 8px;
+      font-size: .78rem;
+    }
+    .ticket-actions .app-button {
+      background: #25211c;
+      box-shadow: 0 8px 16px rgba(37, 33, 28, .14);
     }
     .lounge-pass {
       overflow: hidden;
@@ -1017,7 +1094,7 @@
           <div><h2>Vienna</h2><p>Thu, Jul 2 - Fri, Jul 3, 2026</p></div>
         </div>
         <div class="plan-grid">
-          <details class="ticket-card airline-os">
+          <details class="ticket-card airline-os" data-flight-date="2026-07-03" data-leave-at="2026-07-03T11:15:00">
             <summary>
               <article class="ticket">
                 <div class="ticket-main">
@@ -1037,6 +1114,7 @@
                     <div class="ticket-hint"><span>Leave by</span><strong>11:15 AM</strong></div>
                     <div class="ticket-hint"><span>Boarding</span><strong>2:10 PM</strong></div>
                   </div>
+                  <div class="ticket-countdown" aria-live="polite"><span>Leave countdown</span><strong>Calculating...</strong></div>
                 </div>
                 <div class="ticket-stub"><div><span class="wordmark">Austrian</span><strong>AMS</strong><span class="brand-sash"></span></div></div>
               </article>
@@ -1048,7 +1126,10 @@
               <div class="info-row"><span>Bag drop</span><strong>Area 3, Counter no. 361-368</strong></div>
               <div class="info-row"><span>Deadline</span><strong>2:05 PM</strong></div>
               <div class="info-row"><span>Seats</span><strong>7F, 7E, 7D, 7C</strong></div>
-              <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=Vienna%20International%20Airport%20Terminal%203%2C%20Vienna%2C%20Austria" target="_blank" rel="noopener">Directions to VIE Terminal 3</a>
+              <div class="ticket-actions">
+                <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=Vienna%20International%20Airport%20Terminal%203%2C%20Vienna%2C%20Austria" target="_blank" rel="noopener">Airport Directions</a>
+                <a class="directions-button app-button" href="https://apps.apple.com/us/app/austrian/id400224803" target="_blank" rel="noopener">Austrian App</a>
+              </div>
             </div>
           </details>
           <article class="hotel-key">
@@ -1086,11 +1167,11 @@
           <div><h2>Amsterdam</h2><p>Fri, Jul 3 - Mon, Jul 6, 2026</p></div>
         </div>
         <div class="plan-grid">
-          <details class="ticket-card airline-ba">
+          <details class="ticket-card airline-ba" data-flight-date="2026-07-06" data-leave-at="2026-07-06T11:05:00">
             <summary>
               <article class="ticket">
                 <div class="ticket-main">
-                  <div class="airline"><span>British Airways</span><span>BA8454</span></div>
+                  <div class="airline"><span class="airline-logo">British Airways</span><span>BA8454</span></div>
                   <div class="route">
                     <div class="city"><strong>Amsterdam</strong><span>AMS</span></div>
                     <div class="plane-line">→</div>
@@ -1102,6 +1183,11 @@
                     <div><span>Arrive</span><strong>14:25</strong></div>
                     <div><span>Aircraft</span><strong>E190</strong></div>
                   </div>
+                  <div class="ticket-hints">
+                    <div class="ticket-hint"><span>Leave by</span><strong>11:05 AM</strong></div>
+                    <div class="ticket-hint"><span>Boarding</span><strong>1:35 PM</strong></div>
+                  </div>
+                  <div class="ticket-countdown" aria-live="polite"><span>Leave countdown</span><strong>Calculating...</strong></div>
                 </div>
                 <div class="ticket-stub"><div><span class="wordmark">British<br>Airways</span><strong>LCY</strong><span class="brand-sash"></span></div></div>
               </article>
@@ -1110,8 +1196,13 @@
               <div class="info-row"><span>Duration</span><strong>1h 5m, direct</strong></div>
               <div class="info-row"><span>Operated</span><strong>BA Cityflyer</strong></div>
               <div class="info-row"><span>Class</span><strong>Economy, Selling Class O</strong></div>
+              <div class="info-row"><span>Arrive AMS</span><strong>11:20 AM, 3 hours before departure</strong></div>
               <div class="info-row"><span>From</span><strong>Amsterdam, Amsterdam (AMS)</strong></div>
               <div class="info-row"><span>To</span><strong>City Airport, London (LCY)</strong></div>
+              <div class="ticket-actions">
+                <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=Amsterdam%20Airport%20Schiphol%2C%20Amsterdam%2C%20Netherlands" target="_blank" rel="noopener">Airport Directions</a>
+                <a class="directions-button app-button" href="https://apps.apple.com/us/app/british-airways/id284793089" target="_blank" rel="noopener">BA App</a>
+              </div>
             </div>
           </details>
           <article class="hotel-key">
@@ -1148,11 +1239,11 @@
           <div><h2>London</h2><p>Mon, Jul 6 - Sat, Jul 11, 2026</p></div>
         </div>
         <div class="plan-grid">
-          <details class="ticket-card airline-ua">
+          <details class="ticket-card airline-ua" data-flight-date="2026-07-11" data-leave-at="2026-07-11T12:20:00">
             <summary>
               <article class="ticket">
                 <div class="ticket-main">
-                  <div class="airline"><span>United Airlines</span><span>UA925</span></div>
+                  <div class="airline"><span class="airline-logo">United Airlines</span><span>UA925</span></div>
                   <div class="route">
                     <div class="city"><strong>London</strong><span>LHR</span></div>
                     <div class="plane-line">→</div>
@@ -1164,6 +1255,11 @@
                     <div><span>Arrive</span><strong>8:00 PM</strong></div>
                     <div><span>Duration</span><strong>8h 20m</strong></div>
                   </div>
+                  <div class="ticket-hints">
+                    <div class="ticket-hint"><span>Leave by</span><strong>12:20 PM</strong></div>
+                    <div class="ticket-hint"><span>Boarding</span><strong>3:55 PM</strong></div>
+                  </div>
+                  <div class="ticket-countdown" aria-live="polite"><span>Leave countdown</span><strong>Calculating...</strong></div>
                 </div>
                 <div class="ticket-stub"><div><span class="wordmark">United</span><strong>IAD</strong><span class="brand-sash"></span></div></div>
               </article>
@@ -1173,6 +1269,11 @@
               <div class="info-row"><span>Anton</span><strong>Seat 44L, Travel Options Bundle</strong></div>
               <div class="info-row"><span>Slava</span><strong>Seat 44C, Travel Options Bundle</strong></div>
               <div class="info-row"><span>Alex</span><strong>Seat 44B, Travel Options Bundle</strong></div>
+              <div class="info-row"><span>Arrive LHR</span><strong>1:40 PM, 3 hours before departure</strong></div>
+              <div class="ticket-actions">
+                <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=London%20Heathrow%20Airport%2C%20London%2C%20United%20Kingdom" target="_blank" rel="noopener">Airport Directions</a>
+                <a class="directions-button app-button" href="https://apps.apple.com/us/app/united-airlines/id449945214" target="_blank" rel="noopener">United App</a>
+              </div>
             </div>
           </details>
           <article class="hotel-key">
@@ -1624,6 +1725,35 @@
         renderAttractions(ATTRACTIONS[city] ? city : "vienna");
         localStorage.gelmanAttractionsCity = city;
       }
+      function todayKey(now) {
+        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+      }
+      function formatDuration(ms) {
+        const absolute = Math.max(0, Math.abs(ms));
+        const minutes = Math.floor(absolute / 60000);
+        const days = Math.floor(minutes / 1440);
+        const hours = Math.floor((minutes % 1440) / 60);
+        const mins = minutes % 60;
+        if (days) return `${days}d ${hours}h`;
+        if (hours) return `${hours}h ${mins}m`;
+        return `${mins}m`;
+      }
+      function updateFlightCountdowns() {
+        const params = new URLSearchParams(location.search);
+        const testToday = params.get("today");
+        const now = testToday ? new Date(`${testToday}T08:00:00`) : new Date();
+        const today = todayKey(now);
+        document.querySelectorAll(".ticket-card[data-flight-date]").forEach(card => {
+          const target = card.querySelector(".ticket-countdown strong");
+          if (!target) return;
+          const isToday = card.dataset.flightDate === today;
+          card.classList.toggle("flight-today", isToday);
+          if (!isToday) return;
+          const leaveAt = new Date(card.dataset.leaveAt);
+          const delta = leaveAt.getTime() - now.getTime();
+          target.textContent = delta > 0 ? `Leave in ${formatDuration(delta)}` : `Leave time passed ${formatDuration(delta)} ago`;
+        });
+      }
 
       document.querySelector("#smaller").onclick = () => { size = Math.max(12, size - 1); localStorage.gelmanFont = size; applyPrefs(); };
       document.querySelector("#larger").onclick = () => { size = Math.min(22, size + 1); localStorage.gelmanFont = size; applyPrefs(); };
@@ -1640,7 +1770,9 @@
       applyPrefs();
       showTripCity(activeCity);
       showPage(localStorage.gelmanPage || "dictionary");
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=26");
+      updateFlightCountdowns();
+      setInterval(updateFlightCountdowns, 60000);
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=27");
     })();
   </script>
 </body>
