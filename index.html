@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=20">
+  <link rel="manifest" href="manifest.webmanifest?v=21">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -47,6 +47,35 @@
       margin: 0 auto;
       padding: calc(env(safe-area-inset-top) + 10px) 10px calc(env(safe-area-inset-bottom) + 92px);
     }
+    .app-top {
+      display: grid;
+      gap: 8px;
+      margin: 0 -2px 10px;
+      padding: 0 2px;
+    }
+    .app-title {
+      margin: 0;
+      font-size: 1.35rem;
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: 0;
+    }
+    .trip-city-tabs {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .trip-city-tabs::-webkit-scrollbar { display: none; }
+    .trip-city-tab {
+      flex: 0 0 auto;
+      min-height: 34px;
+      padding: 7px 12px;
+      font-size: .82rem;
+      font-weight: 900;
+    }
     .logo {
       width: 72px;
       height: 72px;
@@ -56,11 +85,11 @@
     }
     .hero {
       position: relative;
-      min-height: 182px;
-      margin: -10px -10px 10px;
-      padding: calc(env(safe-area-inset-top) + 16px) 18px 16px;
+      min-height: 172px;
+      margin: 0 -10px 8px;
+      padding: 12px 18px 16px;
       display: grid;
-      align-content: end;
+      place-items: center;
       overflow: hidden;
       background: #ddd8d0;
     }
@@ -70,18 +99,16 @@
       inset: 0;
       background:
         linear-gradient(180deg, rgba(0, 0, 0, .06), rgba(0, 0, 0, .05) 38%, rgba(0, 0, 0, .42)),
-        url("vienna-hero.png?v=1") center / cover no-repeat;
+        var(--hero-image, url("vienna-hero.png?v=1")) center / cover no-repeat;
     }
     .hero-logo {
-      position: absolute;
-      top: calc(env(safe-area-inset-top) + 12px);
-      left: 50%;
-      transform: translateX(-50%);
-      width: 76px;
-      height: 76px;
-      border-radius: 24px;
-      border: 3px solid rgba(255, 255, 255, .86);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, .22);
+      position: relative;
+      z-index: 1;
+      width: 116px;
+      height: 116px;
+      border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, .9);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, .28);
       background: #ffffff;
       object-fit: cover;
     }
@@ -180,7 +207,7 @@
     .section-nav {
       display: flex;
       gap: 5px;
-      padding: 1px 1px 3px;
+      padding: 1px 1px 5px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
@@ -188,7 +215,7 @@
     .section-nav::-webkit-scrollbar { display: none; }
     .section-nav a {
       flex: 0 0 auto;
-      padding: 7px 10px;
+      padding: 7px 11px;
       border: 1px solid var(--line);
       border-radius: 999px;
       color: var(--ink);
@@ -210,13 +237,21 @@
       color: var(--ink);
       letter-spacing: .04em;
     }
-    .list { display: grid; gap: var(--gap); }
+    .dictionary-content { display: grid; gap: 10px; }
+    .list {
+      display: grid;
+      gap: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--panel);
+    }
     .phrase-cols {
       display: grid;
-      grid-template-columns: minmax(0, .95fr) minmax(0, 1.25fr);
+      grid-template-columns: minmax(0, .88fr) minmax(0, 1.12fr);
       gap: 10px;
       margin: 0 0 4px;
-      padding: 0 10px;
+      padding: 0 6px;
       color: var(--muted);
       font-size: .7rem;
       font-weight: 850;
@@ -224,20 +259,23 @@
     }
     .phrase {
       display: grid;
-      grid-template-columns: minmax(0, .95fr) minmax(0, 1.25fr);
-      column-gap: 10px;
-      row-gap: 3px;
-      padding: var(--pad);
-      border: 1px solid var(--line);
-      border-radius: 14px;
+      grid-template-columns: minmax(0, .88fr) minmax(0, 1.12fr);
+      column-gap: 8px;
+      row-gap: 1px;
+      min-height: 36px;
+      padding: 5px 7px;
+      border: 0;
+      border-top: 1px solid var(--line);
+      border-radius: 0;
       background: var(--panel);
-      box-shadow: 0 1px 0 rgba(34, 34, 34, .03);
+      box-shadow: none;
     }
+    .phrase:first-child { border-top: 0; }
     .de {
       grid-column: 2;
       grid-row: 2;
       color: var(--muted);
-      font-size: .74rem;
+      font-size: .68rem;
       font-weight: 750;
       line-height: 1.18;
     }
@@ -250,7 +288,7 @@
       grid-column: 1;
       grid-row: 1 / span 2;
       color: var(--ink);
-      font-size: .88rem;
+      font-size: .82rem;
       font-weight: 700;
       line-height: 1.18;
     }
@@ -258,7 +296,7 @@
       grid-column: 2;
       grid-row: 1;
       color: var(--accent-deep);
-      font-size: .96rem;
+      font-size: .9rem;
       font-weight: 850;
       line-height: 1.18;
     }
@@ -308,6 +346,7 @@
       scrollbar-width: none;
     }
     .city-tabs::-webkit-scrollbar { display: none; }
+    main > .city-tabs { display: none; }
     .city-tab {
       flex: 0 0 auto;
       min-height: 35px;
@@ -784,190 +823,23 @@
 </head>
 <body>
   <div class="app">
+    <header class="app-top">
+      <h1 class="app-title">Gelman Travel</h1>
+      <div class="trip-city-tabs" aria-label="Choose city">
+        <button class="trip-city-tab" type="button" data-trip-city="vienna" aria-pressed="true">Vienna</button>
+        <button class="trip-city-tab" type="button" data-trip-city="amsterdam" aria-pressed="false">Amsterdam</button>
+        <button class="trip-city-tab" type="button" data-trip-city="london" aria-pressed="false">London</button>
+        <button class="trip-city-tab" type="button" data-trip-city="washington" aria-pressed="false">Washington</button>
+        <button class="trip-city-tab" type="button" data-trip-city="sarasota" aria-pressed="false">Sarasota</button>
+      </div>
+    </header>
     <main id="dictionary" class="page" data-page="dictionary">
-      <section class="hero" aria-label="Vienna">
-        <img class="hero-logo" src="app-logo.png?v=17" alt="Gelman Travel Guide logo">
-        <div class="hero-copy">
-          <h1>Vienna</h1>
-          <p>Austria Travel Dictionary for quick phrases on the move.</p>
-        </div>
+      <section class="hero" aria-label="City hero">
+        <img class="hero-logo" src="app-logo-circle.png?v=17" alt="Gelman Travel Guide logo">
       </section>
-      <nav class="section-nav" aria-label="Dictionary sections">
-        <a href="#essentials">Essentials</a>
-        <a href="#restaurant">Restaurant</a>
-        <a href="#getting-around">Getting Around</a>
-        <a href="#shopping">Shopping</a>
-        <a href="#hotel">Hotel</a>
-        <a href="#emergency">Emergency</a>
-        <a href="#numbers">Numbers</a>
-        <a href="#austrian-words">Austrian Words</a>
-        <a href="#vienna-coffee">Vienna Coffee</a>
-        <a href="#handy-phrases">Handy Phrases</a>
-      </nav>
-
-      <section class="dict-section" id="essentials">
-        <h2>Essentials</h2>
-        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation / German</span></div>
-        <div class="list">
-          <article class="phrase"><div class="en">Hello / good day</div><div class="de">Grüß Gott.</div><div class="pr">groos got</div></article>
-          <article class="phrase"><div class="en">Hi / bye</div><div class="de">Servus.</div><div class="pr">SEHR-voos</div></article>
-          <article class="phrase"><div class="en">Good morning</div><div class="de">Guten Morgen.</div><div class="pr">GOO-ten MOR-gen</div></article>
-          <article class="phrase"><div class="en">Good evening</div><div class="de">Guten Abend.</div><div class="pr">GOO-ten AH-bent</div></article>
-          <article class="phrase"><div class="en">Goodbye</div><div class="de">Auf Wiedersehen.</div><div class="pr">owf VEE-der-zay-en</div></article>
-          <article class="phrase"><div class="en">Please / you're welcome</div><div class="de">Bitte.</div><div class="pr">BIT-tuh</div></article>
-          <article class="phrase"><div class="en">Thank you</div><div class="de">Danke.</div><div class="pr">DAN-kuh</div></article>
-          <article class="phrase"><div class="en">Thank you very much</div><div class="de">Vielen Dank.</div><div class="pr">FEE-len dank</div></article>
-          <article class="phrase"><div class="en">Excuse me / sorry</div><div class="de">Entschuldigung.</div><div class="pr">ent-SHOOL-di-goong</div></article>
-          <article class="phrase"><div class="en">Yes / no</div><div class="de">Ja. / Nein.</div><div class="pr">yah / nine</div></article>
-          <article class="phrase"><div class="en">I don't understand.</div><div class="de">Ich verstehe nicht.</div><div class="pr">ikh fer-SHTAY-uh nikht</div></article>
-          <article class="phrase"><div class="en">Do you speak English?</div><div class="de">Sprechen Sie Englisch?</div><div class="pr">SHPREKH-en zee ENG-lish</div></article>
-        </div>
-      </section>
-
-      <section class="dict-section" id="restaurant">
-        <h2>Restaurant</h2>
-        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation / German</span></div>
-        <div class="list">
-          <article class="phrase"><div class="en">A table for two, please.</div><div class="de">Einen Tisch für zwei, bitte.</div><div class="pr">EYE-nen tish fuer tsvy</div></article>
-          <article class="phrase"><div class="en">The menu, please.</div><div class="de">Die Speisekarte, bitte.</div><div class="pr">dee SHPY-zuh-kar-tuh</div></article>
-          <article class="phrase"><div class="en">What do you recommend?</div><div class="de">Was empfehlen Sie?</div><div class="pr">vas emp-FAY-len zee</div></article>
-          <article class="phrase"><div class="en">I would like...</div><div class="de">Ich hätte gern...</div><div class="pr">ikh HET-tuh gairn</div></article>
-          <article class="phrase"><div class="en">Water with gas / still water</div><div class="de">Mineralwasser mit / ohne Kohlensäure.</div><div class="pr">mee-neh-RAHL-vah-ser mit / OH-nuh</div></article>
-          <article class="phrase"><div class="en">A beer / a glass of wine</div><div class="de">Ein Bier / ein Glas Wein.</div><div class="pr">ine beer / ine glahs vine</div></article>
-          <article class="phrase"><div class="en">The bill, please.</div><div class="de">Die Rechnung, bitte.</div><div class="pr">dee REKH-noong</div></article>
-          <article class="phrase"><div class="en">Can I pay by card?</div><div class="de">Kann ich mit Karte zahlen?</div><div class="pr">kan ikh mit KAR-tuh TSAH-len</div></article>
-          <article class="phrase"><div class="en">It was very good.</div><div class="de">Es war sehr gut.</div><div class="pr">es var zair goot</div></article>
-          <article class="phrase"><div class="en">I am vegetarian.</div><div class="de">Ich bin Vegetarier(in).</div><div class="pr">ikh bin veh-geh-TAH-ree-er</div></article>
-          <article class="phrase"><div class="en">I have an allergy.</div><div class="de">Ich habe eine Allergie.</div><div class="pr">ikh HAH-buh EYE-nuh ah-ler-GEE</div></article>
-          <article class="phrase"><div class="en">Without pork, please.</div><div class="de">Ohne Schweinefleisch, bitte.</div><div class="pr">OH-nuh SHVY-nuh-flysh</div></article>
-        </div>
-      </section>
-
-      <section class="dict-section" id="getting-around">
-        <h2>Getting Around</h2>
-        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation / German</span></div>
-        <div class="list">
-          <article class="phrase"><div class="en">Where is the subway?</div><div class="de">Wo ist die U-Bahn?</div><div class="pr">vo ist dee OO-bahn</div></article>
-          <article class="phrase"><div class="en">Where is the train station?</div><div class="de">Wo ist der Bahnhof?</div><div class="pr">vo ist dair BAHN-hof</div></article>
-          <article class="phrase"><div class="en">Which platform?</div><div class="de">Welcher Bahnsteig?</div><div class="pr">VEL-kher BAHN-shtyg</div></article>
-          <article class="phrase"><div class="en">One ticket to Vienna, please.</div><div class="de">Eine Fahrkarte nach Wien, bitte.</div><div class="pr">EYE-nuh FAR-kar-tuh nahkh veen</div></article>
-          <article class="phrase"><div class="en">Is this seat free?</div><div class="de">Ist dieser Platz frei?</div><div class="pr">ist DEE-zer plats fry</div></article>
-          <article class="phrase"><div class="en">Where do I change?</div><div class="de">Wo muss ich umsteigen?</div><div class="pr">vo moos ikh OOM-shty-gen</div></article>
-          <article class="phrase"><div class="en">I need a taxi.</div><div class="de">Ich brauche ein Taxi.</div><div class="pr">ikh BROW-khuh ine TAK-see</div></article>
-          <article class="phrase"><div class="en">Please stop here.</div><div class="de">Bitte halten Sie hier.</div><div class="pr">BIT-tuh HAL-ten zee heer</div></article>
-          <article class="phrase"><div class="en">How long does it take?</div><div class="de">Wie lange dauert es?</div><div class="pr">vee LANG-uh DOW-ert es</div></article>
-          <article class="phrase"><div class="en">Left / right / straight ahead</div><div class="de">Links / rechts / geradeaus.</div><div class="pr">links / rekhts / guh-RAH-duh-ows</div></article>
-        </div>
-      </section>
-
-      <section class="dict-section" id="shopping">
-        <h2>Shopping</h2>
-        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation / German</span></div>
-        <div class="list">
-          <article class="phrase"><div class="en">How much does it cost?</div><div class="de">Wie viel kostet das?</div><div class="pr">vee feel KOS-tet das</div></article>
-          <article class="phrase"><div class="en">That's too expensive.</div><div class="de">Das ist zu teuer.</div><div class="pr">das ist tsoo TOY-er</div></article>
-          <article class="phrase"><div class="en">Do you have this in another size?</div><div class="de">Haben Sie das in einer anderen Größe?</div><div class="pr">HAH-ben zee das in EYE-ner AHN-der-en GROH-suh</div></article>
-          <article class="phrase"><div class="en">Can I try it on?</div><div class="de">Kann ich das anprobieren?</div><div class="pr">kan ikh das AHN-pro-bee-ren</div></article>
-          <article class="phrase"><div class="en">I'll take it.</div><div class="de">Ich nehme es.</div><div class="pr">ikh NAY-muh es</div></article>
-          <article class="phrase"><div class="en">I am just looking.</div><div class="de">Ich schaue nur.</div><div class="pr">ikh SHOW-uh noor</div></article>
-          <article class="phrase"><div class="en">Where is a pharmacy?</div><div class="de">Wo ist eine Apotheke?</div><div class="pr">vo ist EYE-nuh ah-po-TAY-kuh</div></article>
-          <article class="phrase"><div class="en">Do you take credit cards?</div><div class="de">Nehmen Sie Kreditkarten?</div><div class="pr">NAY-men zee kreh-DEET-kar-ten</div></article>
-        </div>
-      </section>
-
-      <section class="dict-section" id="hotel">
-        <h2>Hotel</h2>
-        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation / German</span></div>
-        <div class="list">
-          <article class="phrase"><div class="en">I have a reservation.</div><div class="de">Ich habe eine Reservierung.</div><div class="pr">ikh HAH-buh EYE-nuh reh-zer-VEE-roong</div></article>
-          <article class="phrase"><div class="en">My name is...</div><div class="de">Mein Name ist...</div><div class="pr">mine NAH-muh ist</div></article>
-          <article class="phrase"><div class="en">What time is check-out?</div><div class="de">Wann ist Check-out?</div><div class="pr">van ist check-out</div></article>
-          <article class="phrase"><div class="en">Can I leave my luggage here?</div><div class="de">Kann ich mein Gepäck hier lassen?</div><div class="pr">kan ikh mine geh-PEK heer LAH-sen</div></article>
-          <article class="phrase"><div class="en">The Wi-Fi password, please.</div><div class="de">Das WLAN-Passwort, bitte.</div><div class="pr">das VAY-lahn PASS-vort</div></article>
-          <article class="phrase"><div class="en">The room is too cold / too hot.</div><div class="de">Das Zimmer ist zu kalt / zu warm.</div><div class="pr">das TSIM-mer ist tsoo kalt / varm</div></article>
-          <article class="phrase"><div class="en">There is no hot water.</div><div class="de">Es gibt kein warmes Wasser.</div><div class="pr">es gibt kine VAR-mes VAH-ser</div></article>
-          <article class="phrase"><div class="en">Can you call a taxi?</div><div class="de">Können Sie ein Taxi rufen?</div><div class="pr">KOE-nen zee ine TAK-see ROO-fen</div></article>
-        </div>
-      </section>
-
-      <section class="dict-section" id="emergency">
-        <h2>Emergency</h2>
-        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation / German</span></div>
-        <div class="list">
-          <article class="phrase"><div class="en">Help!</div><div class="de">Hilfe!</div><div class="pr">HIL-fuh</div></article>
-          <article class="phrase"><div class="en">Call the police!</div><div class="de">Rufen Sie die Polizei!</div><div class="pr">ROO-fen zee dee po-lee-TSY</div></article>
-          <article class="phrase"><div class="en">Call an ambulance!</div><div class="de">Rufen Sie einen Krankenwagen!</div><div class="pr">ROO-fen zee EYE-nen KRAN-ken-vah-gen</div></article>
-          <article class="phrase"><div class="en">I need a doctor.</div><div class="de">Ich brauche einen Arzt.</div><div class="pr">ikh BROW-khuh EYE-nen artst</div></article>
-          <article class="phrase"><div class="en">I am sick.</div><div class="de">Mir ist schlecht.</div><div class="pr">meer ist shlekht</div></article>
-          <article class="phrase"><div class="en">I am lost.</div><div class="de">Ich habe mich verlaufen.</div><div class="pr">ikh HAH-buh mikh fer-LOW-fen</div></article>
-          <article class="phrase"><div class="en">I lost my passport.</div><div class="de">Ich habe meinen Pass verloren.</div><div class="pr">ikh HAH-buh MY-nen pass fer-LOH-ren</div></article>
-          <article class="phrase"><div class="en">Emergency number in Austria</div><div class="de">112 oder 144 für Rettung, 133 Polizei.</div><div class="pr">112 / 144 / 133</div></article>
-        </div>
-      </section>
-
-      <section class="dict-section" id="numbers">
-        <h2>Numbers</h2>
-        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation / German</span></div>
-        <div class="list">
-          <article class="phrase"><div class="en">0 / 1 / 2</div><div class="de">null / eins / zwei</div><div class="pr">nool / ines / tsvy</div></article>
-          <article class="phrase"><div class="en">3 / 4 / 5</div><div class="de">drei / vier / fünf</div><div class="pr">dry / feer / fuenf</div></article>
-          <article class="phrase"><div class="en">6 / 7 / 8</div><div class="de">sechs / sieben / acht</div><div class="pr">zeks / ZEE-ben / akht</div></article>
-          <article class="phrase"><div class="en">9 / 10</div><div class="de">neun / zehn</div><div class="pr">noyn / tsayn</div></article>
-          <article class="phrase"><div class="en">11 / 12</div><div class="de">elf / zwölf</div><div class="pr">elf / tsvoelf</div></article>
-          <article class="phrase"><div class="en">20 / 30 / 40</div><div class="de">zwanzig / dreißig / vierzig</div><div class="pr">TSVAN-tsikh / DRY-sikh / FEER-tsikh</div></article>
-          <article class="phrase"><div class="en">50 / 100 / 1000</div><div class="de">fünfzig / hundert / tausend</div><div class="pr">FUENF-tsikh / HOON-dert / TOW-zent</div></article>
-          <article class="phrase"><div class="en">One euro, two euros</div><div class="de">ein Euro, zwei Euro</div><div class="pr">ine OY-roh, tsvy OY-roh</div></article>
-        </div>
-      </section>
-
-      <section class="dict-section" id="austrian-words">
-        <h2>Austrian Words</h2>
-        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation / German</span></div>
-        <div class="list">
-          <article class="phrase"><div class="en">Austrian hello / goodbye</div><div class="de">Servus.</div><div class="pr">SEHR-voos</div></article>
-          <article class="phrase"><div class="en">Austrian greeting</div><div class="de">Grüß Gott.</div><div class="pr">groos got</div></article>
-          <article class="phrase"><div class="en">Tomato</div><div class="de">Paradeiser.</div><div class="pr">pah-rah-DY-zer</div></article>
-          <article class="phrase"><div class="en">Potato</div><div class="de">Erdapfel.</div><div class="pr">AIR-dap-fel</div></article>
-          <article class="phrase"><div class="en">Apricot</div><div class="de">Marille.</div><div class="pr">mah-RIL-luh</div></article>
-          <article class="phrase"><div class="en">Whipped cream</div><div class="de">Schlagobers.</div><div class="pr">SHLAHG-oh-bers</div></article>
-          <article class="phrase"><div class="en">Bread roll</div><div class="de">Semmel.</div><div class="pr">ZEM-mel</div></article>
-          <article class="phrase"><div class="en">Bag / sack</div><div class="de">Sackerl.</div><div class="pr">SAK-erl</div></article>
-          <article class="phrase"><div class="en">No problem / it fits</div><div class="de">Passt schon.</div><div class="pr">past shohn</div></article>
-          <article class="phrase"><div class="en">A little bit</div><div class="de">A bisserl.</div><div class="pr">ah BIS-serl</div></article>
-        </div>
-      </section>
-
-      <section class="dict-section" id="vienna-coffee">
-        <h2>Vienna Coffee</h2>
-        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation / German</span></div>
-        <div class="list">
-          <article class="phrase"><div class="en">Black coffee, espresso-like</div><div class="de">Ein kleiner Schwarzer.</div><div class="pr">ine KLY-ner SHVAR-tser</div></article>
-          <article class="phrase"><div class="en">Double black coffee</div><div class="de">Ein großer Schwarzer.</div><div class="pr">ine GROH-ser SHVAR-tser</div></article>
-          <article class="phrase"><div class="en">Espresso with milk</div><div class="de">Ein kleiner Brauner.</div><div class="pr">ine KLY-ner BROW-ner</div></article>
-          <article class="phrase"><div class="en">Double espresso with milk</div><div class="de">Ein großer Brauner.</div><div class="pr">ine GROH-ser BROW-ner</div></article>
-          <article class="phrase"><div class="en">Melange, classic Viennese coffee</div><div class="de">Eine Melange.</div><div class="pr">EYE-nuh meh-LAHNZH</div></article>
-          <article class="phrase"><div class="en">Coffee with whipped cream</div><div class="de">Ein Einspanner.</div><div class="pr">ine IN-shpah-ner</div></article>
-          <article class="phrase"><div class="en">I would like a coffee and water.</div><div class="de">Ich hätte gern einen Kaffee und Wasser.</div><div class="pr">ikh HET-tuh gairn EYE-nen kah-FAY oont VAH-ser</div></article>
-          <article class="phrase"><div class="en">A piece of cake, please.</div><div class="de">Ein Stück Kuchen, bitte.</div><div class="pr">ine shtuek KOO-khen</div></article>
-        </div>
-      </section>
-
-      <section class="dict-section" id="handy-phrases">
-        <h2>Handy Phrases</h2>
-        <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation / German</span></div>
-        <div class="list">
-          <article class="phrase"><div class="en">Where is the restroom?</div><div class="de">Wo ist die Toilette?</div><div class="pr">vo ist dee toy-LET-tuh</div></article>
-          <article class="phrase"><div class="en">Can you show me on the map?</div><div class="de">Können Sie es mir auf der Karte zeigen?</div><div class="pr">KOE-nen zee es meer owf dair KAR-tuh TSY-gen</div></article>
-          <article class="phrase"><div class="en">Can you repeat that?</div><div class="de">Können Sie das wiederholen?</div><div class="pr">KOE-nen zee das VEE-der-hoh-len</div></article>
-          <article class="phrase"><div class="en">More slowly, please.</div><div class="de">Langsamer, bitte.</div><div class="pr">LANG-zah-mer</div></article>
-          <article class="phrase"><div class="en">I am from the United States.</div><div class="de">Ich komme aus den USA.</div><div class="pr">ikh KOM-muh ows den oo-es-AH</div></article>
-          <article class="phrase"><div class="en">Nice to meet you.</div><div class="de">Freut mich.</div><div class="pr">froyt mikh</div></article>
-          <article class="phrase"><div class="en">That is wonderful.</div><div class="de">Das ist wunderbar.</div><div class="pr">das ist VOON-der-bar</div></article>
-          <article class="phrase"><div class="en">See you later.</div><div class="de">Bis später.</div><div class="pr">bis SHTAY-ter</div></article>
-        </div>
-      </section>
-
-      <p class="note">Edit this guide by changing the phrase rows directly in this HTML file. Offline mode needs the service worker file and a local or HTTPS host.</p>
+      <nav class="section-nav" aria-label="Dictionary sections" id="dictionaryNav"></nav>
+      <div id="dictionaryContent" class="dictionary-content" aria-live="polite"></div>
+      <p class="note">Edit city phrase lists in the tiny JavaScript data block near the bottom of this HTML file. Offline mode needs the service worker file and a local or HTTPS host.</p>
     </main>
 
     <main id="plans" class="page" data-page="plans" hidden>
@@ -983,6 +855,7 @@
         <button class="city-tab" type="button" data-city-target="amsterdam" aria-pressed="false">Amsterdam</button>
         <button class="city-tab" type="button" data-city-target="london" aria-pressed="false">London</button>
         <button class="city-tab" type="button" data-city-target="washington" aria-pressed="false">Washington, DC</button>
+        <button class="city-tab" type="button" data-city-target="sarasota" aria-pressed="false">Sarasota</button>
       </div>
 
       <section class="city-plan" data-city="vienna">
@@ -1152,6 +1025,25 @@
           </article>
         </div>
       </section>
+
+      <section class="city-plan" data-city="sarasota">
+        <div class="city-title-row">
+          <span class="city-mark">SRQ</span>
+          <div><h2>Sarasota</h2><p>Florida time</p></div>
+        </div>
+        <div class="plan-grid">
+          <article class="hotel-key">
+            <img src="sarasota-hero.png?v=1" alt="Sarasota waterfront">
+            <div class="hotel-key-body">
+              <h3>Sarasota notes</h3>
+              <div class="info-list">
+                <div class="info-row"><span>Status</span><strong>Add flights, stays, and beach plans here.</strong></div>
+                <div class="info-row"><span>Airport</span><strong>SRQ - Sarasota Bradenton</strong></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
     </main>
 
     <main id="photos" class="page" data-page="photos" hidden>
@@ -1165,6 +1057,8 @@
         <button class="attraction-tab city-tab" type="button" data-attraction-target="vienna" aria-pressed="true">Vienna</button>
         <button class="attraction-tab city-tab" type="button" data-attraction-target="amsterdam" aria-pressed="false">Amsterdam</button>
         <button class="attraction-tab city-tab" type="button" data-attraction-target="london" aria-pressed="false">London</button>
+        <button class="attraction-tab city-tab" type="button" data-attraction-target="washington" aria-pressed="false">Washington</button>
+        <button class="attraction-tab city-tab" type="button" data-attraction-target="sarasota" aria-pressed="false">Sarasota</button>
       </div>
       <section class="card wide attraction-city" data-attraction-city="vienna">
         <h2><span class="city-mark">VIE</span> Vienna</h2>
@@ -1191,6 +1085,20 @@
           <li><a href="https://www.hrp.org.uk/tower-of-london/" target="_blank" rel="noopener">Tower of London</a><span>Historic fortress, Crown Jewels, and river views.</span></li>
           <li><a href="https://www.westminster-abbey.org/" target="_blank" rel="noopener">Westminster Abbey</a><span>Royal church, poets, coronations, and history.</span></li>
           <li><a href="https://www.londoneye.com/" target="_blank" rel="noopener">London Eye</a><span>Big skyline view beside the Thames.</span></li>
+        </ul>
+      </section>
+      <section class="card wide attraction-city" data-attraction-city="washington" hidden>
+        <h2><span class="city-mark">DC</span> Washington</h2>
+        <ul class="attractions">
+          <li><a href="https://www.si.edu/museums" target="_blank" rel="noopener">Smithsonian Museums</a><span>Free museums, easy wins, zero ticket drama.</span></li>
+          <li><a href="https://www.nps.gov/linc/index.htm" target="_blank" rel="noopener">Lincoln Memorial</a><span>Big steps, big statue, big “we are in DC” energy.</span></li>
+        </ul>
+      </section>
+      <section class="card wide attraction-city" data-attraction-city="sarasota" hidden>
+        <h2><span class="city-mark">SRQ</span> Sarasota</h2>
+        <ul class="attractions">
+          <li><a href="https://www.visitsarasota.com/beaches/siesta-key-beach" target="_blank" rel="noopener">Siesta Key Beach</a><span>White sand, Gulf water, mandatory sunglasses.</span></li>
+          <li><a href="https://www.ringling.org/" target="_blank" rel="noopener">The Ringling</a><span>Museum, gardens, and a properly odd Florida afternoon.</span></li>
         </ul>
       </section>
     </main>
@@ -1226,14 +1134,138 @@
       const root = document.documentElement;
       const pages = [...document.querySelectorAll("[data-page]")];
       const tabs = [...document.querySelectorAll(".tab")];
+      const tripCityTabs = [...document.querySelectorAll("[data-trip-city]")];
       const cityTabs = [...document.querySelectorAll("[data-city-target]")];
       const cityPlans = [...document.querySelectorAll(".city-plan")];
       const attractionTabs = [...document.querySelectorAll(".attraction-tab")];
       const attractionCities = [...document.querySelectorAll(".attraction-city")];
       const floatControls = document.querySelector("#floatControls");
       const controlsToggle = document.querySelector("#controlsToggle");
+      const dictionaryNav = document.querySelector("#dictionaryNav");
+      const dictionaryContent = document.querySelector("#dictionaryContent");
       let size = Number(localStorage.gelmanFont || 15);
       let density = localStorage.gelmanDensity || "compact";
+      let activeCity = localStorage.gelmanTripCity || "vienna";
+      const HEROES = {
+        vienna: "vienna-hero.png?v=1",
+        amsterdam: "amsterdam-hero.png?v=1",
+        london: "london-hero.png?v=1",
+        washington: "washington-hero.png?v=1",
+        sarasota: "sarasota-hero.png?v=1"
+      };
+      const DICTIONARIES = {
+        vienna: [
+          { id: "funny", title: "Funny", rows: [
+            ["Please do not yell at the schnitzel.", "BIT-tuh nikht MIT dem SHNIT-sel SHRY-en", "Bitte nicht mit dem Schnitzel schreien."],
+            ["I am not lost, I am culturally confused.", "ikh bin nikht fer-LOW-fen", "Ich bin nicht verloren, ich bin kulturell verwirrt."],
+            ["This coffee is now my personality.", "DEE-zer kah-FAY ist mine per-zoh-nah-lee-TAYT", "Dieser Kaffee ist jetzt meine Persönlichkeit."]
+          ]},
+          { id: "basics", title: "Basics", rows: [
+            ["Hello / good day", "groos got", "Grüß Gott."],
+            ["Please / thanks", "BIT-tuh / DAN-kuh", "Bitte. / Danke."],
+            ["Do you speak English?", "SHPREKH-en zee ENG-lish", "Sprechen Sie Englisch?"],
+            ["Where is the restroom?", "vo ist dee toy-LET-tuh", "Wo ist die Toilette?"]
+          ]},
+          { id: "food", title: "Food", rows: [
+            ["The bill, please.", "dee REKH-noong BIT-tuh", "Die Rechnung, bitte."],
+            ["A coffee and water, please.", "kah-FAY oont VAH-ser BIT-tuh", "Kaffee und Wasser, bitte."],
+            ["It was very good.", "es var zair goot", "Es war sehr gut."]
+          ]},
+          { id: "move", title: "Move", rows: [
+            ["Where is the subway?", "vo ist dee OO-bahn", "Wo ist die U-Bahn?"],
+            ["Left / right / straight", "links / rekhts / guh-RAH-duh-ows", "Links / rechts / geradeaus."],
+            ["How long does it take?", "vee LANG-uh DOW-ert es", "Wie lange dauert es?"]
+          ]}
+        ],
+        amsterdam: [
+          { id: "funny", title: "Funny", rows: [
+            ["I respect the bicycle kingdom.", "ikh reh-SPEKT-eer het FEETS-koh-nink-rike", "Ik respecteer het fietskoninkrijk."],
+            ["I am walking in the bike lane by accident.", "sor-REE, ik loop fer-KAYRT", "Sorry, ik loop verkeerd."],
+            ["This tiny pancake has defeated me.", "dit POF-er-che heft muh fer-SLAH-gen", "Dit poffertje heeft me verslagen."]
+          ]},
+          { id: "basics", title: "Basics", rows: [
+            ["Hello / thanks", "ha-LOH / DAHNK yuh", "Hallo. / Dank je."],
+            ["Do you speak English?", "sprayk yuh ENG-els", "Spreek je Engels?"],
+            ["Where is the restroom?", "vahr is het twa-LET", "Waar is het toilet?"]
+          ]},
+          { id: "food", title: "Food", rows: [
+            ["The bill, please.", "duh RAY-kuh-ning ahls-too-BLEEFT", "De rekening, alstublieft."],
+            ["Still water, please.", "plat VAH-ter ahls-too-BLEEFT", "Plat water, alstublieft."],
+            ["Very tasty.", "airg LEK-er", "Erg lekker."]
+          ]},
+          { id: "move", title: "Move", rows: [
+            ["Where is the tram?", "vahr is duh tram", "Waar is de tram?"],
+            ["One ticket, please.", "ayn kaart-yuh ahls-too-BLEEFT", "Een kaartje, alstublieft."],
+            ["Which way?", "vel-kuh RIKH-ting", "Welke richting?"]
+          ]}
+        ],
+        london: [
+          { id: "funny", title: "Funny UK", rows: [
+            ["That is suspiciously charming.", "sus-pish-us-lee CHAH-ming", "That is suspiciously charming."],
+            ["I require tea and emotional support.", "tee and ee-MOH-shun-al suh-PORT", "I require tea and emotional support."],
+            ["This queue has become my family.", "kyoo family", "This queue has become my family."]
+          ]},
+          { id: "basics", title: "Useful UK", rows: [
+            ["Where is the loo?", "wherez the loo", "Where is the loo?"],
+            ["Can I tap to pay?", "tap tuh pay", "Can I tap to pay?"],
+            ["Cheers.", "cheerz", "Cheers."]
+          ]},
+          { id: "food", title: "Food", rows: [
+            ["A table for four.", "tay-bul for fawr", "A table for four."],
+            ["The bill, please.", "bill pleez", "The bill, please."],
+            ["No coriander, please.", "no kor-ee-AN-der", "No coriander, please."]
+          ]},
+          { id: "move", title: "Move", rows: [
+            ["Which platform?", "which plat-form", "Which platform?"],
+            ["Mind the gap.", "mind the gap", "Mind the gap."],
+            ["Is this the right train?", "rite train", "Is this the right train?"]
+          ]}
+        ],
+        washington: [
+          { id: "funny", title: "Funny USA", rows: [
+            ["This meeting could have been a monument.", "MEE-ting mon-yuh-ment", "This meeting could have been a monument."],
+            ["I have strong opinions about free museum air conditioning.", "free myoo-ZEE-um air", "I have strong opinions about free museum air conditioning."],
+            ["I am bipartisan about snacks.", "bye-PAR-tuh-zun snacks", "I am bipartisan about snacks."]
+          ]},
+          { id: "basics", title: "Useful USA", rows: [
+            ["Where is the nearest Metro?", "near-est MEH-tro", "Where is the nearest Metro?"],
+            ["Can I get a receipt?", "ruh-SEET", "Can I get a receipt?"],
+            ["Do you validate parking?", "VAL-ih-dayt parking", "Do you validate parking?"]
+          ]},
+          { id: "food", title: "Food", rows: [
+            ["Can we split the check?", "split the check", "Can we split the check?"],
+            ["Tap water is fine.", "tap water", "Tap water is fine."],
+            ["No ice, please.", "no ice", "No ice, please."]
+          ]},
+          { id: "move", title: "Move", rows: [
+            ["How bad is traffic?", "traf-fik", "How bad is traffic?"],
+            ["Is this going toward Arlington?", "AR-ling-ton", "Is this going toward Arlington?"],
+            ["Drop us at the entrance.", "EN-truns", "Drop us at the entrance."]
+          ]}
+        ],
+        sarasota: [
+          { id: "funny", title: "Funny Florida", rows: [
+            ["I am one sunscreen layer away from wisdom.", "sun-screen wisdom", "I am one sunscreen layer away from wisdom."],
+            ["The humidity has joined our family plan.", "hyoo-MID-ih-tee", "The humidity has joined our family plan."],
+            ["This beach chair is my office now.", "beach chair office", "This beach chair is my office now."]
+          ]},
+          { id: "basics", title: "Useful USA", rows: [
+            ["Where is the beach access?", "beach AK-sess", "Where is the beach access?"],
+            ["Do you have shade?", "shayde", "Do you have shade?"],
+            ["Can I get this to go?", "to go", "Can I get this to go?"]
+          ]},
+          { id: "food", title: "Food", rows: [
+            ["Fresh fish, please.", "fresh fish", "Fresh fish, please."],
+            ["No straw, thanks.", "no straw", "No straw, thanks."],
+            ["Key lime pie, obviously.", "kee lime pie", "Key lime pie, obviously."]
+          ]},
+          { id: "move", title: "Move", rows: [
+            ["Where can we park?", "where park", "Where can we park?"],
+            ["Is there beach traffic?", "beach traf-fik", "Is there beach traffic?"],
+            ["Which way to Siesta Key?", "see-ES-tuh kee", "Which way to Siesta Key?"]
+          ]}
+        ]
+      };
 
       function applyPrefs() {
         root.style.setProperty("--font", size + "px");
@@ -1252,6 +1284,32 @@
         controlsToggle.setAttribute("aria-expanded", "false");
         localStorage.gelmanPage = name;
         scrollTo(0, 0);
+      }
+      function escapeHTML(value) {
+        return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
+      }
+      function renderDictionary(city) {
+        const sections = DICTIONARIES[city] || DICTIONARIES.vienna;
+        dictionaryNav.innerHTML = sections.map(section => `<a href="#${section.id}">${escapeHTML(section.title)}</a>`).join("");
+        dictionaryContent.innerHTML = sections.map(section => `
+          <section class="dict-section" id="${section.id}">
+            <h2>${escapeHTML(section.title)}</h2>
+            <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation / Phrase</span></div>
+            <div class="list">
+              ${section.rows.map(row => `<article class="phrase"><div class="en">${escapeHTML(row[0])}</div><div class="pr">${escapeHTML(row[1])}</div><div class="de">${escapeHTML(row[2])}</div></article>`).join("")}
+            </div>
+          </section>
+        `).join("");
+      }
+      function showTripCity(city) {
+        if (!DICTIONARIES[city]) city = "vienna";
+        activeCity = city;
+        localStorage.gelmanTripCity = city;
+        root.style.setProperty("--hero-image", `url("${HEROES[city] || HEROES.vienna}")`);
+        tripCityTabs.forEach(tab => tab.setAttribute("aria-pressed", tab.dataset.tripCity === city));
+        renderDictionary(city);
+        showCity(city);
+        showAttractions(city);
       }
       function showCity(city) {
         if (!cityPlans.some(plan => plan.dataset.city === city)) city = "vienna";
@@ -1276,13 +1334,13 @@
         controlsToggle.setAttribute("aria-expanded", open);
       });
       tabs.forEach(tab => tab.addEventListener("click", () => showPage(tab.dataset.target)));
+      tripCityTabs.forEach(tab => tab.addEventListener("click", () => showTripCity(tab.dataset.tripCity)));
       cityTabs.forEach(tab => tab.addEventListener("click", () => showCity(tab.dataset.cityTarget)));
       attractionTabs.forEach(tab => tab.addEventListener("click", () => showAttractions(tab.dataset.attractionTarget)));
       applyPrefs();
-      showCity(localStorage.gelmanCity || "vienna");
-      showAttractions(localStorage.gelmanAttractionsCity || "vienna");
+      showTripCity(activeCity);
       showPage(localStorage.gelmanPage || "dictionary");
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=20");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=21");
     })();
   </script>
 </body>
