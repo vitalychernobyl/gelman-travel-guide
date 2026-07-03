@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=23">
+  <link rel="manifest" href="manifest.webmanifest?v=24">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -460,22 +460,76 @@
       padding: 0;
       list-style: none;
     }
-    .attractions li {
+    .attraction-stack {
       display: grid;
-      gap: 2px;
+      gap: 9px;
+    }
+    .attraction-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+      box-shadow: 0 3px 12px rgba(59, 52, 43, .05);
+    }
+    .attraction-card summary {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr);
+      gap: 9px;
+      min-height: 86px;
       padding: 8px;
+      list-style: none;
+      cursor: pointer;
+    }
+    .attraction-card summary::-webkit-details-marker { display: none; }
+    .attraction-thumb {
+      width: 72px;
+      height: 72px;
       border-radius: 14px;
+      object-fit: cover;
       background: var(--soft);
     }
-    .attractions a {
-      color: var(--accent-deep);
-      font-size: .9rem;
-      font-weight: 850;
-      text-decoration: none;
+    .attraction-main {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
     }
-    .attractions span {
+    .attraction-main h3 {
+      margin: 0;
+      color: var(--accent-deep);
+      font-size: .94rem;
+      line-height: 1.05;
+    }
+    .attraction-main p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .76rem;
+      line-height: 1.18;
+    }
+    .attraction-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 1px;
+    }
+    .attraction-tags span {
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--ink);
+      font-size: .64rem;
+      font-weight: 850;
+    }
+    .attraction-extra {
+      display: grid;
+      gap: 7px;
+      padding: 0 10px 10px 89px;
       color: var(--muted);
       font-size: .78rem;
+    }
+    .attraction-extra a {
+      color: var(--accent-deep);
+      font-weight: 850;
+      text-decoration: none;
     }
     .ticket {
       position: relative;
@@ -1204,60 +1258,7 @@
     </main>
 
     <main id="photos" class="page" data-page="photos" hidden>
-      <div class="page-head">
-        <div>
-          <h2 class="page-title">Attractions</h2>
-          <p class="page-copy">Places to explore by city.</p>
-        </div>
-      </div>
-      <div class="city-tabs" aria-label="View attractions by city">
-        <button class="attraction-tab city-tab" type="button" data-attraction-target="vienna" aria-pressed="true">Vienna</button>
-        <button class="attraction-tab city-tab" type="button" data-attraction-target="amsterdam" aria-pressed="false">Amsterdam</button>
-        <button class="attraction-tab city-tab" type="button" data-attraction-target="london" aria-pressed="false">London</button>
-        <button class="attraction-tab city-tab" type="button" data-attraction-target="washington" aria-pressed="false">Washington</button>
-        <button class="attraction-tab city-tab" type="button" data-attraction-target="sarasota" aria-pressed="false">Sarasota</button>
-      </div>
-      <section class="card wide attraction-city" data-attraction-city="vienna">
-        <h2><span class="city-mark">VIE</span> Vienna</h2>
-        <ul class="attractions">
-          <li><a href="https://www.schoenbrunn.at/en/" target="_blank" rel="noopener">Schönbrunn Palace</a><span>Imperial palace, gardens, and classic Vienna photos.</span></li>
-          <li><a href="https://www.belvedere.at/en" target="_blank" rel="noopener">Belvedere Museum</a><span>Palace museum and Klimt’s The Kiss.</span></li>
-          <li><a href="https://www.stephanskirche.at/" target="_blank" rel="noopener">St. Stephen’s Cathedral</a><span>Central cathedral and landmark tower views.</span></li>
-          <li><a href="https://www.praterwien.com/en" target="_blank" rel="noopener">Vienna Prater</a><span>Historic amusement park and giant ferris wheel.</span></li>
-        </ul>
-      </section>
-      <section class="card wide attraction-city" data-attraction-city="amsterdam" hidden>
-        <h2><span class="city-mark">AMS</span> Amsterdam</h2>
-        <ul class="attractions">
-          <li><a href="https://www.rijksmuseum.nl/en" target="_blank" rel="noopener">Rijksmuseum</a><span>Dutch masters, design, and the museum garden.</span></li>
-          <li><a href="https://www.vangoghmuseum.nl/en" target="_blank" rel="noopener">Van Gogh Museum</a><span>Van Gogh works, letters, and special exhibitions.</span></li>
-          <li><a href="https://www.annefrank.org/en/" target="_blank" rel="noopener">Anne Frank House</a><span>Timed-entry museum in the original canal house.</span></li>
-          <li><a href="https://www.iamsterdam.com/en/whats-on/calendar/attractions-and-sights/nature-and-active/vondelpark" target="_blank" rel="noopener">Vondelpark</a><span>Easy walk, picnic, and reset spot near museums.</span></li>
-        </ul>
-      </section>
-      <section class="card wide attraction-city" data-attraction-city="london" hidden>
-        <h2><span class="city-mark">LDN</span> London</h2>
-        <ul class="attractions">
-          <li><a href="https://www.britishmuseum.org/" target="_blank" rel="noopener">British Museum</a><span>Global collections and major galleries.</span></li>
-          <li><a href="https://www.hrp.org.uk/tower-of-london/" target="_blank" rel="noopener">Tower of London</a><span>Historic fortress, Crown Jewels, and river views.</span></li>
-          <li><a href="https://www.westminster-abbey.org/" target="_blank" rel="noopener">Westminster Abbey</a><span>Royal church, poets, coronations, and history.</span></li>
-          <li><a href="https://www.londoneye.com/" target="_blank" rel="noopener">London Eye</a><span>Big skyline view beside the Thames.</span></li>
-        </ul>
-      </section>
-      <section class="card wide attraction-city" data-attraction-city="washington" hidden>
-        <h2><span class="city-mark">DC</span> Washington</h2>
-        <ul class="attractions">
-          <li><a href="https://www.si.edu/museums" target="_blank" rel="noopener">Smithsonian Museums</a><span>Free museums, easy wins, zero ticket drama.</span></li>
-          <li><a href="https://www.nps.gov/linc/index.htm" target="_blank" rel="noopener">Lincoln Memorial</a><span>Big steps, big statue, big “we are in DC” energy.</span></li>
-        </ul>
-      </section>
-      <section class="card wide attraction-city" data-attraction-city="sarasota" hidden>
-        <h2><span class="city-mark">SRQ</span> Sarasota</h2>
-        <ul class="attractions">
-          <li><a href="https://www.visitsarasota.com/beaches/siesta-key-beach" target="_blank" rel="noopener">Siesta Key Beach</a><span>White sand, Gulf water, mandatory sunglasses.</span></li>
-          <li><a href="https://www.ringling.org/" target="_blank" rel="noopener">The Ringling</a><span>Museum, gardens, and a properly odd Florida afternoon.</span></li>
-        </ul>
-      </section>
+      <div id="attractionContent" class="attraction-stack" aria-live="polite"></div>
     </main>
 
     <nav class="bottom-tabs" aria-label="App pages">
@@ -1294,12 +1295,11 @@
       const tripCityTabs = [...document.querySelectorAll("[data-trip-city]")];
       const cityTabs = [...document.querySelectorAll("[data-city-target]")];
       const cityPlans = [...document.querySelectorAll(".city-plan")];
-      const attractionTabs = [...document.querySelectorAll(".attraction-tab")];
-      const attractionCities = [...document.querySelectorAll(".attraction-city")];
       const floatControls = document.querySelector("#floatControls");
       const controlsToggle = document.querySelector("#controlsToggle");
       const dictionaryNav = document.querySelector("#dictionaryNav");
       const dictionaryContent = document.querySelector("#dictionaryContent");
+      const attractionContent = document.querySelector("#attractionContent");
       let size = Number(localStorage.gelmanFont || 15);
       let density = localStorage.gelmanDensity || "compact";
       let activeCity = localStorage.gelmanTripCity || "vienna";
@@ -1423,6 +1423,75 @@
           ]}
         ]
       };
+      const ATTRACTIONS = {
+        vienna: {
+          code: "VIE",
+          city: "Vienna",
+          hotel: "NH Danube City",
+          items: [
+            ["Schönbrunn Palace", "Palace", "Schönbrunn", "From about €22; gardens free", "40-45 min from hotel", "Imperial summer palace with formal gardens and big-family-photo energy.", "Best for the full Vienna postcard: palace rooms, gardens, Gloriette views, and room to wander.", "Book timed palace tickets if you want interiors. The gardens are the easy low-friction option if everyone is fading.", "https://www.schoenbrunn.at/en/"],
+            ["Belvedere Museum", "Museum", "Landstrasse", "From about €17", "30-35 min from hotel", "Baroque palace museum best known for Klimt's The Kiss.", "Good because the building is gorgeous even before the art starts, and the collection is compact enough to survive.", "Upper Belvedere is the main pick. Buy timed tickets if you care about Klimt and want fewer line surprises.", "https://www.belvedere.at/en"],
+            ["St. Stephen's Cathedral", "Landmark", "Stephansplatz", "Free entry; tower/tours extra", "20-25 min from hotel", "Central Gothic cathedral with towers, tiled roof, and classic old-city gravity.", "Good first-stop landmark because everything radiates from here and it helps everyone orient.", "Do the square even if you skip the paid tower. North Tower elevator is the easier view option.", "https://www.stephanskirche.at/"],
+            ["Vienna Prater", "Fun", "Leopoldstadt", "Free entry; rides paid", "12-18 min from hotel", "Historic amusement park with the Giant Ferris Wheel.", "Good for a lower-culture, higher-snack reset after museums and palaces.", "Entry is free, pay per ride. The Ferris Wheel is the iconic one; Prater also works just for wandering.", "https://www.praterwien.com/en"],
+            ["Hofburg Palace", "Palace", "Innere Stadt", "Museums vary", "22-28 min from hotel", "Former imperial complex with museums, courtyards, and the Spanish Riding School nearby.", "Good because it layers a lot of Vienna history in one central walkable area.", "Pick one interior museum, not all of them, unless everyone has unusually strong Habsburg stamina.", "https://www.hofburg-wien.at/en/"],
+            ["Kunsthistorisches Museum", "Museum", "Maria-Theresien-Platz", "About €21", "25-30 min from hotel", "Major fine-art museum in a lavish Ringstrasse building.", "Good for old masters, dramatic staircases, and feeling fancy indoors.", "If attention spans are limited, do the main staircase, cafe, and a short greatest-hits route.", "https://www.khm.at/en/"],
+            ["MuseumsQuartier", "Culture", "Neubau", "Courtyard free; museums vary", "25-30 min from hotel", "Big museum and courtyard district with modern art, cafes, and outdoor seating.", "Good as a flexible stop: people can museum, snack, sit, or wander without needing the same energy level.", "Leopold Museum and mumok are the headline museums. The courtyard is useful even with no ticket.", "https://www.mqw.at/en/"],
+            ["Albertina", "Museum", "Innere Stadt", "About €19", "25-30 min from hotel", "Museum near the Opera with graphic art, modern classics, and palace rooms.", "Good if you want a central museum that is polished but not a full-day commitment.", "Check current exhibitions first; the permanent and palace-room combo is usually a safe bet.", "https://www.albertina.at/en/"],
+            ["Vienna State Opera", "Performance", "Ringstrasse", "Tour/ticket prices vary", "25-30 min from hotel", "One of Europe's major opera houses, right on the Ring.", "Good even from outside; better if there is an easy tour or last-minute standing-room option.", "Tours are a good low-commitment way in. Performances need planning and outfit tolerance.", "https://www.wiener-staatsoper.at/en/"],
+            ["Naschmarkt", "Food", "Wieden/Mariahilf", "Free entry; food varies", "30-35 min from hotel", "Outdoor market with food stalls, restaurants, spices, and snack wandering.", "Good when the group needs food choices without choosing one perfect restaurant.", "Better earlier in the day. Saturdays add flea-market chaos if that sounds fun rather than cursed.", "https://www.wien.info/en/dine-drink/markets/naschmarkt-351688"],
+            ["Karlskirche", "Church", "Karlsplatz", "Entry varies", "25-30 min from hotel", "Baroque church with a dramatic dome and reflecting pool.", "Good because the outside is striking and Karlsplatz connects easily to other central stops.", "Best paired with Secession, Naschmarkt, or a Ring walk.", "https://www.wien.info/en/sights-a-z/st-charles-church-341990"],
+            ["Hundertwasserhaus", "Architecture", "Landstrasse", "Outside free", "20-25 min from hotel", "Colorful apartment building by Friedensreich Hundertwasser.", "Good for weird, quick, photogenic Vienna that is not another palace.", "You view it from outside. Pair with Kunst Haus Wien nearby if the style hooks you.", "https://www.wien.info/en/sights-a-z/hundertwasser-house-vienna-340026"],
+            ["Kunst Haus Wien", "Museum", "Landstrasse", "About €15", "20-25 min from hotel", "Hundertwasser museum with uneven floors, greenery, and strong personality.", "Good when you want art plus an actually unusual building.", "More interesting if Hundertwasserhaus made people curious. Also a solid rainy-day pick.", "https://www.kunsthauswien.com/en/"],
+            ["Danube Tower", "View", "Donauturm", "About €18", "10-15 min from hotel", "Tall observation tower near Danube Park.", "Good because it is close to NH Danube City and gives an easy city-scale view.", "Best nearby add-on from the hotel. Go for clear weather; skip if visibility is gray soup.", "https://www.donauturm.at/en/"],
+            ["Danube Island", "Outdoors", "Donauinsel", "Free", "10-20 min from hotel", "Long recreation island for walking, biking, river views, and decompression.", "Good because it is close, free, and useful when everyone needs air instead of another admission ticket.", "Pick a short stretch rather than trying to understand the whole island.", "https://www.wien.info/en/livable-vienna/sports/danube-island-347082"],
+            ["Café Central", "Cafe", "Innere Stadt", "Menu prices", "25-30 min from hotel", "Historic Viennese cafe with pastries, coffee, and high-ceiling drama.", "Good for the classic cafe experience, especially if dessert is part of the itinerary constitution.", "Expect a line at peak times. Go off-hours or keep it as a flexible treat.", "https://www.cafecentral.wien/en/"],
+            ["Demel", "Cafe", "Innere Stadt", "Menu prices", "25-30 min from hotel", "Famous pastry shop and cafe near the Hofburg.", "Good for cake-window browsing and a very polished sugar stop.", "Works well after Hofburg. If seated cafe is packed, takeaway still counts emotionally.", "https://www.demel.com/en"],
+            ["Stadtpark", "Park", "Landstrasse", "Free", "20-25 min from hotel", "Central park with the golden Johann Strauss monument.", "Good for a low-effort walk and a recognizable photo without paying for anything.", "Pair with Ringstrasse, MAK, or a cafe stop.", "https://www.wien.info/en/sights-a-z/stadtpark-344386"],
+            ["MAK", "Museum", "Stubenring", "About €15", "20-25 min from hotel", "Museum of applied arts, design, furniture, posters, and decorative objects.", "Good for design-minded people and less crowded than the blockbuster museums.", "A strong alternative if everyone is palace-saturated.", "https://www.mak.at/en"],
+            ["Spanish Riding School", "Performance", "Hofburg", "Tours/shows vary", "22-28 min from hotel", "Historic Lipizzaner horse training and performances in the Hofburg.", "Good if the group wants something distinctively Viennese that is not just walking through rooms.", "Morning exercises can be easier than full performances, depending on schedule.", "https://www.srs.at/en/"]
+          ]
+        },
+        amsterdam: {
+          code: "AMS",
+          city: "Amsterdam",
+          hotel: "Avani Museum Quarter",
+          items: [
+            ["Rijksmuseum", "Museum", "Museumplein", "About €25", "5 min from hotel", "Dutch masters and a grand museum garden.", "Best nearby heavyweight museum; easy from Avani.", "Book timed tickets for a calmer visit.", "https://www.rijksmuseum.nl/en"],
+            ["Van Gogh Museum", "Museum", "Museumplein", "About €24", "6 min from hotel", "Van Gogh paintings, drawings, and letters.", "Good because it is close and emotionally direct.", "Timed tickets are usually essential.", "https://www.vangoghmuseum.nl/en"],
+            ["Anne Frank House", "History", "Jordaan", "About €16", "20-25 min from hotel", "Timed-entry museum in the original canal house.", "Important and memorable, but needs booking discipline.", "Reserve ahead; walk-up is not the plan.", "https://www.annefrank.org/en/"],
+            ["Vondelpark", "Park", "Amsterdam-Zuid", "Free", "12 min from hotel", "Big urban park near the museum district.", "Good reset walk near the hotel.", "Useful between museum slots.", "https://www.iamsterdam.com/en/explore/areas/oud-zuid/vondelpark"]
+          ]
+        },
+        london: {
+          code: "LDN",
+          city: "London",
+          hotel: "London stay",
+          items: [
+            ["British Museum", "Museum", "Bloomsbury", "Free", "35-45 min from stay", "Huge global collection with major galleries.", "Good because free entry lets you do a short greatest-hits visit.", "Book a free timed entry if available.", "https://www.britishmuseum.org/"],
+            ["Tower of London", "History", "Tower Hill", "About £35", "20-30 min from stay", "Historic fortress and Crown Jewels.", "Good for a full London history hit near the river.", "Go early if Crown Jewels matter.", "https://www.hrp.org.uk/tower-of-london/"],
+            ["Westminster Abbey", "Church", "Westminster", "About £30", "35-45 min from stay", "Royal church with coronations, poets, and monuments.", "Good if you want one deeply historic interior.", "Pair with Parliament and the Thames.", "https://www.westminster-abbey.org/"],
+            ["London Eye", "View", "South Bank", "About £30+", "35-45 min from stay", "Big skyline wheel beside the Thames.", "Good if the weather is clear and everyone wants the view.", "Skip in heavy rain or if the skyline is hiding.", "https://www.londoneye.com/"]
+          ]
+        },
+        washington: {
+          code: "DC",
+          city: "Washington",
+          hotel: "Arlington stay",
+          items: [
+            ["Smithsonian Museums", "Museum", "National Mall", "Free", "15-25 min from Arlington", "Cluster of free museums across the Mall.", "Good because everyone can choose a lane and nobody pays admission.", "Air and Space and Natural History are easy crowd-pleasers.", "https://www.si.edu/museums"],
+            ["Lincoln Memorial", "Monument", "National Mall", "Free", "10-20 min from Arlington", "Iconic memorial and Reflecting Pool views.", "Good at golden hour or evening when it feels properly monumental.", "Pair with Vietnam Veterans Memorial.", "https://www.nps.gov/linc/index.htm"]
+          ]
+        },
+        sarasota: {
+          code: "SRQ",
+          city: "Sarasota",
+          hotel: "Eagle Lake Dr",
+          items: [
+            ["Siesta Key Beach", "Beach", "Siesta Key", "Free", "30-40 min from stay", "White sand beach with Gulf water.", "Good because it is the obvious Sarasota beach answer.", "Go earlier for easier parking.", "https://www.visitsarasota.com/beaches/siesta-key-beach"],
+            ["The Ringling", "Museum", "Bay Shore Rd", "About $25", "30-35 min from stay", "Art museum, circus history, gardens, and Ca' d'Zan.", "Good as the Sarasota non-beach anchor.", "Check hours before going; it can fill an afternoon.", "https://www.ringling.org/"]
+          ]
+        }
+      };
 
       function applyPrefs() {
         root.style.setProperty("--font", size + "px");
@@ -1445,6 +1514,28 @@
       function escapeHTML(value) {
         return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
       }
+      function attractionThumb(title, category) {
+        const initials = title.split(/\s+/).slice(0, 2).map(word => word[0]).join("").toUpperCase();
+        const palette = {
+          Palace: ["#f8d6b3", "#d97823"],
+          Museum: ["#d9e4ec", "#527386"],
+          Landmark: ["#f1e6cf", "#a84f15"],
+          Fun: ["#ffe3e6", "#c9002b"],
+          Culture: ["#e8ded2", "#7a5b45"],
+          Performance: ["#e9e0f2", "#6d4f8b"],
+          Food: ["#fff1e3", "#a84f15"],
+          Church: ["#e8ece8", "#667c66"],
+          Architecture: ["#f5dfcf", "#b85b2d"],
+          View: ["#dcecf2", "#2f6f8f"],
+          Outdoors: ["#dff0df", "#4f7f4f"],
+          Cafe: ["#f6e5d5", "#8a5838"],
+          Park: ["#e4f1dc", "#587a45"],
+          History: ["#eee4d7", "#765a40"],
+          Beach: ["#d9f1f2", "#2f8390"]
+        }[category] || ["#ecebe7", "#d97823"];
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 144"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="${palette[0]}"/><stop offset="1" stop-color="${palette[1]}"/></linearGradient></defs><rect width="144" height="144" rx="26" fill="url(#g)"/><circle cx="108" cy="34" r="22" fill="rgba(255,255,255,.36)"/><path d="M18 112c25-38 48-45 69-20 14-18 28-21 43 20" fill="rgba(255,255,255,.42)"/><text x="18" y="52" fill="#25211c" font-size="18" font-family="Arial, sans-serif" font-weight="800">${escapeHTML(category)}</text><text x="20" y="100" fill="#fffefa" font-size="34" font-family="Arial, sans-serif" font-weight="900">${escapeHTML(initials)}</text></svg>`;
+        return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+      }
       function renderDictionary(city) {
         const sections = DICTIONARIES[city] || DICTIONARIES.vienna;
         dictionaryNav.innerHTML = sections.map(section => `<a href="#${section.id}">${escapeHTML(section.title)}</a>`).join("");
@@ -1458,6 +1549,39 @@
           </section>
         `).join("");
       }
+      function renderAttractions(city) {
+        const data = ATTRACTIONS[city] || ATTRACTIONS.vienna;
+        attractionContent.innerHTML = `
+          <section class="card wide attraction-city" data-attraction-city="${escapeHTML(city)}">
+            <h2><span class="city-mark">${escapeHTML(data.code)}</span> ${escapeHTML(data.city)} <span class="meta">${data.items.length} picks near ${escapeHTML(data.hotel)}</span></h2>
+            <div class="attraction-stack">
+              ${data.items.map((item, index) => {
+                const [title, category, location, price, distance, description, why, details, link] = item;
+                return `<details class="attraction-card"${index === 0 ? " open" : ""}>
+                  <summary>
+                    <img class="attraction-thumb" src="${attractionThumb(title, category)}" alt="">
+                    <div class="attraction-main">
+                      <h3>${escapeHTML(title)}</h3>
+                      <p>${escapeHTML(description)}</p>
+                      <div class="attraction-tags">
+                        <span>${escapeHTML(category)}</span>
+                        <span>${escapeHTML(price)}</span>
+                        <span>${escapeHTML(distance)}</span>
+                      </div>
+                    </div>
+                  </summary>
+                  <div class="attraction-extra">
+                    <div><strong>Why it is good:</strong> ${escapeHTML(why)}</div>
+                    <div><strong>Location:</strong> ${escapeHTML(location)}</div>
+                    <div><strong>More:</strong> ${escapeHTML(details)}</div>
+                    <a href="${escapeHTML(link)}" target="_blank" rel="noopener">Open official info</a>
+                  </div>
+                </details>`;
+              }).join("")}
+            </div>
+          </section>
+        `;
+      }
       function showTripCity(city) {
         if (!DICTIONARIES[city]) city = "vienna";
         activeCity = city;
@@ -1465,8 +1589,8 @@
         root.style.setProperty("--hero-image", `url("${HEROES[city] || HEROES.vienna}")`);
         tripCityTabs.forEach(tab => tab.setAttribute("aria-pressed", tab.dataset.tripCity === city));
         renderDictionary(city);
+        renderAttractions(city);
         showCity(city);
-        showAttractions(city);
       }
       function showCity(city) {
         if (!cityPlans.some(plan => plan.dataset.city === city)) city = "vienna";
@@ -1475,9 +1599,7 @@
         localStorage.gelmanCity = city;
       }
       function showAttractions(city) {
-        if (!attractionCities.some(plan => plan.dataset.attractionCity === city)) city = "vienna";
-        attractionTabs.forEach(tab => tab.setAttribute("aria-pressed", tab.dataset.attractionTarget === city));
-        attractionCities.forEach(plan => { plan.hidden = plan.dataset.attractionCity !== city; });
+        renderAttractions(ATTRACTIONS[city] ? city : "vienna");
         localStorage.gelmanAttractionsCity = city;
       }
 
@@ -1493,11 +1615,10 @@
       tabs.forEach(tab => tab.addEventListener("click", () => showPage(tab.dataset.target)));
       tripCityTabs.forEach(tab => tab.addEventListener("click", () => showTripCity(tab.dataset.tripCity)));
       cityTabs.forEach(tab => tab.addEventListener("click", () => showCity(tab.dataset.cityTarget)));
-      attractionTabs.forEach(tab => tab.addEventListener("click", () => showAttractions(tab.dataset.attractionTarget)));
       applyPrefs();
       showTripCity(activeCity);
       showPage(localStorage.gelmanPage || "dictionary");
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=23");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=24");
     })();
   </script>
 </body>
