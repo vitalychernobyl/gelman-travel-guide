@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=41">
+  <link rel="manifest" href="manifest.webmanifest?v=42">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -121,7 +121,7 @@
       inset: 0;
       background:
         linear-gradient(180deg, rgba(0, 0, 0, .06), rgba(0, 0, 0, .05) 38%, rgba(0, 0, 0, .42)),
-        var(--hero-image, url("vienna-hero.png?v=1")) center / cover no-repeat;
+        var(--hero-image, url("amsterdam-hero.png?v=1")) center / cover no-repeat;
     }
     .hero-brand {
       position: relative;
@@ -179,6 +179,47 @@
       font-size: .82rem;
       line-height: 1.05;
     }
+    .share-button {
+      position: absolute;
+      top: max(10px, env(safe-area-inset-top));
+      left: 10px;
+      z-index: 2;
+      display: inline-grid;
+      grid-auto-flow: column;
+      align-items: center;
+      gap: 5px;
+      min-height: 36px;
+      padding: 0 11px;
+      border: 1px solid rgba(255, 255, 255, .58);
+      border-radius: 999px;
+      background: rgba(37, 33, 28, .58);
+      color: #fffefa;
+      font-size: .74rem;
+      font-weight: 950;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .2);
+      backdrop-filter: blur(14px);
+    }
+    .share-button svg {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2.6;
+    }
+    .share-status {
+      position: fixed;
+      left: 50%;
+      bottom: calc(env(safe-area-inset-bottom) + 92px);
+      z-index: 30;
+      transform: translateX(-50%);
+      max-width: min(360px, calc(100vw - 28px));
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(37, 33, 28, .92);
+      color: #fffefa;
+      font-size: .82rem;
+      font-weight: 900;
+      box-shadow: 0 14px 30px rgba(37, 33, 28, .25);
+    }
+    .share-status[hidden] { display: none; }
     .hero-copy {
       position: relative;
       color: #ffffff;
@@ -1354,7 +1395,11 @@
 <body>
   <div class="app">
     <section class="hero" aria-label="City hero">
-      <div class="hero-status" id="heroStatus" aria-live="polite"><span>Stay</span><strong>Jul 2-3</strong></div>
+      <div class="hero-status" id="heroStatus" aria-live="polite"><span>Stay</span><strong>Jul 3-6</strong></div>
+      <button class="share-button" id="shareButton" type="button" aria-label="Share current Gelman Travel page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 16V3"/><path d="m7 8 5-5 5 5"/></svg>
+        <span>Share</span>
+      </button>
       <div class="hero-brand">
         <button class="logo-button" id="logoButton" type="button" aria-label="Open Gelman Travel logo">
           <img class="hero-logo" src="app-logo-circle.png?v=17" alt="Gelman Travel Guide logo">
@@ -1362,8 +1407,8 @@
         <h1 class="app-title">Gelman Travel</h1>
         <header class="app-top">
           <div class="trip-city-tabs" aria-label="Choose city">
-            <button class="trip-city-tab" type="button" data-trip-city="vienna" aria-pressed="true">Vienna</button>
-            <button class="trip-city-tab" type="button" data-trip-city="amsterdam" aria-pressed="false">Amsterdam</button>
+            <button class="trip-city-tab" type="button" data-trip-city="vienna" aria-pressed="false">Vienna</button>
+            <button class="trip-city-tab" type="button" data-trip-city="amsterdam" aria-pressed="true">Amsterdam</button>
             <button class="trip-city-tab" type="button" data-trip-city="london" aria-pressed="false">London</button>
             <button class="trip-city-tab" type="button" data-trip-city="washington" aria-pressed="false">Washington</button>
             <button class="trip-city-tab" type="button" data-trip-city="sarasota" aria-pressed="false">Sarasota</button>
@@ -1386,8 +1431,8 @@
       </div>
 
       <div class="city-tabs" aria-label="View plans by city">
-        <button class="city-tab" type="button" data-city-target="vienna" aria-pressed="true">Vienna</button>
-        <button class="city-tab" type="button" data-city-target="amsterdam" aria-pressed="false">Amsterdam</button>
+        <button class="city-tab" type="button" data-city-target="vienna" aria-pressed="false">Vienna</button>
+        <button class="city-tab" type="button" data-city-target="amsterdam" aria-pressed="true">Amsterdam</button>
         <button class="city-tab" type="button" data-city-target="london" aria-pressed="false">London</button>
         <button class="city-tab" type="button" data-city-target="washington" aria-pressed="false">Washington, DC</button>
         <button class="city-tab" type="button" data-city-target="sarasota" aria-pressed="false">Sarasota</button>
@@ -1787,6 +1832,7 @@
         <button class="plain-button" id="closeLogo" type="button">Close</button>
       </div>
     </div>
+    <div class="share-status" id="shareStatus" hidden aria-live="polite"></div>
   </div>
 
   <script>
@@ -1810,10 +1856,14 @@
       const logoButton = document.querySelector("#logoButton");
       const logoLightbox = document.querySelector("#logoLightbox");
       const closeLogo = document.querySelector("#closeLogo");
+      const shareButton = document.querySelector("#shareButton");
+      const shareStatus = document.querySelector("#shareStatus");
       let deferredInstallPrompt = null;
       let size = Number(localStorage.gelmanFont || 15);
       let density = localStorage.gelmanDensity || "compact";
-      let activeCity = localStorage.gelmanTripCity || "vienna";
+      const startParams = new URLSearchParams(location.search);
+      let activeCity = startParams.get("city") || "amsterdam";
+      let activePage = normalizePage(startParams.get("page") || "plans");
       const HEROES = {
         vienna: "vienna-hero.png?v=1",
         amsterdam: "amsterdam-hero.png?v=1",
@@ -2037,26 +2087,81 @@
       function showPage(name) {
         if (name === "tickets") name = "plans";
         if (name === "memories") name = "photos";
-        if (!pages.some(page => page.dataset.page === name)) name = "dictionary";
+        if (!pages.some(page => page.dataset.page === name)) name = "plans";
+        activePage = name;
         pages.forEach(page => { page.hidden = page.dataset.page !== name; });
         tabs.forEach(tab => tab.setAttribute("aria-current", tab.dataset.target === name ? "page" : "false"));
         floatControls.classList.remove("open");
         controlsToggle.setAttribute("aria-expanded", "false");
         localStorage.gelmanPage = name;
+        syncShareUrl();
         scrollTo(0, 0);
+      }
+      function normalizePage(page) {
+        if (page === "tickets") return "plans";
+        if (page === "memories") return "photos";
+        return ["plans", "photos", "dictionary"].includes(page) ? page : "plans";
+      }
+      function sharePageLabel(page) {
+        return { plans: "Trip Plans", photos: "Attractions", dictionary: "Dictionary" }[page] || "Trip Plans";
+      }
+      function shareCityLabel(city) {
+        return { vienna: "Vienna", amsterdam: "Amsterdam", london: "London", washington: "Washington", sarasota: "Sarasota" }[city] || "Amsterdam";
+      }
+      function buildShareUrl(page = activePage, city = activeCity) {
+        const url = new URL(location.href);
+        url.searchParams.set("city", city);
+        url.searchParams.set("page", normalizePage(page));
+        url.searchParams.delete("qa");
+        url.searchParams.delete("today");
+        return url.toString();
+      }
+      function syncShareUrl() {
+        if (!history.replaceState) return;
+        history.replaceState(null, "", buildShareUrl(activePage, activeCity));
+      }
+      function showShareStatus(message) {
+        if (!shareStatus) return;
+        shareStatus.textContent = message;
+        shareStatus.hidden = false;
+        clearTimeout(showShareStatus.timer);
+        showShareStatus.timer = setTimeout(() => { shareStatus.hidden = true; }, 2200);
+      }
+      async function shareCurrentPage() {
+        const url = buildShareUrl();
+        const city = shareCityLabel(activeCity);
+        const page = sharePageLabel(activePage);
+        const title = `Gelman Travel - ${city} ${page}`;
+        const text = `${city} ${page} in Gelman Travel`;
+        try {
+          if (navigator.share) {
+            await navigator.share({ title, text, url });
+            return;
+          }
+          await navigator.clipboard.writeText(url);
+          showShareStatus("Link copied");
+        } catch (error) {
+          if (error && error.name === "AbortError") return;
+          try {
+            await navigator.clipboard.writeText(url);
+            showShareStatus("Link copied");
+          } catch {
+            showShareStatus(url);
+          }
+        }
       }
       function isStandalone() {
         return window.navigator.standalone || window.matchMedia("(display-mode: standalone)").matches;
       }
       function showInstallSheet(force = false) {
         if (!installSheet || isStandalone()) return;
-        if (!force && localStorage.gelmanInstallSeenV41) return;
+        if (!force && localStorage.gelmanInstallSeenV42) return;
         installSheet.hidden = false;
       }
       function hideInstallSheet(markSeen = true) {
         if (!installSheet) return;
         installSheet.hidden = true;
-        if (markSeen) localStorage.gelmanInstallSeenV41 = "1";
+        if (markSeen) localStorage.gelmanInstallSeenV42 = "1";
       }
       function enhanceHotelCards() {
         document.querySelectorAll("article.hotel-key").forEach(article => {
@@ -2227,7 +2332,7 @@
         return testToday ? new Date(`${testToday}T08:00:00`) : new Date();
       }
       function updateHeroStatus() {
-        const meta = CITY_META[activeCity] || CITY_META.vienna;
+        const meta = CITY_META[activeCity] || CITY_META.amsterdam;
         const now = currentNow();
         let label = meta.statusLabel || "Stay";
         let value = meta.stayLabel;
@@ -2252,25 +2357,26 @@
         setTimeout(() => { cityCentering = false; }, 520);
       }
       function showTripCity(city, center = true) {
-        if (!DICTIONARIES[city]) city = "vienna";
+        if (!DICTIONARIES[city]) city = "amsterdam";
         activeCity = city;
         localStorage.gelmanTripCity = city;
-        root.style.setProperty("--hero-image", `url("${HEROES[city] || HEROES.vienna}")`);
+        root.style.setProperty("--hero-image", `url("${HEROES[city] || HEROES.amsterdam}")`);
         tripCityTabs.forEach(tab => tab.setAttribute("aria-pressed", tab.dataset.tripCity === city));
         updateHeroStatus();
         renderDictionary(city);
         renderAttractions(city);
         showCity(city);
+        syncShareUrl();
         if (center) requestAnimationFrame(() => centerTripCity(city));
       }
       function showCity(city) {
-        if (!cityPlans.some(plan => plan.dataset.city === city)) city = "vienna";
+        if (!cityPlans.some(plan => plan.dataset.city === city)) city = "amsterdam";
         cityTabs.forEach(tab => tab.setAttribute("aria-pressed", tab.dataset.cityTarget === city));
         cityPlans.forEach(plan => { plan.hidden = plan.dataset.city !== city; });
         localStorage.gelmanCity = city;
       }
       function showAttractions(city) {
-        renderAttractions(ATTRACTIONS[city] ? city : "vienna");
+        renderAttractions(ATTRACTIONS[city] ? city : "amsterdam");
         localStorage.gelmanAttractionsCity = city;
       }
       function todayKey(now) {
@@ -2342,6 +2448,7 @@
       logoLightbox?.addEventListener("click", event => {
         if (event.target === logoLightbox) logoLightbox.hidden = true;
       });
+      shareButton?.addEventListener("click", shareCurrentPage);
       document.addEventListener("click", event => {
         const detailButton = event.target.closest("[data-detail-toggle]");
         if (!detailButton) return;
@@ -2356,11 +2463,11 @@
       enhanceHotelCards();
       applyPrefs();
       showTripCity(activeCity);
-      showPage("plans");
+      showPage(activePage);
       updateFlightCountdowns();
       setTimeout(() => showInstallSheet(false), 900);
       setInterval(updateFlightCountdowns, 60000);
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=41");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=42");
     })();
   </script>
 </body>
