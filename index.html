@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=25">
+  <link rel="manifest" href="manifest.webmanifest?v=26">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -1366,69 +1366,82 @@
           ]}
         ],
         london: [
-          { id: "funny", title: "Funny UK", rows: [
-            ["That is suspiciously charming.", "sus-pish-us-lee CHAH-ming", "That is suspiciously charming."],
-            ["I require tea and emotional support.", "tee and ee-MOH-shun-al suh-PORT", "I require tea and emotional support."],
-            ["This queue has become my family.", "kyoo family", "This queue has become my family."]
+          { id: "decoded", title: "UK decoded", left: "What they say", right: "Translation / What it means", rows: [
+            ["That's brave.", "Your decision has chosen violence.", "They think it is terrible, but etiquette is wearing a blazer."],
+            ["Interesting.", "I disagree and have already left the conversation spiritually.", "A polite warning shot."],
+            ["With respect...", "You are about to be dismantled with cutlery.", "Respect has exited the building."],
+            ["Not bad.", "Excellent, but I refuse to let joy win.", "This is basically five stars."],
+            ["I'll bear it in mind.", "I will bury it in a mental cupboard.", "No."]
           ]},
-          { id: "basics", title: "Useful UK", rows: [
-            ["Where is the loo?", "wherez the loo", "Where is the loo?"],
-            ["Can I tap to pay?", "tap tuh pay", "Can I tap to pay?"],
-            ["Cheers.", "cheerz", "Cheers."]
+          { id: "tea", title: "Tea diplomacy", left: "What they say", right: "Translation / What it means", rows: [
+            ["Let's circle back.", "Let us place this in a museum of forgotten tasks.", "A soft no with Outlook stationery."],
+            ["Could do.", "I have no intention of doing that.", "The door is technically not locked."],
+            ["I'm sure it's fine.", "It is not fine and I will mention it in 2029.", "Long-game resentment."],
+            ["No worries.", "There are worries. I have named them.", "The invoice is emotional."]
           ]},
-          { id: "food", title: "Food", rows: [
-            ["A table for four.", "tay-bul for fawr", "A table for four."],
-            ["The bill, please.", "bill pleez", "The bill, please."],
-            ["No coriander, please.", "no kor-ee-AN-der", "No coriander, please."]
+          { id: "street", title: "Street survival", left: "What they say", right: "Translation / What it means", rows: [
+            ["Sorry.", "Move.", "Collision avoided by national reflex."],
+            ["After you.", "We are trapped in a politeness duel.", "Someone must surrender."],
+            ["Lovely weather.", "We are united by dampness.", "The social contract."],
+            ["Bit of a walk.", "Your feet will become historical evidence.", "Distance has been minimized for morale."]
           ]},
-          { id: "move", title: "Move", rows: [
-            ["Which platform?", "which plat-form", "Which platform?"],
-            ["Mind the gap.", "mind the gap", "Mind the gap."],
-            ["Is this the right train?", "rite train", "Is this the right train?"]
+          { id: "pub", title: "Pub science", left: "What they say", right: "Translation / What it means", rows: [
+            ["Just the one.", "A legal fiction.", "There may be four."],
+            ["I might get chips.", "I am getting chips.", "Decision already complete."],
+            ["It has character.", "The pub carpet is sentient.", "Proceed, but do not inspect."],
+            ["One more for the road.", "The road has not been consulted.", "Classic strategic ambiguity."]
           ]}
         ],
         washington: [
-          { id: "funny", title: "Funny USA", rows: [
-            ["This meeting could have been a monument.", "MEE-ting mon-yuh-ment", "This meeting could have been a monument."],
-            ["I have strong opinions about free museum air conditioning.", "free myoo-ZEE-um air", "I have strong opinions about free museum air conditioning."],
-            ["I am bipartisan about snacks.", "bye-PAR-tuh-zun snacks", "I am bipartisan about snacks."]
+          { id: "overheard", title: "Overheard DC", left: "What they say", right: "Translation / What it means", rows: [
+            ["Let's take this offline.", "I would like fewer witnesses.", "Usually follows one good question."],
+            ["Can you send a one-pager?", "Please compress democracy into a PDF.", "DC's love language."],
+            ["My friend at State says...", "I have one group chat and a tote bag.", "Credential fog machine."],
+            ["I'm not political, I'm policy-adjacent.", "I am extremely political, but my lanyard is tasteful.", "Self-own with laminate."]
           ]},
-          { id: "basics", title: "Useful USA", rows: [
-            ["Where is the nearest Metro?", "near-est MEH-tro", "Where is the nearest Metro?"],
-            ["Can I get a receipt?", "ruh-SEET", "Can I get a receipt?"],
-            ["Do you validate parking?", "VAL-ih-dayt parking", "Do you validate parking?"]
+          { id: "consultant", title: "Consultant ritual", left: "What they say", right: "Translation / What it means", rows: [
+            ["We should socialize this.", "Let's make everyone responsible and no one accountable.", "Consensus theatre."],
+            ["Per my last email.", "I have chosen litigation in business casual.", "The Sharpie of Outlook."],
+            ["I have a hard stop.", "I want to leave, and my calendar agrees.", "Sacred escape hatch."],
+            ["Let's pressure-test that.", "I am about to stress you and the spreadsheet.", "Consultant cardio."]
           ]},
-          { id: "food", title: "Food", rows: [
-            ["Can we split the check?", "split the check", "Can we split the check?"],
-            ["Tap water is fine.", "tap water", "Tap water is fine."],
-            ["No ice, please.", "no ice", "No ice, please."]
+          { id: "hill", title: "Hill talk", left: "What they say", right: "Translation / What it means", rows: [
+            ["Who's your member?", "Please identify your congressional Pokemon.", "Capitol small talk."],
+            ["That's above my pay grade.", "I know exactly who caused this.", "Bureaucratic self-preservation."],
+            ["Redline it.", "Bleed on this document politely.", "Policy arts and crafts."],
+            ["This is Chatham House.", "Say the spicy part, but do not tag me.", "Gossip with stationery."]
           ]},
-          { id: "move", title: "Move", rows: [
-            ["How bad is traffic?", "traf-fik", "How bad is traffic?"],
-            ["Is this going toward Arlington?", "AR-ling-ton", "Is this going toward Arlington?"],
-            ["Drop us at the entrance.", "EN-truns", "Drop us at the entrance."]
+          { id: "reception", title: "Reception snacks", left: "What they say", right: "Translation / What it means", rows: [
+            ["I'm at a reception.", "I am eating cheese cubes near influence.", "Networking dinner."],
+            ["Metro is single tracking.", "Time is a suggestion.", "WMATA has entered the chat."],
+            ["Great to connect.", "I have forgotten your name but respect your badge.", "Professional fog."],
+            ["Let's grab coffee.", "Let's schedule a meeting with better lighting.", "DC romance, apparently."]
           ]}
         ],
         sarasota: [
-          { id: "funny", title: "Funny Florida", rows: [
-            ["I am one sunscreen layer away from wisdom.", "sun-screen wisdom", "I am one sunscreen layer away from wisdom."],
-            ["The humidity has joined our family plan.", "hyoo-MID-ih-tee", "The humidity has joined our family plan."],
-            ["This beach chair is my office now.", "beach chair office", "This beach chair is my office now."]
+          { id: "florida", title: "Florida decoded", left: "What they say", right: "Translation / What it means", rows: [
+            ["It's not the heat, it's the humidity.", "We are all soup now.", "Weather report and existential thesis."],
+            ["A quick Publix run.", "We are buying subs, sunscreen, and emotional stability.", "No one leaves with only one thing."],
+            ["We'll go before it gets hot.", "We have already failed.", "Florida time starts at sunrise."],
+            ["Watch for gators.", "This is not a metaphor.", "Practical advice."]
           ]},
-          { id: "basics", title: "Useful USA", rows: [
-            ["Where is the beach access?", "beach AK-sess", "Where is the beach access?"],
-            ["Do you have shade?", "shayde", "Do you have shade?"],
-            ["Can I get this to go?", "to go", "Can I get this to go?"]
+          { id: "southern", title: "Southern polite danger", left: "What they say", right: "Translation / What it means", rows: [
+            ["Bless your heart.", "You sweet disaster.", "May be kindness. May be a courtroom sketch."],
+            ["That's different.", "I will not be purchasing that reality.", "A velvet no."],
+            ["Aren't you precious?", "You are testing several limits.", "Proceed carefully."],
+            ["Y'all come back now.", "You passed the vibe check.", "Actual warmth, usually."]
           ]},
-          { id: "food", title: "Food", rows: [
-            ["Fresh fish, please.", "fresh fish", "Fresh fish, please."],
-            ["No straw, thanks.", "no straw", "No straw, thanks."],
-            ["Key lime pie, obviously.", "kee lime pie", "Key lime pie, obviously."]
+          { id: "beach", title: "Beach logistics", left: "What they say", right: "Translation / What it means", rows: [
+            ["Snowbird traffic.", "The left lane has become a philosophical debate.", "Seasonal migration ritual."],
+            ["Just bring a towel.", "Bring seven bags and a small supply chain.", "Beach minimalism is fake."],
+            ["This chair is taken.", "A towel established sovereignty at dawn.", "International law, but sandy."],
+            ["We're almost at Siesta Key.", "We are in a parking experiment.", "Hope is part of the route."]
           ]},
-          { id: "move", title: "Move", rows: [
-            ["Where can we park?", "where park", "Where can we park?"],
-            ["Is there beach traffic?", "beach traf-fik", "Is there beach traffic?"],
-            ["Which way to Siesta Key?", "see-ES-tuh kee", "Which way to Siesta Key?"]
+          { id: "weather", title: "Weather theology", left: "What they say", right: "Translation / What it means", rows: [
+            ["That storm'll pass.", "The sky is throwing furniture, but calmly.", "Local optimism."],
+            ["It cools down at night.", "It becomes dark humidity.", "Technically true."],
+            ["It's a dry heat somewhere else.", "Not here, friend.", "Florida rebuttal."],
+            ["Do you want sweet tea?", "Would you like dessert in a glass?", "Southern hydration."]
           ]}
         ]
       };
@@ -1551,7 +1564,7 @@
         dictionaryContent.innerHTML = sections.map(section => `
           <section class="dict-section" id="${section.id}">
             <h2>${escapeHTML(section.title)}</h2>
-            <div class="phrase-cols" aria-hidden="true"><span>English</span><span>Pronunciation / Phrase</span></div>
+            <div class="phrase-cols" aria-hidden="true"><span>${escapeHTML(section.left || "English")}</span><span>${escapeHTML(section.right || "Pronunciation / Phrase")}</span></div>
             <div class="list">
               ${section.rows.map(row => `<article class="phrase"><div class="en">${escapeHTML(row[0])}</div><div class="pr">${escapeHTML(row[1])}</div><div class="de">${escapeHTML(row[2])}</div></article>`).join("")}
             </div>
@@ -1627,7 +1640,7 @@
       applyPrefs();
       showTripCity(activeCity);
       showPage(localStorage.gelmanPage || "dictionary");
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=25");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=26");
     })();
   </script>
 </body>
