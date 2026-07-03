@@ -1,10 +1,10 @@
-const CACHE = "gelman-travel-guide-v47";
+const CACHE = "gelman-travel-guide-v48";
 const FILES = [
   "./",
   "./index.html",
-  "./?v=47",
+  "./?v=48",
   "./manifest.webmanifest",
-  "./manifest.webmanifest?v=47",
+  "./manifest.webmanifest?v=48",
   "./app-logo.png",
   "./app-logo.png?v=17",
   "./apple-touch-icon.png",
@@ -79,6 +79,8 @@ const FILES = [
   "./attractions/amsterdam-rijksmuseum.jpg?v=1",
   "./attractions/amsterdam-albert-cuyp-market.jpg",
   "./attractions/amsterdam-albert-cuyp-market.jpg?v=1",
+  "./attractions/amsterdam-loetje-cafe.jpg",
+  "./attractions/amsterdam-loetje-cafe.jpg?v=1",
   "./attractions/amsterdam-centraal-station.jpg",
   "./attractions/amsterdam-centraal-station.jpg?v=1",
   "./attractions/amsterdam-canal-tour.jpg",

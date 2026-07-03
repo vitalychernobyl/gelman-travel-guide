@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=47">
+  <link rel="manifest" href="manifest.webmanifest?v=48">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -719,15 +719,13 @@
     }
     .attraction-actions {
       display: grid;
-      grid-template-columns: 1fr 1fr auto auto;
+      grid-template-columns: 1.05fr 1fr .9fr;
       gap: 6px;
       margin-top: 2px;
     }
     .attraction-actions a,
     .attraction-actions button {
       display: grid;
-      grid-auto-flow: column;
-      gap: 5px;
       place-items: center;
       min-height: 38px;
       padding: 6px 7px;
@@ -741,26 +739,28 @@
       text-align: center;
       text-decoration: none;
     }
-    .attraction-actions .detail-action {
-      border: 1px solid #d8d3ca;
-      background: #f2f1ee;
-      color: #5f5850;
+    .attraction-actions .ticket-link {
+      border: 1px solid #c9e4cf;
+      background: #eef9ef;
+      color: #24502c;
     }
-    .attraction-actions .ticket-link { background: #25211c; }
-    .attraction-actions .uber-button { background: #25211c; }
+    .attraction-actions .uber-button {
+      background: #090909;
+      color: #fffefa;
+    }
     .attraction-actions .map-action {
+      width: auto;
+      min-width: 0;
       min-height: 38px;
-      background: #f2f1ee;
-      color: #5f5850;
+      padding: 6px 7px;
+      border: 0;
+      background: #1a73e8;
+      color: #ffffff;
+      font-size: .74rem;
+      box-shadow: 0 8px 16px rgba(26, 115, 232, .2);
     }
-    .btn-icon {
-      display: inline-grid;
-      place-items: center;
-      width: 1.1em;
-      height: 1.1em;
-      font-size: 1em;
-      line-height: 1;
-    }
+    .attraction-actions .map-icon { display: none; }
+    .attraction-actions .action-label { display: inline; }
     .ticket {
       position: relative;
       display: grid;
@@ -1167,6 +1167,7 @@
       stroke-width: 2.7;
     }
     .map-action .action-label { display: none; }
+    .attraction-actions .map-action .action-label { display: inline; }
     .uber-button {
       background: #25211c;
       color: #fffaf2;
@@ -1979,7 +1980,6 @@
         <button id="larger" type="button" aria-label="Increase font size">A+</button>
         <button id="density" type="button" aria-pressed="false">Compact</button>
         <button id="reset" type="button">Reset</button>
-        <button id="famShare" type="button" hidden>💬 Fam</button>
       </div>
       <button class="float-toggle" id="controlsToggle" type="button" aria-expanded="false" aria-controls="controlMenu">Aa</button>
     </div>
@@ -2202,10 +2202,11 @@
           code: "AMS",
           city: "Amsterdam",
           hotel: "Avani Museum Quarter",
-          filters: ["Museum", "Fish", "Coffee", "Canal", "Landmark", "Nightlife", "Outdoors"],
-          featured: ["Café Luce", "Albert Cuyp Fish Market", "Van Gogh Museum", "Amsterdam City Center & Centraal", "Vondelpark", "Blue Boat Canal Cruise", "Flagship Anne Frank Canal Tour"],
+          filters: ["Museum", "Fish", "Food", "Coffee", "Canal", "Landmark", "Nightlife", "Outdoors"],
+          featured: ["Café Luce", "Loetje Amsterdam Café", "Albert Cuyp Fish Market", "Van Gogh Museum", "Amsterdam City Center & Centraal", "Vondelpark", "Blue Boat Canal Cruise", "Flagship Anne Frank Canal Tour"],
           items: [
             { title: "Café Luce", featured: true, category: "Coffee", rating: 4.8, location: "Amsterdam", price: "Cafe / restaurant prices", distance: "Check live map", description: "Saved from the Google result you sent: a quick cafe/restaurant candidate to keep at the very top of the Amsterdam list.", why: "Useful because it is a user-picked stop rather than another generic recommendation. Tap the map/Uber buttons from the card when you are ready to go.", details: "Exact public listing was not cleanly discoverable from search, so this is stored as a Google lookup/Maps target for fast access in Amsterdam.", link: "https://www.google.com/search?q=Cafe+Luce+Amsterdam", map: "https://www.google.com/maps/search/?api=1&query=Cafe%20Luce%20Amsterdam" },
+            { title: "Loetje Amsterdam Café", featured: true, category: "Food", rating: 4.3, location: "Johannes Vermeerstraat 52", price: "Menu prices", distance: "4-6 min walk from hotel", description: "Classic Amsterdam steak-and-gravy spot right by Museumplein and the Concertgebouw, close enough to the hotel to be an easy dinner fallback.", why: "This is the original Loetje cafe and the low-drama nearby meal move: steak in Loetje jus, fries, bread for the gravy, terrace if the weather behaves, and enough non-steak options to keep everyone civil.", details: "Official listing says daily 10:00-22:30. Reservations are recommended on busy nights; walk from Avani Museum Quarter instead of turning it into logistics.", link: "https://www.loetje.nl/en/locations/amsterdam-cafe/", map: "https://www.google.com/maps/search/?api=1&query=Loetje%20Amsterdam%20Caf%C3%A9%2C%20Johannes%20Vermeerstraat%2052%2C%20Amsterdam" },
             { title: "Albert Cuyp Fish Market", featured: true, category: "Fish", rating: 4.8, location: "Albert Cuypstraat, De Pijp", price: "Market prices", distance: "10-15 min from hotel", description: "The nearby Albert Cuyp Market is the easy fish-market move from the hotel: herring, kibbeling, snacks, and enough stalls to satisfy everyone.", why: "This is the practical fish stop near Avani Museum Quarter. Go for lunch or a snack crawl, not a formal dinner.", details: "Open Monday-Saturday roughly 9:30 AM-5:00 PM and closed Sunday. Fish stalls vary by day, so earlier is better.", link: "https://albertcuyp-markt.amsterdam/", map: "https://www.google.com/maps/search/?api=1&query=Albert%20Cuyp%20Market%2C%20Amsterdam" },
             { title: "Rijksmuseum", category: "Museum", rating: 4.7, location: "Museumplein", price: "About €25", distance: "5 min walk from hotel", description: "Amsterdam's heavyweight art museum: Rembrandt, Vermeer, ship models, Delftware, and a grand building five minutes from the hotel.", why: "Best nearby museum anchor. The Gallery of Honour works even as a short greatest-hits strike.", details: "Book a timed ticket. Night Watch room plus Gallery of Honour is the core route if attention spans are limited.", link: "https://www.rijksmuseum.nl/en" },
             { title: "Van Gogh Museum", featured: true, category: "Museum", rating: 4.7, location: "Museumplein", price: "About €25", distance: "3 min walk from hotel", description: "The world's largest Van Gogh collection: paintings, drawings, and letters arranged chronologically.", why: "Close, emotionally direct, and doable in 90 minutes without museum fatigue.", details: "Timed tickets are essentially mandatory; book days ahead in July.", link: "https://www.vangoghmuseum.nl/en" },
@@ -2351,21 +2352,9 @@
         return '<svg class="map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m12 3 7 18-7-4-7 4 7-18Z"/><path d="M12 3v14"/></svg>';
       }
       function slugify(value) {
-        return String(value).toLowerCase().replace(/&/g, " and ").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+        return String(value).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/&/g, " and ").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
       }
-      function familySmsUrl(url, text) {
-        const numbers = ["+12026410072", "+12404470927", "+12406877739", "+4407875721986"];
-        const body = encodeURIComponent(`${text}\n${url}`);
-        const addresses = numbers.map(encodeURIComponent).join(",");
-        const apple = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
-        return apple ? `sms://open?addresses=${addresses}&body=${body}` : `sms:${addresses}?body=${body}`;
-      }
-      async function shareUrl(url, title, text, preferMessages = false) {
-        if (preferMessages) {
-          location.href = familySmsUrl(url, text);
-          showShareStatus("Opening Messages");
-          return;
-        }
+      async function shareUrl(url, title, text) {
         try {
           if (navigator.share) {
             await navigator.share({ title, text, url });
@@ -2387,7 +2376,7 @@
         return `<button class="card-share-button" type="button" data-share-target="${escapeHTML(id)}" data-share-page="${escapeHTML(page)}" data-share-city="${escapeHTML(city)}" data-share-label="${escapeHTML(label)}" aria-label="Share ${escapeHTML(label)}">${shareIconHTML()}</button>`;
       }
       function googleMapsDirections(destination) {
-        return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving`;
+        return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving&dir_action=navigate`;
       }
       function normalizeGoogleMapsHref(href, fallbackDestination = "") {
         try {
@@ -2475,7 +2464,7 @@
         const page = sharePageLabel(activePage);
         const title = `Gelman Travel - ${city} ${page}`;
         const text = `${city} ${page} in Gelman Travel`;
-        shareUrl(url, title, text, true);
+        shareUrl(url, title, text);
       }
       function isStandalone() {
         return window.navigator.standalone || window.matchMedia("(display-mode: standalone)").matches;
@@ -2591,6 +2580,7 @@
         "Spanish Riding School": "attractions/vienna-spanish-riding-school.jpg?v=1",
         "Rijksmuseum": "attractions/amsterdam-rijksmuseum.jpg?v=1",
         "Café Luce": "attractions/amsterdam-bocca-coffee.jpg?v=1",
+        "Loetje Amsterdam Café": "attractions/amsterdam-loetje-cafe.jpg?v=1",
         "Albert Cuyp Fish Market": "attractions/amsterdam-albert-cuyp-market.jpg?v=1",
         "Van Gogh Museum": "attractions/amsterdam-van-gogh-museum.jpg?v=1",
         "Anne Frank House": "attractions/amsterdam-anne-frank-house.jpg?v=1",
@@ -2659,9 +2649,8 @@
       }
       function attractionActionLabel(category, price) {
         if (category === "Food" || category === "Cafe" || category === "Fish" || category === "Coffee") return "Menu";
-        if (category === "Nightlife") return "Explore";
-        if (/free/i.test(price || "") || ["Park", "Beach", "Outdoors", "Landmark", "Architecture"].includes(category)) return "Visit";
-        return "Tickets";
+        if (/about|from|ticket|tour|entry/i.test(price || "") && !/free/i.test(price || "")) return "Tickets";
+        return "Website";
       }
       document.addEventListener("error", event => {
         const image = event.target;
@@ -2682,7 +2671,7 @@
           </section>
         `).join("");
       }
-      const ATTRACTION_FILTER_LABELS = { Museum: "Museums", Fish: "Fish", Coffee: "Coffee", Canal: "Canals", Landmark: "Landmarks", Nightlife: "Nightlife", Outdoors: "Outdoors" };
+      const ATTRACTION_FILTER_LABELS = { Museum: "Museums", Fish: "Fish", Food: "Food", Coffee: "Coffee", Canal: "Canals", Landmark: "Landmarks", Nightlife: "Nightlife", Outdoors: "Outdoors" };
       const attractionFilterChoice = {};
       function renderAttractions(city) {
         const data = ATTRACTIONS[city] || ATTRACTIONS.vienna;
@@ -2759,10 +2748,9 @@
                     <div><strong>Location:</strong> ${escapeHTML(location)}</div>
                     <div><strong>More:</strong> ${escapeHTML(details)}</div>
                     <div class="attraction-actions">
-                      <button class="detail-action" type="button" data-detail-toggle><span class="btn-icon" aria-hidden="true">⌃</span><span>Details</span></button>
-                      <a class="ticket-link" href="${escapeHTML(ticketLink)}" target="_blank" rel="noopener"><span class="btn-icon" aria-hidden="true">▤</span><span>${escapeHTML(ticketLabel)}</span></a>
-                      <a class="map-action" href="${escapeHTML(mapLink)}" target="_blank" rel="noopener" aria-label="Google Maps directions to ${escapeHTML(title)}" title="Google Maps directions to ${escapeHTML(title)}">${mapIconHTML()}<span class="action-label">Directions</span></a>
-                      <a class="uber-button" href="${escapeHTML(uberLink)}" target="_blank" rel="noopener" aria-label="Open Uber to ${escapeHTML(title)}" title="Open Uber to ${escapeHTML(title)}"><span class="btn-icon" aria-hidden="true">U</span><span>Uber</span></a>
+                      <a class="ticket-link" href="${escapeHTML(ticketLink)}" target="_blank" rel="noopener">${escapeHTML(ticketLabel)}</a>
+                      <a class="map-action" href="${escapeHTML(mapLink)}" target="_blank" rel="noopener" aria-label="Google Maps directions to ${escapeHTML(title)}" title="Google Maps directions to ${escapeHTML(title)}"><span class="action-label">Directions</span></a>
+                      <a class="uber-button" href="${escapeHTML(uberLink)}" target="_blank" rel="noopener" aria-label="Open Uber to ${escapeHTML(title)}" title="Open Uber to ${escapeHTML(title)}">Uber</a>
                     </div>
                   </div>
                 </details>`;
@@ -2933,18 +2921,6 @@
         });
         updateHeroStatus();
       }
-      // Fill with the fam group's phone numbers (comma-separated, e.g. "+12025550101,+12025550102")
-      // to enable the "Text the fam" button. iMessage threads it into the existing group chat
-      // when the numbers match that group's members exactly.
-      const FAM_SMS = "";
-      const famShare = document.querySelector("#famShare");
-      if (famShare && FAM_SMS.trim()) {
-        famShare.hidden = false;
-        famShare.addEventListener("click", () => {
-          const body = encodeURIComponent("From the Gelman Travel Guide: https://antonreport.com/gelmantravel/");
-          location.href = `sms:${FAM_SMS.trim()}&body=${body}`;
-        });
-      }
       const appTop = document.querySelector(".app-top");
       if (appTop && "IntersectionObserver" in window) {
         const sentinel = document.createElement("div");
@@ -3015,7 +2991,7 @@
           const label = shareTarget.dataset.shareLabel || "Gelman Travel";
           const cityLabel = shareCityLabel(city);
           const pageLabel = sharePageLabel(page);
-          shareUrl(buildShareUrl(page, city, id, true), `Gelman Travel - ${label}`, `${label} in ${cityLabel} ${pageLabel}`, false);
+          shareUrl(buildShareUrl(page, city, id, true), `Gelman Travel - ${label}`, `${label} in ${cityLabel} ${pageLabel}`);
           return;
         }
         const address = event.target.closest("[data-copy-address]");
@@ -3025,12 +3001,6 @@
           copyText(address.dataset.copyAddress);
           return;
         }
-        const detailButton = event.target.closest("[data-detail-toggle]");
-        if (!detailButton) return;
-        const card = detailButton.closest("details");
-        if (!card) return;
-        card.open = true;
-        card.querySelector("summary")?.scrollIntoView({ block: "nearest", behavior: "smooth" });
       });
       document.addEventListener("keydown", event => {
         if (!["Enter", " "].includes(event.key)) return;
@@ -3056,7 +3026,7 @@
       setTimeout(scrollToHashTarget, 320);
       setInterval(updateFlightCountdowns, 60000);
       if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-        navigator.serviceWorker.register("service-worker.js?v=47", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=48", { updateViaCache: "none" }).then(registration => {
           const checkForUpdate = () => registration.update().catch(() => {});
           document.addEventListener("visibilitychange", () => {
             if (document.visibilityState === "visible") checkForUpdate();
