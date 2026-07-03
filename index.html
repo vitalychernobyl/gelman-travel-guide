@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=41">
+  <link rel="manifest" href="manifest.webmanifest?v=42">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -2360,7 +2360,39 @@
       updateFlightCountdowns();
       setTimeout(() => showInstallSheet(false), 900);
       setInterval(updateFlightCountdowns, 60000);
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=41");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+        navigator.serviceWorker.register("service-worker.js?v=42", { updateViaCache: "none" }).then(registration => {
+          const checkForUpdate = () => registration.update().catch(() => {});
+          document.addEventListener("visibilitychange", () => {
+            if (document.visibilityState === "visible") checkForUpdate();
+          });
+          window.addEventListener("pageshow", event => {
+            if (event.persisted) checkForUpdate();
+          });
+          setInterval(checkForUpdate, 30 * 60 * 1000);
+        });
+        let reloadingForUpdate = false;
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+          if (reloadingForUpdate || !navigator.serviceWorker.controller) return;
+          reloadingForUpdate = true;
+          location.reload();
+        });
+        window.forceAppUpdate = async () => {
+          try {
+            const registration = await navigator.serviceWorker.getRegistration();
+            if (registration) {
+              registration.active?.postMessage("CLEAR_CACHES");
+              await registration.unregister();
+            }
+            if (window.caches) {
+              const keys = await caches.keys();
+              await Promise.all(keys.map(key => caches.delete(key)));
+            }
+          } finally {
+            location.reload();
+          }
+        };
+      }
     })();
   </script>
 </body>

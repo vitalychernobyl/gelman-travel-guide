@@ -1,10 +1,10 @@
-const CACHE = "gelman-travel-guide-v41";
+const CACHE = "gelman-travel-guide-v42";
 const FILES = [
   "./",
   "./index.html",
-  "./?v=41",
+  "./?v=42",
   "./manifest.webmanifest",
-  "./manifest.webmanifest?v=41",
+  "./manifest.webmanifest?v=42",
   "./app-logo.png",
   "./app-logo.png?v=17",
   "./apple-touch-icon.png",
@@ -112,8 +112,19 @@ const FILES = [
 ];
 
 self.addEventListener("install", event => {
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(FILES)));
+  event.waitUntil(
+    caches.open(CACHE).then(cache =>
+      cache.addAll(FILES.map(file => new Request(file, { cache: "reload" })))
+    )
+  );
   self.skipWaiting();
+});
+
+self.addEventListener("message", event => {
+  if (event.data === "SKIP_WAITING") self.skipWaiting();
+  if (event.data === "CLEAR_CACHES") {
+    event.waitUntil(caches.keys().then(keys => Promise.all(keys.map(key => caches.delete(key)))));
+  }
 });
 
 self.addEventListener("activate", event => {
@@ -128,8 +139,10 @@ self.addEventListener("fetch", event => {
   event.respondWith(
     fetch(event.request)
       .then(response => {
-        const copy = response.clone();
-        caches.open(CACHE).then(cache => cache.put(event.request, copy));
+        if (response.ok) {
+          const copy = response.clone();
+          caches.open(CACHE).then(cache => cache.put(event.request, copy));
+        }
         return response;
       })
       .catch(() => caches.match(event.request).then(hit => hit || caches.match("./index.html")))
