@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=53">
+  <link rel="manifest" href="manifest.webmanifest?v=54">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -2084,7 +2084,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "53";
+      const APP_VERSION = "54";
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
       const UPDATE_RELOAD_AT_KEY = "gelmanLastForcedReloadAt";
@@ -2520,10 +2520,125 @@
         const destination = info.destination || fallbackDestination;
         return destination ? googleMapsDirections(destination, info.mode) : href;
       }
+      const DESTINATION_COORDS = {
+        "Schönbrunn Palace": [48.184989, 16.311568],
+        "Belvedere Museum": [48.185797, 16.383849],
+        "St. Stephen's Cathedral": [48.208492, 16.373127],
+        "Vienna Prater": [48.217065, 16.389498],
+        "Hofburg Palace": [48.206329, 16.365626],
+        "Kunsthistorisches Museum": [48.203739, 16.361782],
+        "MuseumsQuartier": [48.203183, 16.358346],
+        "Albertina": [48.204636, 16.368261],
+        "Vienna State Opera": [48.203286, 16.369194],
+        "Naschmarkt": [48.19818, 16.362622],
+        "Karlskirche": [48.198279, 16.371895],
+        "Hundertwasserhaus": [48.207384, 16.393941],
+        "Kunst Haus Wien": [48.211134, 16.393276],
+        "Danube Tower": [48.2405, 16.4133],
+        "Danube Island": [48.226611, 16.412238],
+        "Café Central": [48.210367, 16.365387],
+        "Demel": [48.208605, 16.367211],
+        "Stadtpark": [48.202886, 16.379724],
+        "MAK": [48.20742, 16.381507],
+        "Spanish Riding School": [48.207307, 16.366707],
+        "Loetje Amsterdam Café": [52.354367, 4.884237],
+        "Albert Cuyp Fish Market": [52.355233, 4.891779],
+        "Rijksmuseum": [52.359843, 4.88504],
+        "Van Gogh Museum": [52.358367, 4.88109],
+        "Anne Frank House": [52.375156, 4.884081],
+        "Amsterdam City Center & Centraal": [52.378901, 4.900581],
+        "Flagship Anne Frank Canal Tour": [52.375156, 4.884081],
+        "NEMO Science Museum": [52.374115, 4.91232],
+        "Rembrandt House Museum": [52.369369, 4.90125],
+        "National Maritime Museum": [52.372005, 4.914953],
+        "Stedelijk Museum": [52.3579, 4.87986],
+        "Micropia": [52.366891, 4.912689],
+        "H'ART Museum": [52.365652, 4.902214],
+        "Moco Museum": [52.358716, 4.881962],
+        "John Dory": [52.362155, 4.893874],
+        "Stubbe's Haring": [52.379064, 4.894237],
+        "Vishuisje Herengracht": [52.365564, 4.89039],
+        "Pesca": [52.372782, 4.878859],
+        "Bar Fisk": [52.35771, 4.888769],
+        "The Seafood Bar": [52.359944, 4.877465],
+        "Visaandeschelde": [52.344671, 4.890382],
+        "Bridges": [52.370928, 4.895255],
+        "Mos": [52.383796, 4.895503],
+        "Lucius": [52.370757, 4.889383],
+        "Back to Black": [52.361039, 4.888585],
+        "Monks Coffee Roasters": [52.371213, 4.870198],
+        "White Label Coffee": [52.370416, 4.851612],
+        "Lot Sixty One": [52.366815, 4.870312],
+        "Winkel 43": [52.379084, 4.886234],
+        "Screaming Beans": [52.372479, 4.886175],
+        "Bocca Coffee": [52.364446, 4.886813],
+        "Toki": [52.382941, 4.885569],
+        "Scandinavian Embassy": [52.353486, 4.894217],
+        "Coffee & Coconuts": [52.352665, 4.891452],
+        "Jordaan brown cafés": [52.378741, 4.884426],
+        "Paradiso": [52.362155, 4.883782],
+        "Westergas": [52.386127, 4.872496],
+        "De Pijp bars": [52.350533, 4.891054],
+        "Melkweg": [52.364778, 4.881073],
+        "NDSM Wharf": [52.400374, 4.892954],
+        "Nieuwmarkt": [52.372595, 4.900345],
+        "Leidseplein": [52.363958, 4.882758],
+        "Rembrandtplein": [52.365988, 4.896611],
+        "Red Light District walk": [52.373408, 4.898281],
+        "Vondelpark": [52.357197, 4.864119],
+        "Amsterdamse Bos": [52.311571, 4.828337],
+        "Westerpark": [52.387228, 4.87179],
+        "Amstelpark": [52.328131, 4.89367],
+        "Hortus Botanicus": [52.366806, 4.907778],
+        "Sarphatipark": [52.354375, 4.896388],
+        "Flevopark": [52.361914, 4.949521],
+        "Frankendael Park": [52.350465, 4.929807],
+        "Oosterpark": [52.360206, 4.920543],
+        "Rembrandtpark": [52.363873, 4.847443],
+        "British Museum": [51.519312, -0.126705],
+        "Tower of London": [51.508217, -0.076188],
+        "Westminster Abbey": [51.499399, -0.127391],
+        "London Eye": [51.504637, -0.116681],
+        "Smithsonian Museums": [38.897866, -77.02359],
+        "Lincoln Memorial": [38.889212, -77.050172],
+        "Siesta Key Beach": [27.272132, -82.557224],
+        "The Ringling": [27.3812, -82.5602],
+        "Vienna International Airport": [48.119543, 16.563263],
+        "Vienna Airport": [48.119543, 16.563263],
+        "NH Danube City": [48.235424, 16.421906],
+        "Amsterdam Airport Schiphol": [52.309557, 4.762243],
+        "Aspire Lounge": [52.309557, 4.762243],
+        "Avani Museum Quarter": [52.355824, 4.886117],
+        "Heathrow": [51.469501, -0.451799],
+        "City Airport": [51.504266, 0.054902],
+        "Galaxy Building": [51.492264, -0.025593],
+        "Ronald Reagan Washington National Airport": [38.848716, -77.042474],
+        "Washington Dulles": [38.952911, -77.447791],
+        "1111 Arlington Blvd": [38.892627, -77.070039],
+        "Eagle Lake Dr": [27.280379, -82.398241],
+        "Sarasota Bradenton International Airport": [27.395988, -82.554074],
+        "Blue Boat Canal Cruise": [52.3624, 4.8824]
+      };
+      function coordsForDestination(name, destination) {
+        const haystack = `${name || ""} | ${destination || ""}`.toLowerCase();
+        let best = null;
+        for (const key of Object.keys(DESTINATION_COORDS)) {
+          if (!haystack.includes(key.toLowerCase())) continue;
+          if (!best || key.length > best.length) best = key;
+        }
+        return best ? DESTINATION_COORDS[best] : null;
+      }
       function uberDeepLink(name, destination) {
         const url = new URL("https://m.uber.com/ul/");
         url.searchParams.set("action", "setPickup");
         url.searchParams.set("pickup", "my_location");
+        // Uber needs dropoff coordinates to pin the destination; the
+        // address and nickname alone leave the destination blank.
+        const coords = coordsForDestination(name, destination);
+        if (coords) {
+          url.searchParams.set("dropoff[latitude]", String(coords[0]));
+          url.searchParams.set("dropoff[longitude]", String(coords[1]));
+        }
         url.searchParams.set("dropoff[formatted_address]", destination);
         if (name) url.searchParams.set("dropoff[nickname]", name);
         return url.toString();
@@ -3182,7 +3297,14 @@
           event.preventDefault();
           event.stopPropagation();
           showShareStatus("Opening Google Maps");
-          window.location.href = mapLink.dataset.mapsAppHref || mapLink.href;
+          const appHref = mapLink.dataset.mapsAppHref || mapLink.href;
+          const webHref = mapLink.dataset.webMapUrl;
+          window.location.href = appHref;
+          if (webHref && webHref !== appHref) {
+            setTimeout(() => {
+              if (!document.hidden) window.location.href = webHref;
+            }, 1600);
+          }
           return;
         }
         const shareTarget = event.target.closest("[data-share-target]");
@@ -3290,7 +3412,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=53", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=54", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
