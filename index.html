@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=22">
+  <link rel="manifest" href="manifest.webmanifest?v=23">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -665,24 +665,19 @@
       position: relative;
       overflow: hidden;
       min-height: 238px;
-      border-radius: 34px;
+      border-radius: 24px;
       background: #ffffff;
       box-shadow: var(--shadow);
       isolation: isolate;
     }
-    .hotel-key::before,
-    .hotel-key::after {
+    .hotel-key::before {
       content: "";
       position: absolute;
-      top: 38%;
-      width: 38px;
-      height: 70px;
-      border-radius: 999px;
-      background: var(--bg);
+      inset: 0 auto 0 0;
+      width: 6px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-deep));
       z-index: 2;
     }
-    .hotel-key::before { left: -20px; }
-    .hotel-key::after { right: -20px; }
     .hotel-key img {
       width: 100%;
       height: 140px;
@@ -1065,7 +1060,10 @@
                 <div class="info-row"><span>Address</span><strong>Hobbemakade 50, 1071 XL Amsterdam</strong></div>
                 <div class="info-row"><span>Dates</span><strong>Fri, Jul 3 - Mon, Jul 6</strong></div>
               </div>
-              <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=Avani%20Museum%20Quarter%20Amsterdam%20Hotel%2C%20Hobbemakade%2050%2C%201071%20XL%20Amsterdam%2C%20Netherlands" target="_blank" rel="noopener">Open Directions</a>
+              <div class="mini-actions">
+                <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=Avani%20Museum%20Quarter%20Amsterdam%20Hotel%2C%20Hobbemakade%2050%2C%201071%20XL%20Amsterdam%2C%20Netherlands" target="_blank" rel="noopener">Directions</a>
+                <a class="directions-button" href="https://www.avanihotels.com/en/museum-quarter-amsterdam" target="_blank" rel="noopener">Hotel Site</a>
+              </div>
             </div>
           </article>
           <article class="lounge-pass">
@@ -1499,7 +1497,7 @@
       applyPrefs();
       showTripCity(activeCity);
       showPage(localStorage.gelmanPage || "dictionary");
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=22");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=23");
     })();
   </script>
 </body>
