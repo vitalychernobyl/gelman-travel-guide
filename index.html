@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=45">
+  <link rel="manifest" href="manifest.webmanifest?v=46">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -177,7 +177,7 @@
       top: max(10px, env(safe-area-inset-top));
       right: 10px;
       z-index: 2;
-      max-width: 132px;
+      max-width: 118px;
       padding: 8px 10px;
       border: 1px solid rgba(255, 255, 255, .58);
       border-radius: 16px;
@@ -201,45 +201,17 @@
       font-size: .82rem;
       line-height: 1.05;
     }
-    .weather-chip {
-      position: absolute;
-      top: max(10px, env(safe-area-inset-top));
-      left: 10px;
-      z-index: 2;
-      max-width: 152px;
-      padding: 8px 10px;
-      border: 1px solid rgba(255, 255, 255, .58);
-      border-radius: 16px;
-      background: rgba(37, 33, 28, .62);
-      color: #fffefa;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, .2);
-      backdrop-filter: blur(14px);
-    }
-    .weather-chip span {
-      display: block;
-      color: #f7c99e;
-      font-size: .58rem;
-      font-weight: 950;
-      line-height: 1;
-      text-transform: uppercase;
-    }
-    .weather-chip strong {
+    .hero-status small {
       display: block;
       margin-top: 3px;
-      font-size: .82rem;
-      line-height: 1.05;
-    }
-    .weather-chip small {
-      display: block;
-      margin-top: 2px;
       color: rgba(255, 254, 250, .82);
-      font-size: .62rem;
+      font-size: .6rem;
       font-weight: 850;
       line-height: 1.15;
     }
     .share-button {
       position: absolute;
-      top: max(82px, calc(env(safe-area-inset-top) + 82px));
+      top: max(10px, env(safe-area-inset-top));
       left: 10px;
       z-index: 2;
       display: inline-grid;
@@ -1570,8 +1542,7 @@
 <body>
   <div class="app">
     <section class="hero" aria-label="City hero">
-      <div class="hero-status" id="heroStatus" aria-live="polite"><span>Stay</span><strong>Jul 3-6</strong></div>
-      <div class="weather-chip" id="weatherChip" aria-live="polite"><span>Amsterdam</span><strong>66/57°F</strong><small>Tomorrow 72/62°F</small></div>
+      <div class="hero-status" id="heroStatus" aria-live="polite"><span>AMS · Stay</span><strong>Jul 3-6</strong><small>66/57° · Sat: 72/62°</small></div>
       <button class="share-button" id="shareButton" type="button" aria-label="Share current Gelman Travel page">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 16V3"/><path d="m7 8 5-5 5 5"/></svg>
         <span>Share</span>
@@ -2026,7 +1997,6 @@
       const dictionaryContent = document.querySelector("#dictionaryContent");
       const attractionContent = document.querySelector("#attractionContent");
       const heroStatus = document.querySelector("#heroStatus");
-      const weatherChip = document.querySelector("#weatherChip");
       const tripCityScroller = document.querySelector(".trip-city-tabs");
       const installSheet = document.querySelector("#installSheet");
       const installLater = document.querySelector("#installLater");
@@ -2042,6 +2012,7 @@
       const startParams = new URLSearchParams(location.search);
       let activeCity = "amsterdam";
       let activePage = normalizePage(startParams.get("page") || "plans");
+      let weatherByCity = {};
       const HEROES = {
         vienna: "vienna-hero.png?v=1",
         amsterdam: "amsterdam-hero.png?v=1",
@@ -2057,11 +2028,11 @@
         sarasota: { stayLabel: "Arrive Jul 12", statusLabel: "Next" }
       };
       const CITY_WEATHER = {
-        vienna: { label: "Vienna", latitude: 48.2082, longitude: 16.3738, fallback: { today: "72/58°F", tomorrow: "74/60°F", note: "Check live" } },
-        amsterdam: { label: "Amsterdam", latitude: 52.3676, longitude: 4.9041, fallback: { today: "66/57°F", tomorrow: "72/62°F", note: "Cloudy" } },
-        london: { label: "London", latitude: 51.5072, longitude: -0.1276, fallback: { today: "70/57°F", tomorrow: "70/58°F", note: "Check live" } },
-        washington: { label: "DC", latitude: 38.9072, longitude: -77.0369, fallback: { today: "87/71°F", tomorrow: "88/72°F", note: "Check live" } },
-        sarasota: { label: "Sarasota", latitude: 27.3364, longitude: -82.5307, fallback: { today: "90/78°F", tomorrow: "90/78°F", note: "Check live" } }
+        vienna: { label: "Vienna", short: "VIE", latitude: 48.2082, longitude: 16.3738, fallback: { today: "72/58°", tomorrow: "74/60°" } },
+        amsterdam: { label: "Amsterdam", short: "AMS", latitude: 52.3676, longitude: 4.9041, fallback: { today: "66/57°", tomorrow: "72/62°" } },
+        london: { label: "London", short: "LDN", latitude: 51.5072, longitude: -0.1276, fallback: { today: "70/57°", tomorrow: "70/58°" } },
+        washington: { label: "DC", short: "DC", latitude: 38.9072, longitude: -77.0369, fallback: { today: "87/71°", tomorrow: "88/72°" } },
+        sarasota: { label: "Sarasota", short: "SRQ", latitude: 27.3364, longitude: -82.5307, fallback: { today: "90/78°", tomorrow: "90/78°" } }
       };
       const DICTIONARIES = {
         vienna: [
@@ -2473,13 +2444,13 @@
       }
       function showInstallSheet(force = false) {
         if (!installSheet || isStandalone()) return;
-        if (!force && localStorage.gelmanInstallSeenV45) return;
+        if (!force && localStorage.gelmanInstallSeenV46) return;
         installSheet.hidden = false;
       }
       function hideInstallSheet(markSeen = true) {
         if (!installSheet) return;
         installSheet.hidden = true;
-        if (markSeen) localStorage.gelmanInstallSeenV45 = "1";
+        if (markSeen) localStorage.gelmanInstallSeenV46 = "1";
       }
       function enhanceHotelLocation(card) {
         const body = card.querySelector(".hotel-key-body");
@@ -2520,12 +2491,26 @@
           details.className = article.className;
           const summary = document.createElement("summary");
           const preview = document.createElement("div");
-          const firstRows = [...body.querySelectorAll(".info-row")].slice(0, 2).map(row => row.textContent.trim().replace(/\s+/g, " "));
+          const address = addressRowIn(body)?.querySelector("strong")?.textContent.trim();
           preview.className = "hotel-preview";
           const title = document.createElement("h3");
           title.textContent = heading.textContent;
           const meta = document.createElement("p");
-          meta.textContent = firstRows.join(" • ");
+          if (address) {
+            meta.textContent = address;
+            meta.className = "copy-address";
+            meta.dataset.copyAddress = address;
+            meta.tabIndex = 0;
+            meta.setAttribute("role", "button");
+            meta.setAttribute("aria-label", `Copy address: ${address}`);
+            meta.title = "Tap to copy address";
+          } else {
+            const rows = [...body.querySelectorAll(".info-row")]
+              .filter(row => !/booking/i.test(row.textContent))
+              .slice(0, 1)
+              .map(row => row.textContent.trim().replace(/\s+/g, " "));
+            meta.textContent = rows.join(" • ");
+          }
           preview.append(title, meta);
           summary.append(image, preview);
           details.append(summary, body);
@@ -2775,6 +2760,8 @@
       }
       function updateHeroStatus() {
         const meta = CITY_META[activeCity] || CITY_META.amsterdam;
+        const weatherMeta = CITY_WEATHER[activeCity] || CITY_WEATHER.amsterdam;
+        const weather = weatherByCity[activeCity] || weatherMeta.fallback || {};
         const now = currentNow();
         let label = meta.statusLabel || "Stay";
         let value = meta.stayLabel;
@@ -2786,16 +2773,25 @@
             value = delta > 0 ? `In ${formatDuration(delta)}` : "Now";
           }
         }
-        heroStatus.innerHTML = `<span>${escapeHTML(label)}</span><strong>${escapeHTML(value)}</strong>`;
+        const cityLabel = weatherMeta.short || weatherMeta.label || activeCity;
+        const weatherLine = weather.today && weather.tomorrow ? `${weather.today} · ${weather.tomorrowLabel || "Next"}: ${weather.tomorrow}` : "";
+        heroStatus.innerHTML = `<span>${escapeHTML(cityLabel)} · ${escapeHTML(label)}</span><strong>${escapeHTML(value)}</strong>${weatherLine ? `<small>${escapeHTML(weatherLine)}</small>` : ""}`;
       }
-      function renderWeather(city, today, tomorrow, note = "") {
-        const meta = CITY_WEATHER[city] || CITY_WEATHER.amsterdam;
-        if (!weatherChip) return;
-        weatherChip.innerHTML = `<span>${escapeHTML(meta.label)}</span><strong>${escapeHTML(today)}</strong><small>${escapeHTML(tomorrow ? `Tomorrow ${tomorrow}` : note)}</small>`;
+      function shortTemps(max, min) {
+        return `${Math.round(max)}/${Math.round(min)}°`;
+      }
+      function nextDayLabel(dateText) {
+        const date = dateText ? new Date(`${dateText}T12:00:00`) : new Date(currentNow().getTime() + 86400000);
+        if (Number.isNaN(date.getTime())) return "Next";
+        return date.toLocaleDateString("en-US", { weekday: "short" });
+      }
+      function renderWeather(city, today, tomorrow, tomorrowLabel = "Next") {
+        weatherByCity[city] = { today, tomorrow, tomorrowLabel };
+        if (city === activeCity) updateHeroStatus();
       }
       function fallbackWeather(city) {
         const meta = CITY_WEATHER[city] || CITY_WEATHER.amsterdam;
-        renderWeather(city, meta.fallback.today, meta.fallback.tomorrow, meta.fallback.note);
+        renderWeather(city, meta.fallback.today, meta.fallback.tomorrow, meta.fallback.tomorrowLabel || nextDayLabel());
       }
       function weatherSummary(code) {
         if ([0, 1].includes(code)) return "Clear";
@@ -2820,9 +2816,9 @@
           const lo = daily.temperature_2m_min || [];
           const codes = daily.weather_code || [];
           if (hi.length < 2 || lo.length < 2) throw new Error("weather incomplete");
-          const today = `${Math.round(hi[0])}/${Math.round(lo[0])}°F${weatherSummary(codes[0]) ? ` ${weatherSummary(codes[0])}` : ""}`;
-          const tomorrow = `${Math.round(hi[1])}/${Math.round(lo[1])}°F${weatherSummary(codes[1]) ? ` ${weatherSummary(codes[1])}` : ""}`;
-          renderWeather(city, today, tomorrow);
+          const today = shortTemps(hi[0], lo[0]);
+          const tomorrow = shortTemps(hi[1], lo[1]);
+          renderWeather(city, today, tomorrow, nextDayLabel(daily.time?.[1]));
         } catch {
           fallbackWeather(city);
         }
@@ -2968,6 +2964,7 @@
         const address = event.target.closest("[data-copy-address]");
         if (address) {
           event.preventDefault();
+          event.stopPropagation();
           copyText(address.dataset.copyAddress);
           return;
         }
@@ -2983,6 +2980,7 @@
         const address = event.target.closest("[data-copy-address]");
         if (!address) return;
         event.preventDefault();
+        event.stopPropagation();
         copyText(address.dataset.copyAddress);
       });
       tabs.forEach(tab => tab.addEventListener("click", () => showPage(tab.dataset.target)));
@@ -2999,7 +2997,7 @@
       setTimeout(() => showInstallSheet(false), 900);
       setInterval(updateFlightCountdowns, 60000);
       if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-        navigator.serviceWorker.register("service-worker.js?v=45", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=46", { updateViaCache: "none" }).then(registration => {
           const checkForUpdate = () => registration.update().catch(() => {});
           document.addEventListener("visibilitychange", () => {
             if (document.visibilityState === "visible") checkForUpdate();
