@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=39">
+  <link rel="manifest" href="manifest.webmanifest?v=40">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -1592,7 +1592,7 @@
             </div>
           </details>
           <article class="hotel-key">
-            <img src="london-boot-house.svg?v=1" alt="Magical boot house for London stay">
+            <img src="london-boot-house.png?v=1" alt="Magical boot house for London stay">
             <div class="hotel-key-body">
               <h3>London stay</h3>
               <div class="info-list">
@@ -1767,16 +1767,16 @@
 
     <div class="install-sheet" id="installSheet" hidden role="dialog" aria-modal="true" aria-labelledby="installTitle">
       <div class="install-card">
-        <h2 id="installTitle">Download Gelman Travel</h2>
-        <p>Save this as a tiny app so the trip guide opens from your Home Screen and keeps working after it loads.</p>
+        <h2 id="installTitle">Add Gelman Travel to your Home Screen</h2>
+        <p>Make this feel like a tiny app: one tap from your phone, full-screen, and cached after it loads.</p>
         <ol class="install-steps">
           <li>On iPhone: open this page in Safari.</li>
-          <li>Tap Share, then Add to Home Screen.</li>
+          <li>Tap the Share button, then Add to Home Screen.</li>
           <li>Open Gelman Travel from the new icon.</li>
         </ol>
         <div class="install-actions">
           <button class="plain-button" id="installLater" type="button">Later</button>
-          <button class="primary-button" id="installNow" type="button">Download App</button>
+          <button class="primary-button" id="installNow" type="button">Show Me How</button>
         </div>
       </div>
     </div>
@@ -2050,13 +2050,13 @@
       }
       function showInstallSheet(force = false) {
         if (!installSheet || isStandalone()) return;
-        if (!force && localStorage.gelmanInstallSeen) return;
+        if (!force && localStorage.gelmanInstallSeenV40) return;
         installSheet.hidden = false;
       }
       function hideInstallSheet(markSeen = true) {
         if (!installSheet) return;
         installSheet.hidden = true;
-        if (markSeen) localStorage.gelmanInstallSeen = "1";
+        if (markSeen) localStorage.gelmanInstallSeenV40 = "1";
       }
       function enhanceHotelCards() {
         document.querySelectorAll("article.hotel-key").forEach(article => {
@@ -2360,7 +2360,7 @@
       updateFlightCountdowns();
       setTimeout(() => showInstallSheet(false), 900);
       setInterval(updateFlightCountdowns, 60000);
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=39");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=40");
     })();
   </script>
 </body>
