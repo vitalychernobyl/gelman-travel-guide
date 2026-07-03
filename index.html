@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=37">
+  <link rel="manifest" href="manifest.webmanifest?v=38">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -1846,6 +1846,43 @@
       function escapeHTML(value) {
         return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
       }
+      const ATTRACTION_IMAGES = {
+        "Schönbrunn Palace": "attractions/vienna-schonbrunn-palace.jpg?v=1",
+        "Belvedere Museum": "attractions/vienna-belvedere-museum.jpg?v=1",
+        "St. Stephen's Cathedral": "attractions/vienna-st-stephens-cathedral.jpg?v=1",
+        "Vienna Prater": "attractions/vienna-vienna-prater.jpg?v=1",
+        "Hofburg Palace": "attractions/vienna-hofburg-palace.jpg?v=1",
+        "Kunsthistorisches Museum": "attractions/vienna-kunsthistorisches-museum.jpg?v=1",
+        "MuseumsQuartier": "attractions/vienna-museumsquartier.jpg?v=1",
+        "Albertina": "attractions/vienna-albertina.jpg?v=1",
+        "Vienna State Opera": "attractions/vienna-vienna-state-opera.jpg?v=1",
+        "Naschmarkt": "attractions/vienna-naschmarkt.jpg?v=1",
+        "Karlskirche": "attractions/vienna-karlskirche.jpg?v=1",
+        "Hundertwasserhaus": "attractions/vienna-hundertwasserhaus.jpg?v=1",
+        "Kunst Haus Wien": "attractions/vienna-kunst-haus-wien.jpg?v=1",
+        "Danube Tower": "attractions/vienna-danube-tower.jpg?v=1",
+        "Danube Island": "attractions/vienna-danube-island.jpg?v=1",
+        "Café Central": "attractions/vienna-cafe-central.jpg?v=1",
+        "Demel": "attractions/vienna-demel.jpg?v=1",
+        "Stadtpark": "attractions/vienna-stadtpark.jpg?v=1",
+        "MAK": "attractions/vienna-mak.jpg?v=1",
+        "Spanish Riding School": "attractions/vienna-spanish-riding-school.jpg?v=1",
+        "Rijksmuseum": "attractions/amsterdam-rijksmuseum.jpg?v=1",
+        "Van Gogh Museum": "attractions/amsterdam-van-gogh-museum.jpg?v=1",
+        "Anne Frank House": "attractions/amsterdam-anne-frank-house.jpg?v=1",
+        "Vondelpark": "attractions/amsterdam-vondelpark.jpg?v=1",
+        "Stubbe's Haring": "attractions/amsterdam-stubbes-haring.jpg?v=1",
+        "Vishuisje Herengracht": "attractions/amsterdam-vishuisje-herengracht.jpg?v=1",
+        "The Seafood Bar": "attractions/amsterdam-the-seafood-bar.jpg?v=1",
+        "British Museum": "attractions/london-british-museum.jpg?v=1",
+        "Tower of London": "attractions/london-tower-of-london.jpg?v=1",
+        "Westminster Abbey": "attractions/london-westminster-abbey.jpg?v=1",
+        "London Eye": "attractions/london-london-eye.jpg?v=1",
+        "Smithsonian Museums": "attractions/washington-smithsonian-museums.jpg?v=1",
+        "Lincoln Memorial": "attractions/washington-lincoln-memorial.jpg?v=1",
+        "Siesta Key Beach": "attractions/sarasota-siesta-key-beach.jpg?v=1",
+        "The Ringling": "attractions/sarasota-the-ringling.jpg?v=1",
+      };
       function attractionThumb(title, category) {
         const initials = title.split(/\s+/).slice(0, 2).map(word => word[0]).join("").toUpperCase();
         const palette = {
@@ -1918,7 +1955,7 @@
                 const ticketLabel = attraction.ticketLabel || attractionActionLabel(category, price);
                 const mapLink = attraction.map || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${title} ${location}`)}`;
                 const fallbackImage = attractionThumb(title, category);
-                const image = attraction.image || fallbackImage;
+                const image = ATTRACTION_IMAGES[title] || attraction.image || fallbackImage;
                 return `<details class="attraction-card"${index === 0 ? " open" : ""}>
                   <summary>
                     <img class="attraction-thumb" src="${escapeHTML(image)}" data-fallback-src="${escapeHTML(fallbackImage)}" alt="${escapeHTML(title)}">
@@ -2058,7 +2095,7 @@
       showPage("plans");
       updateFlightCountdowns();
       setInterval(updateFlightCountdowns, 60000);
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=37");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=38");
     })();
   </script>
 </body>
