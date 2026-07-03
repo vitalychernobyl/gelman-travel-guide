@@ -2,7 +2,7 @@
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
   "description": "A compact Austria travel dictionary for offline pocket use.",
-  "start_url": "./?v=50",
+  "start_url": "./?v=51",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f3f3f1",
