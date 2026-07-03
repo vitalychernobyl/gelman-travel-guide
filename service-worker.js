@@ -1,10 +1,10 @@
-const CACHE = "gelman-travel-guide-v40";
+const CACHE = "gelman-travel-guide-v41";
 const FILES = [
   "./",
   "./index.html",
-  "./?v=40",
+  "./?v=41",
   "./manifest.webmanifest",
-  "./manifest.webmanifest?v=40",
+  "./manifest.webmanifest?v=41",
   "./app-logo.png",
   "./app-logo.png?v=17",
   "./apple-touch-icon.png",
@@ -30,11 +30,11 @@ const FILES = [
   "./priority-pass-sky-lounge.png",
   "./priority-pass-sky-lounge.png?v=1",
   "./london-building-key.png",
-  "./london-building-key.png?v=1",
+  "./london-building-key.png?v=2",
   "./london-boot-house.svg",
   "./london-boot-house.svg?v=1",
   "./london-boot-house.png",
-  "./london-boot-house.png?v=1",
+  "./london-boot-house.png?v=2",
   "./dc-taj-mahal-key.jpg",
   "./dc-taj-mahal-key.jpg?v=1",
   "./sarasota-home-key.png",
