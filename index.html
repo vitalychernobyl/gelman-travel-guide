@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=30">
+  <link rel="manifest" href="manifest.webmanifest?v=31">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -1135,13 +1135,13 @@
         </header>
       </div>
     </section>
-    <main id="dictionary" class="page" data-page="dictionary">
+    <main id="dictionary" class="page" data-page="dictionary" hidden>
       <nav class="section-nav" aria-label="Dictionary sections" id="dictionaryNav"></nav>
       <div id="dictionaryContent" class="dictionary-content" aria-live="polite"></div>
       <p class="note">Edit city phrase lists in the tiny JavaScript data block near the bottom of this HTML file. Offline mode needs the service worker file and a local or HTTPS host.</p>
     </main>
 
-    <main id="plans" class="page" data-page="plans" hidden>
+    <main id="plans" class="page" data-page="plans">
       <div class="page-head">
         <div>
           <h2 class="page-title">Trip Plans</h2>
@@ -1442,17 +1442,17 @@
     </main>
 
     <nav class="bottom-tabs" aria-label="App pages">
-      <button class="tab" type="button" data-target="dictionary" aria-current="page">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M5 4h10a4 4 0 0 1 4 4v12H9a4 4 0 0 0-4-4z"/><path d="M5 4v16"/><path d="M9 8h6M9 12h4"/></svg>
-        <span>Dictionary</span>
-      </button>
-      <button class="tab" type="button" data-target="plans">
+      <button class="tab" type="button" data-target="plans" aria-current="page">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 7h16M7 3v4M17 3v4"/><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 12h3M13 12h3M8 16h3"/></svg>
         <span>Plans</span>
       </button>
       <button class="tab" type="button" data-target="photos">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M12 21s7-5.1 7-11a7 7 0 1 0-14 0c0 5.9 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
         <span>Attractions</span>
+      </button>
+      <button class="tab" type="button" data-target="dictionary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M5 4h10a4 4 0 0 1 4 4v12H9a4 4 0 0 0-4-4z"/><path d="M5 4v16"/><path d="M9 8h6M9 12h4"/></svg>
+        <span>Dictionary</span>
       </button>
     </nav>
 
@@ -1741,6 +1741,11 @@
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 144"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="${palette[0]}"/><stop offset="1" stop-color="${palette[1]}"/></linearGradient></defs><rect width="144" height="144" rx="26" fill="url(#g)"/><circle cx="108" cy="34" r="22" fill="rgba(255,255,255,.36)"/><path d="M18 112c25-38 48-45 69-20 14-18 28-21 43 20" fill="rgba(255,255,255,.42)"/><text x="18" y="52" fill="#25211c" font-size="18" font-family="Arial, sans-serif" font-weight="800">${escapeHTML(category)}</text><text x="20" y="100" fill="#fffefa" font-size="34" font-family="Arial, sans-serif" font-weight="900">${escapeHTML(initials)}</text></svg>`;
         return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
       }
+      function attractionActionLabel(category, price) {
+        if (category === "Food" || category === "Cafe") return "Menu";
+        if (/free/i.test(price || "") || ["Park", "Beach", "Outdoors", "Landmark", "Architecture"].includes(category)) return "Visit";
+        return "Tickets";
+      }
       function renderDictionary(city) {
         const sections = DICTIONARIES[city] || DICTIONARIES.vienna;
         dictionaryNav.innerHTML = sections.map(section => `<a href="#${section.id}">${escapeHTML(section.title)}</a>`).join("");
@@ -1777,6 +1782,7 @@
                 const details = attraction.details;
                 const link = attraction.link;
                 const ticketLink = attraction.tickets || link;
+                const ticketLabel = attraction.ticketLabel || attractionActionLabel(category, price);
                 const mapLink = attraction.map || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${title} ${location}`)}`;
                 const image = attraction.image || attractionThumb(title, category);
                 return `<details class="attraction-card"${index === 0 ? " open" : ""}>
@@ -1798,8 +1804,8 @@
                     <div><strong>More:</strong> ${escapeHTML(details)}</div>
                     <div class="attraction-actions">
                       <a href="${escapeHTML(link)}" target="_blank" rel="noopener">Details</a>
-                      <a href="${escapeHTML(ticketLink)}" target="_blank" rel="noopener">Tickets</a>
-                      <a href="${escapeHTML(mapLink)}" target="_blank" rel="noopener">Map</a>
+                      <a href="${escapeHTML(ticketLink)}" target="_blank" rel="noopener">${escapeHTML(ticketLabel)}</a>
+                      <a href="${escapeHTML(mapLink)}" target="_blank" rel="noopener">Directions</a>
                     </div>
                   </div>
                 </details>`;
@@ -1915,10 +1921,10 @@
       cityTabs.forEach(tab => tab.addEventListener("click", () => showCity(tab.dataset.cityTarget)));
       applyPrefs();
       showTripCity(activeCity);
-      showPage(localStorage.gelmanPage || "dictionary");
+      showPage("plans");
       updateFlightCountdowns();
       setInterval(updateFlightCountdowns, 60000);
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=30");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=31");
     })();
   </script>
 </body>
