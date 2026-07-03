@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=49">
+  <link rel="manifest" href="manifest.webmanifest?v=50">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -618,6 +618,10 @@
     .info-row strong {
       font-size: .9rem;
       line-height: 1.15;
+      overflow-wrap: anywhere;
+    }
+    .ticket-extra .info-row {
+      grid-template-columns: 116px minmax(0, 1fr);
     }
     .attractions {
       display: grid;
@@ -857,6 +861,31 @@
       background: linear-gradient(90deg, #005daa 0 48%, #ffffff 48% 54%, #c41230 54% 100%);
       transform: skewX(-18deg);
       box-shadow: 0 0 0 1px rgba(0, 80, 145, .18);
+    }
+    .museum-ticket .ticket {
+      border-color: rgba(58, 112, 88, .26);
+      background: linear-gradient(135deg, #fffefa 0%, #fffefa 58%, #eef7ef 100%);
+    }
+    .museum-ticket .ticket-main {
+      border-top: 5px solid #3a7058;
+    }
+    .museum-ticket .airline {
+      color: #3a7058;
+      font-weight: 950;
+    }
+    .museum-ticket .airline-logo::before {
+      border-radius: 999px;
+      background: linear-gradient(135deg, #f4ca64 0 45%, #3a7058 45% 100%);
+      transform: none;
+    }
+    .museum-ticket .ticket-stub {
+      background: linear-gradient(160deg, #3a7058, #1f3f31);
+    }
+    .museum-ticket .ticket-stub::before { border-color: rgba(255,255,255,.82); }
+    .museum-ticket .ticket-stub .wordmark { color: #f7e5a8; }
+    .museum-ticket .ticket-hint {
+      background: #eef7ef;
+      color: #26513e;
     }
     details.ticket-card {
       border: 0;
@@ -1695,6 +1724,45 @@
           <div><h2>Amsterdam</h2><p>Fri, Jul 3 - Mon, Jul 6, 2026</p></div>
         </div>
         <div class="plan-grid">
+          <details class="ticket-card museum-ticket" id="plan-amsterdam-van-gogh-museum">
+            <summary>
+              <article class="ticket">
+                <div class="ticket-main">
+                  <div class="airline"><span class="airline-logo">Van Gogh Museum</span><span>Booked</span></div>
+                  <div class="route">
+                    <div class="city"><strong>Admission</strong><span>Museumplein</span></div>
+                    <div class="plane-line">→</div>
+                    <div class="city"><strong>10:30 AM</strong><span>GMT+2</span></div>
+                  </div>
+                  <div class="ticket-meta">
+                    <div><span>Date</span><strong>Jul 4</strong></div>
+                    <div><span>Time</span><strong>10:30 AM</strong></div>
+                    <div><span>Tickets</span><strong>4 adults</strong></div>
+                    <div><span>Audio</span><strong>Included</strong></div>
+                  </div>
+                  <div class="ticket-hints">
+                    <div class="ticket-hint"><span>Arrive by</span><strong>10:15 AM</strong></div>
+                    <div class="ticket-hint"><span>Entry</span><strong>Use voucher</strong></div>
+                  </div>
+                </div>
+                <div class="ticket-stub"><div><span class="wordmark">Van<br>Gogh</span><strong>VGM</strong><span class="brand-sash"></span></div></div>
+              </article>
+            </summary>
+            <div class="ticket-extra info-list">
+              <div class="info-row"><span>Confirmation</span><strong>BK209004617221822</strong></div>
+              <div class="info-row"><span>PIN</span><strong>6536</strong></div>
+              <div class="info-row"><span>Booked for</span><strong>Alex Gelman</strong></div>
+              <div class="info-row"><span>Tickets</span><strong>4 × Adult with audio guide</strong></div>
+              <div class="info-row"><span>Total paid</span><strong>€123</strong></div>
+              <div class="info-row"><span>Location</span><strong>Van Gogh Museum, Museumplein 6, 1071 DJ Amsterdam</strong></div>
+              <div class="info-row"><span>What to do</span><strong>Go directly to the museum entrance with the voucher on the phone</strong></div>
+              <div class="info-row"><span>Included</span><strong>Timed admission, temporary exhibitions, multimedia audio guide</strong></div>
+              <div class="ticket-actions">
+                <a class="directions-button" href="https://www.google.com/maps/dir/?api=1&amp;destination=Van%20Gogh%20Museum%2C%20Museumplein%206%2C%201071%20DJ%20Amsterdam&amp;travelmode=walking&amp;dir_action=navigate" target="_blank" rel="noopener">Museum Directions</a>
+                <a class="directions-button ticket-button" href="https://www.vangoghmuseum.nl/en/visit" target="_blank" rel="noopener">Museum Info</a>
+              </div>
+            </div>
+          </details>
           <details class="ticket-card airline-ba" data-flight-date="2026-07-06" data-leave-at="2026-07-06T11:05:00">
             <summary>
               <article class="ticket">
@@ -1996,7 +2064,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "49";
+      const APP_VERSION = "50";
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
       const UPDATE_RELOAD_AT_KEY = "gelmanLastForcedReloadAt";
@@ -3089,7 +3157,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=49", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=50", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
