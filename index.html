@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=33">
+  <link rel="manifest" href="manifest.webmanifest?v=34">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -707,10 +707,51 @@
       background: transparent;
     }
     details.ticket-card summary {
+      position: relative;
       list-style: none;
       cursor: pointer;
     }
     details.ticket-card summary::-webkit-details-marker { display: none; }
+    details.ticket-card summary::after {
+      content: "Tap for details";
+      position: absolute;
+      right: 96px;
+      bottom: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 27px;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: rgba(37, 33, 28, .9);
+      color: #fffefa;
+      font-size: .68rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      box-shadow: 0 8px 16px rgba(37, 33, 28, .18);
+      pointer-events: none;
+      z-index: 2;
+    }
+    details.ticket-card summary::before {
+      content: "⌄";
+      position: absolute;
+      right: 84px;
+      bottom: 12px;
+      display: grid;
+      place-items: center;
+      width: 27px;
+      height: 27px;
+      border-radius: 999px;
+      background: #fffefa;
+      color: #25211c;
+      font-size: 1rem;
+      font-weight: 950;
+      box-shadow: 0 8px 16px rgba(37, 33, 28, .16);
+      pointer-events: none;
+      z-index: 3;
+    }
+    details.ticket-card[open] summary::after { content: "Details open"; }
+    details.ticket-card[open] summary::before { content: "⌃"; }
     .ticket-extra {
       margin-top: 0;
       padding: 10px 12px 12px;
@@ -785,7 +826,7 @@
     .ticket-main {
       display: grid;
       gap: 8px;
-      padding: 14px;
+      padding: 14px 14px 49px;
     }
     .airline {
       display: flex;
@@ -1316,8 +1357,14 @@
             <div class="lounge-pass-body">
               <h3>Priority Pass Lounges</h3>
               <div class="info-list">
-                <div class="info-row"><span>Check</span><strong>Open Priority Pass app for AMS options before security.</strong></div>
-                <div class="info-row"><span>Trip</span><strong>BA8454 departs AMS for London City.</strong></div>
+                <div class="info-row"><span>Best option</span><strong>Aspire Lounge 41, non-Schengen after passport control</strong></div>
+                <div class="info-row"><span>Location</span><strong>Follow Lounge 41 / Airline lounges 40-41 to Panorama Deck, Level 3</strong></div>
+                <div class="info-row"><span>For BA8454</span><strong>Use this after passport control unless the gate is M, where Lounge 41 is not accessible</strong></div>
+                <div class="info-row"><span>Timing</span><strong>Priority Pass access is usually limited to 3 hours before departure</strong></div>
+              </div>
+              <div class="mini-actions">
+                <a class="directions-button" href="https://www.prioritypass.com/en-GB/lounges/netherlands/amsterdam-schiphol/ams-aspire-lounge-no-41" target="_blank" rel="noopener">Priority Pass</a>
+                <a class="directions-button" href="https://www.aspirelounges.com/airport-lounges/amsterdam-schiphol-airport-aspire-lounge-41-non-schengen/" target="_blank" rel="noopener">Lounge Site</a>
               </div>
             </div>
           </article>
@@ -1386,8 +1433,14 @@
             <div class="lounge-pass-body">
               <h3>Priority Pass Lounges</h3>
               <div class="info-list">
-                <div class="info-row"><span>Check</span><strong>Open Priority Pass app for LHR options and terminal rules.</strong></div>
-                <div class="info-row"><span>Trip</span><strong>UA925 departs LHR for Washington.</strong></div>
+                <div class="info-row"><span>Nearest named</span><strong>No1 Lounge Heathrow T2, near Gate A18 after security</strong></div>
+                <div class="info-row"><span>Backup</span><strong>Plaza Premium Lounge T2, Level 4 departures near terminal transfer area</strong></div>
+                <div class="info-row"><span>For UA925</span><strong>United usually uses Terminal 2B gates, so leave time for the long walk from T2A lounges</strong></div>
+                <div class="info-row"><span>Hours</span><strong>No1: 5:00 AM - 9:00 PM; Plaza Premium: about 5:00 AM - 9:30 PM</strong></div>
+              </div>
+              <div class="mini-actions">
+                <a class="directions-button" href="https://www.prioritypass.com/en-GB/lounges/united-kingdom/heathrow/lhr33-no-1-lounge-heathrow-t2" target="_blank" rel="noopener">No1 T2</a>
+                <a class="directions-button" href="https://www.prioritypass.com/en-GB/lounges/united-kingdom/heathrow/lhr11-plaza-premium-lounge" target="_blank" rel="noopener">Plaza T2</a>
               </div>
             </div>
           </article>
@@ -1985,7 +2038,7 @@
       showPage("plans");
       updateFlightCountdowns();
       setInterval(updateFlightCountdowns, 60000);
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=33");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=34");
     })();
   </script>
 </body>
