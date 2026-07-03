@@ -9,7 +9,7 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            60ab595 (v54) — merged and deployed
+main:            v54 proof updated; app deploy commit is in DEPLOYMENT_PROOF.md
 live:            v54 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
