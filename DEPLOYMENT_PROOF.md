@@ -7,8 +7,8 @@ Last verified: 2026-07-03
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-App feature commit: e877df3 Add Van Gogh timing to Amsterdam plans
-Cache version: service-worker.js?v=51
+App feature commit: 9ef075f Add Uber deep links to travel cards
+Cache version: service-worker.js?v=52
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
-Deployment URL: https://ee730725.gelman-travel-guide.pages.dev
+Deployment URL: https://73f5c4ea.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 ```
 
@@ -27,26 +27,24 @@ Public URL: https://antonreport.com/gelmantravel/
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=51
+service-worker.js?v=52
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=51
+service-worker.js?v=52
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"51","publishedAt":"2026-07-03T00:00:00-04:00"}
+{"version":"52","publishedAt":"2026-07-03T00:00:00-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=51' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=52' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=51",
+  "start_url": "./?v=52",
   "display": "standalone",
 
-curl -s 'https://antonreport.com/gelmantravel/?city=amsterdam&page=plans' | rg -o 'Van Gogh Museum|BK209004617221822|10:05 AM from Avani Museum Quarter|About 8-10 minutes from the hotel|service-worker.js\?v=51' | sort -u
-10:05 AM from Avani Museum Quarter
-About 8-10 minutes from the hotel
-BK209004617221822
-Van Gogh Museum
-service-worker.js?v=51
+curl -s 'https://antonreport.com/gelmantravel/?city=amsterdam&page=plans' | rg -o 'uber-button|PLAN_FALLBACK_DESTINATIONS|service-worker.js\?v=52' | sort -u
+PLAN_FALLBACK_DESTINATIONS
+service-worker.js?v=52
+uber-button
 
 curl -sI 'https://antonreport.com/gelmantravel/attractions/amsterdam-loetje-cafe.jpg?v=1' | rg 'HTTP/|content-type|cache-control'
 HTTP/2 200
@@ -73,6 +71,9 @@ URL: https://antonreport.com/gelmantravel/?city=amsterdam&page=photos
 - Attraction category filters wrap; no horizontal overflow.
 - Attraction cards have overlay share buttons.
 - Production render check had no console warnings or errors.
+- v52 local attraction audit checked Vienna, Amsterdam, London, Washington, and Sarasota: 84/84 rendered attraction cards had Uber links with `pickup=my_location` and non-empty `dropoff[formatted_address]`.
+- v52 production attraction audit checked Amsterdam: 56/56 attraction cards had Uber links with `pickup=my_location` and non-empty `dropoff[formatted_address]`.
+- Visible attraction action rows keep Uber rightmost, right-aligned, and wider than the map button.
 
 Previous local forced-update simulation:
 
@@ -95,6 +96,9 @@ URL: https://antonreport.com/gelmantravel/?city=amsterdam&page=plans
 - Google Maps action uses SVG navigation icon.
 - Uber is last and expands to the remaining row width.
 - Collapsed hotel preview shows only: Hobbemakade 50, 1071 XL Amsterdam
+- v52 production plans audit: 5/5 ticket cards, 5/5 hotel cards, and 5/5 lounge cards had Uber links with `pickup=my_location` and non-empty `dropoff[formatted_address]`.
+- BA8454 Uber dropoff is Amsterdam Airport Schiphol; Avani hotel Uber dropoff is Avani Museum Quarter Amsterdam Hotel, Hobbemakade 50, 1071 XL Amsterdam.
+- Visible ticket and hotel action rows keep Uber rightmost, right-aligned, and wider than the map button.
 ```
 
 ## Notes
@@ -102,7 +106,7 @@ URL: https://antonreport.com/gelmantravel/?city=amsterdam&page=plans
 - The app is a static HTML/CSS/JS PWA with no build step.
 - The repo root is the Pages deploy directory.
 - The Cloudflare Pages project is not Git-connected, so future merges will not auto-deploy unless Git integration is configured.
-- The Worker that fronts `https://antonreport.com/gelmantravel*` was not changed for the v51 deploy.
+- The Worker that fronts `https://antonreport.com/gelmantravel*` was not changed for the v52 deploy.
 - iOS does not allow a website to silently install itself to the Home Screen. The banner uses the browser install prompt where supported and otherwise shows the Safari path: Share -> Add to Home Screen.
 - Top Share now uses the default browser/Apple share sheet through `navigator.share`; it no longer attempts to open a Messages recipient group.
 - The PWA now checks `app-version.json` on load, pageshow, visibility return, online, and every 5 minutes. If the published version is newer than the currently loaded bundle, it clears Gelman app caches, unregisters stale service workers, and reloads once with `appv=<version>&fresh=<timestamp>`.
@@ -112,22 +116,21 @@ URL: https://antonreport.com/gelmantravel/?city=amsterdam&page=plans
 ```text
 You are working with repo vitalychernobyl/gelman-travel-guide.
 
-Important: code is already pushed to main at e877df3 or later. The app is a static no-build PWA deployed from the repo root to Cloudflare Pages project gelman-travel-guide.
+Important: code is already pushed to main at 9ef075f or later. The app is a static no-build PWA deployed from the repo root to Cloudflare Pages project gelman-travel-guide.
 
-Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v51 is live:
-- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=51
-- https://antonreport.com/gelmantravel/ serves service-worker.js?v=51
-- https://antonreport.com/gelmantravel/app-version.json returns {"version":"51",...}
-- https://antonreport.com/gelmantravel/manifest.webmanifest?v=51 has start_url ./?v=51
-- https://antonreport.com/gelmantravel/?city=amsterdam&page=plans includes the Van Gogh Museum timed admission plan, confirmation BK209004617221822, leave-by 10:05 AM, arrive-by 10:15 AM, and 8-10 minute hotel walk estimate
+Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v52 is live:
+- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=52
+- https://antonreport.com/gelmantravel/ serves service-worker.js?v=52
+- https://antonreport.com/gelmantravel/app-version.json returns {"version":"52",...}
+- https://antonreport.com/gelmantravel/manifest.webmanifest?v=52 has start_url ./?v=52
+- https://antonreport.com/gelmantravel/?city=amsterdam&page=plans contains runtime Uber support code and public production browser QA found 15/15 plan cards with destination-filled Uber links
 - https://antonreport.com/gelmantravel/attractions/amsterdam-loetje-cafe.jpg?v=1 returns HTTP 200 image/jpeg
 
-v51 changes:
-- Kept the Van Gogh Museum Admission booking in Amsterdam Plans, above BA8454.
-- Added compact leave-by and arrive-by timing to the museum pass: leave Avani at 10:05 AM, arrive at Van Gogh Museum at 10:15 AM for the 10:30 AM slot.
-- The expanded plan now also shows the 8-10 minute walk estimate from the Amsterdam hotel.
-- The booking email and phone number remain intentionally unpublished.
-- Bumped service worker, manifest, and app-version to v51 so installed devices force-refresh from v50.
+v52 changes:
+- Added direct Uber deep links to plan ticket cards, hotel cards, lounge cards, and attraction cards.
+- Uber links use `https://m.uber.com/ul/` with `pickup=my_location` and a populated `dropoff[formatted_address]`.
+- Ticket and location action rows now keep Uber as the rightmost button and let it expand into the remaining row width.
+- Bumped service worker, manifest, and app-version to v52 so installed devices force-refresh from v51.
 
 Cloudflare Pages project gelman-travel-guide has Git Provider: No, so auto-deploy after GitHub merges is not configured. If asked to deploy future changes, use:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
