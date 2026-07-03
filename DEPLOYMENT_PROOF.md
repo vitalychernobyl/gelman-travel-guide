@@ -7,8 +7,8 @@ Last verified: 2026-07-03
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-App feature commit: 3c3abd4 Refine Amsterdam attraction actions
-Cache version: service-worker.js?v=48
+App feature commit: ecd2df5 Add forced app update reload
+Cache version: service-worker.js?v=49
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
-Deployment URL: https://8c76eee5.gelman-travel-guide.pages.dev
+Deployment URL: https://32d30282.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 ```
 
@@ -27,15 +27,18 @@ Public URL: https://antonreport.com/gelmantravel/
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=48
+service-worker.js?v=49
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=48
+service-worker.js?v=49
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=48' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
+{"version":"49","publishedAt":"2026-07-03T00:00:00-04:00"}
+
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=49' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=48",
+  "start_url": "./?v=49",
   "display": "standalone",
 
 curl -sI 'https://antonreport.com/gelmantravel/attractions/amsterdam-loetje-cafe.jpg?v=1' | rg 'HTTP/|content-type|cache-control'
@@ -62,6 +65,13 @@ URL: https://antonreport.com/gelmantravel/?city=amsterdam&page=photos
 - First card is Café Luce and has a Recommended badge.
 - Attraction category filters wrap; no horizontal overflow.
 - Attraction cards have overlay share buttons.
+- Production render check had no console warnings or errors.
+
+Local forced-update simulation:
+
+- A local test server intentionally returned `app-version.json` version `50` while the app bundle was `49`.
+- The app forced a refresh to a cache-busted URL ending in `appv=50&fresh=...`.
+- The service-worker `controllerchange` race was verified fixed: the URL stayed on the newer detected version instead of being overwritten back to bundled v49.
 
 URL: https://antonreport.com/gelmantravel/?city=amsterdam&page=plans
 
@@ -80,30 +90,31 @@ URL: https://antonreport.com/gelmantravel/?city=amsterdam&page=plans
 - The app is a static HTML/CSS/JS PWA with no build step.
 - The repo root is the Pages deploy directory.
 - The Cloudflare Pages project is not Git-connected, so future merges will not auto-deploy unless Git integration is configured.
-- The Worker that fronts `https://antonreport.com/gelmantravel*` was not changed for the v48 deploy.
+- The Worker that fronts `https://antonreport.com/gelmantravel*` was not changed for the v49 deploy.
 - iOS does not allow a website to silently install itself to the Home Screen. The banner uses the browser install prompt where supported and otherwise shows the Safari path: Share -> Add to Home Screen.
 - Top Share now uses the default browser/Apple share sheet through `navigator.share`; it no longer attempts to open a Messages recipient group.
+- The PWA now checks `app-version.json` on load, pageshow, visibility return, online, and every 5 minutes. If the published version is newer than the currently loaded bundle, it clears Gelman app caches, unregisters stale service workers, and reloads once with `appv=<version>&fresh=<timestamp>`.
 
 ## Handoff Prompt
 
 ```text
 You are working with repo vitalychernobyl/gelman-travel-guide.
 
-Important: code is already pushed to main at 3c3abd4 or later. The app is a static no-build PWA deployed from the repo root to Cloudflare Pages project gelman-travel-guide.
+Important: code is already pushed to main at ecd2df5 or later. The app is a static no-build PWA deployed from the repo root to Cloudflare Pages project gelman-travel-guide.
 
-Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v48 is live:
-- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=48
-- https://antonreport.com/gelmantravel/ serves service-worker.js?v=48
-- https://antonreport.com/gelmantravel/manifest.webmanifest?v=48 has start_url ./?v=48
+Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v49 is live:
+- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=49
+- https://antonreport.com/gelmantravel/ serves service-worker.js?v=49
+- https://antonreport.com/gelmantravel/app-version.json returns {"version":"49",...}
+- https://antonreport.com/gelmantravel/manifest.webmanifest?v=49 has start_url ./?v=49
 - https://antonreport.com/gelmantravel/attractions/amsterdam-loetje-cafe.jpg?v=1 returns HTTP 200 image/jpeg
 
-v48 changes:
-- Added Loetje Amsterdam Café near the top of Amsterdam Attractions, with local image and official listing details.
-- Attraction action rows are text-only: Menu/Tickets/Website, Directions, Uber.
-- Directions buttons are Google Maps blue and use `dir_action=navigate` for one-tap navigation from current location.
-- Uber buttons are black and deep-link to `m.uber.com/ul/` with pickup set to current location.
-- Removed the second bottom Details button from attraction cards.
-- Top Share uses the default native share sheet, not an iMessage recipient group.
+v49 changes:
+- Added `app-version.json` as a no-store freshness marker.
+- Bumped the service worker, manifest, and cache to v49.
+- Current/new-use update path: the app checks the published version on load, pageshow, visibility return, online, and every 5 minutes.
+- If a newer version is published, it clears Gelman app caches, unregisters stale service workers, and reloads once with a cache-busted URL.
+- Service-worker activation posts `APP_UPDATED` to open clients, and controller-change reloads honor the newer detected published version to avoid racing back to an older bundle version.
 
 Cloudflare Pages project gelman-travel-guide has Git Provider: No, so auto-deploy after GitHub merges is not configured. If asked to deploy future changes, use:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
