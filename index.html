@@ -9,7 +9,8 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=54">
+  <link rel="manifest" href="manifest.webmanifest?v=55">
+  <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -521,6 +522,42 @@
       background: var(--accent) !important;
       color: var(--accent-ink) !important;
       font-weight: 900;
+    }
+    .attraction-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 0 1px 8px;
+    }
+    .attraction-sorts,
+    .attraction-views {
+      display: flex;
+      gap: 5px;
+    }
+    .attraction-sort,
+    .attraction-view {
+      min-height: 31px;
+      padding: 5px 11px;
+      font-size: .76rem;
+      font-weight: 850;
+    }
+    #attractionMap {
+      height: min(62vh, 520px);
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      margin-bottom: 4px;
+      z-index: 1;
+    }
+    #attractionMap .leaflet-popup-content {
+      font: inherit;
+      font-size: .85rem;
+      line-height: 1.35;
+    }
+    #attractionMap .leaflet-popup-content a {
+      color: var(--accent-deep, #a84f15);
+      font-weight: 800;
     }
     .recommended-tag {
       background: #25211c !important;
@@ -2081,10 +2118,11 @@
     <div class="share-status" id="shareStatus" hidden aria-live="polite"></div>
   </div>
 
+  <script src="vendor/leaflet.js?v=1"></script>
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "54";
+      const APP_VERSION = "55";
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
       const UPDATE_RELOAD_AT_KEY = "gelmanLastForcedReloadAt";
@@ -2889,6 +2927,27 @@
         "MAK": "attractions/vienna-mak.jpg?v=1",
         "Spanish Riding School": "attractions/vienna-spanish-riding-school.jpg?v=1",
         "Rijksmuseum": "attractions/amsterdam-rijksmuseum.jpg?v=1",
+        "Moco Museum": "attractions/amsterdam-moco-museum.jpg?v=1",
+        "Pesca": "attractions/amsterdam-pesca.jpg?v=1",
+        "Bar Fisk": "attractions/amsterdam-bar-fisk.jpg?v=1",
+        "Visaandeschelde": "attractions/amsterdam-visaandeschelde.jpg?v=1",
+        "Bridges": "attractions/amsterdam-bridges.jpg?v=1",
+        "Back to Black": "attractions/amsterdam-back-to-black.jpg?v=1",
+        "Lot Sixty One": "attractions/amsterdam-lot-sixty-one.jpg?v=1",
+        "Toki": "attractions/amsterdam-toki.jpg?v=1",
+        "Scandinavian Embassy": "attractions/amsterdam-scandinavian-embassy.jpg?v=1",
+        "Jordaan brown cafés": "attractions/amsterdam-jordaan.jpg?v=1",
+        "De Pijp bars": "attractions/amsterdam-de-pijp.jpg?v=1",
+        "Nieuwmarkt": "attractions/amsterdam-nieuwmarkt.jpg?v=1",
+        "Leidseplein": "attractions/amsterdam-leidseplein.jpg?v=1",
+        "Rembrandtplein": "attractions/amsterdam-rembrandtplein.jpg?v=1",
+        "Red Light District walk": "attractions/amsterdam-red-light-district.jpg?v=1",
+        "Westerpark": "attractions/amsterdam-westerpark.jpg?v=1",
+        "Amstelpark": "attractions/amsterdam-amstelpark.jpg?v=1",
+        "Sarphatipark": "attractions/amsterdam-sarphatipark.jpg?v=1",
+        "Flevopark": "attractions/amsterdam-flevopark.jpg?v=1",
+        "Oosterpark": "attractions/amsterdam-oosterpark.jpg?v=1",
+        "Rembrandtpark": "attractions/amsterdam-rembrandtpark.jpg?v=1",
         "Café Luce": "attractions/amsterdam-bocca-coffee.jpg?v=1",
         "Loetje Amsterdam Café": "attractions/amsterdam-loetje-cafe.jpg?v=1",
         "Albert Cuyp Fish Market": "attractions/amsterdam-albert-cuyp-market.jpg?v=1",
@@ -2983,6 +3042,52 @@
       }
       const ATTRACTION_FILTER_LABELS = { Museum: "Museums", Fish: "Fish", Food: "Food", Coffee: "Coffee", Canal: "Canals", Landmark: "Landmarks", Nightlife: "Nightlife", Outdoors: "Outdoors" };
       const attractionFilterChoice = {};
+      const attractionSortChoice = {};
+      const attractionViewChoice = {};
+      const ATTRACTION_SORTS = { rating: "Top rated", distance: "Nearest", name: "A-Z" };
+      const HOTEL_COORDS = {
+        vienna: [48.235424, 16.421906],
+        amsterdam: [52.355824, 4.886117],
+        london: [51.492264, -0.025593],
+        washington: [38.892627, -77.070039],
+        sarasota: [27.280379, -82.398241]
+      };
+      function parseDistanceMinutes(text) {
+        const match = /(\d+)/.exec(text || "");
+        return match ? Number(match[1]) : 999;
+      }
+      let attractionMap = null;
+      function destroyAttractionMap() {
+        if (attractionMap) { attractionMap.remove(); attractionMap = null; }
+      }
+      function initAttractionMap(city, items, cityLabel) {
+        const el = document.querySelector("#attractionMap");
+        if (!el || typeof L === "undefined") return;
+        destroyAttractionMap();
+        attractionMap = L.map(el, { scrollWheelZoom: false });
+        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19,
+          attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(attractionMap);
+        const bounds = [];
+        const hotel = HOTEL_COORDS[city];
+        if (hotel) {
+          L.circleMarker(hotel, { radius: 9, weight: 3, color: "#fffefa", fillColor: "#25211c", fillOpacity: 1 })
+            .addTo(attractionMap)
+            .bindPopup("<strong>Hotel / stay</strong>");
+          bounds.push(hotel);
+        }
+        items.forEach(item => {
+          const destination = item.address || `${item.title}, ${item.location}, ${cityLabel}`;
+          const coords = coordsForDestination(item.title, destination);
+          if (!coords) return;
+          const marker = L.circleMarker(coords, { radius: 8, weight: 2, color: "#fffefa", fillColor: "#d97823", fillOpacity: .92 }).addTo(attractionMap);
+          const rating = item.rating ? `★ ${item.rating.toFixed(1)} · ` : "";
+          marker.bindPopup(`<strong>${escapeHTML(item.title)}</strong><br>${rating}${escapeHTML(item.category)}<br><a href="${escapeHTML(googleMapsWebDirections(destination))}" target="_blank" rel="noopener">Directions</a> · <a href="${escapeHTML(uberDeepLink(item.title, destination))}" target="_blank" rel="noopener">Uber</a>`);
+          bounds.push(coords);
+        });
+        if (bounds.length) attractionMap.fitBounds(bounds, { padding: [30, 30], maxZoom: 15 });
+      }
       function renderAttractions(city) {
         const data = ATTRACTIONS[city] || ATTRACTIONS.vienna;
         const normalizeAttraction = item => {
@@ -2996,7 +3101,14 @@
           _index: index,
           _featuredRank: featuredTitles.indexOf(item.title)
         }));
-        if (items.some(item => item.rating || item.featured || item._featuredRank >= 0)) {
+        const activeSort = ATTRACTION_SORTS[attractionSortChoice[city]] ? attractionSortChoice[city] : "rating";
+        if (activeSort === "distance") {
+          items = items.slice().sort((a, b) =>
+            parseDistanceMinutes(a.distance) - parseDistanceMinutes(b.distance) || (b.rating || 0) - (a.rating || 0) || a._index - b._index
+          );
+        } else if (activeSort === "name") {
+          items = items.slice().sort((a, b) => a.title.localeCompare(b.title));
+        } else if (items.some(item => item.rating || item.featured || item._featuredRank >= 0)) {
           items = items.slice().sort((a, b) => {
             const aFeatured = a.featured || a._featuredRank >= 0;
             const bFeatured = b.featured || b._featuredRank >= 0;
@@ -3008,15 +3120,28 @@
         const filters = data.filters || [];
         const activeFilter = filters.includes(attractionFilterChoice[city]) ? attractionFilterChoice[city] : "All";
         const shown = activeFilter === "All" ? items : items.filter(item => item.category === activeFilter);
+        const activeView = attractionViewChoice[city] === "map" ? "map" : "list";
         const filterChips = filters.length ? `
           <div class="attraction-filters" role="tablist" aria-label="Filter attractions">
             ${["All", ...filters].map(filter => `<button type="button" class="attraction-filter" data-filter="${escapeHTML(filter)}" aria-pressed="${filter === activeFilter}">${escapeHTML(filter === "All" ? "All" : ATTRACTION_FILTER_LABELS[filter] || filter)}</button>`).join("")}
           </div>` : "";
+        const toolbar = `
+          <div class="attraction-toolbar">
+            <div class="attraction-sorts" role="group" aria-label="Sort attractions">
+              ${Object.entries(ATTRACTION_SORTS).map(([key, label]) => `<button type="button" class="attraction-sort" data-sort="${key}" aria-pressed="${key === activeSort}">${label}</button>`).join("")}
+            </div>
+            <div class="attraction-views" role="group" aria-label="View as list or map">
+              <button type="button" class="attraction-view" data-view="list" aria-pressed="${activeView === "list"}">List</button>
+              <button type="button" class="attraction-view" data-view="map" aria-pressed="${activeView === "map"}">Map</button>
+            </div>
+          </div>`;
         attractionContent.innerHTML = `
           <section class="card wide attraction-city" data-attraction-city="${escapeHTML(city)}">
             <h2><span class="city-mark">${escapeHTML(data.code)}</span> ${escapeHTML(data.city)} <span class="meta">${shown.length} picks near ${escapeHTML(data.hotel)}</span></h2>
             ${filterChips}
-            <div class="attraction-stack">
+            ${toolbar}
+            ${activeView === "map" ? '<div id="attractionMap" aria-label="Map of attractions"></div>' : ""}
+            <div class="attraction-stack"${activeView === "map" ? " hidden" : ""}>
               ${shown.map((item, index) => {
                 const attraction = item;
                 const title = attraction.title;
@@ -3074,6 +3199,19 @@
           renderAttractions(city);
           attractionContent.scrollIntoView({ block: "start", behavior: "smooth" });
         }));
+        attractionContent.querySelectorAll(".attraction-sort").forEach(button => button.addEventListener("click", () => {
+          attractionSortChoice[city] = button.dataset.sort;
+          renderAttractions(city);
+        }));
+        attractionContent.querySelectorAll(".attraction-view").forEach(button => button.addEventListener("click", () => {
+          attractionViewChoice[city] = button.dataset.view;
+          renderAttractions(city);
+        }));
+        if (activeView === "map") {
+          requestAnimationFrame(() => initAttractionMap(city, shown, data.city));
+        } else {
+          destroyAttractionMap();
+        }
       }
       function currentNow() {
         const testToday = new URLSearchParams(location.search).get("today");
@@ -3412,7 +3550,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=54", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=55", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;

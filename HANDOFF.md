@@ -9,9 +9,9 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v54 proof updated; app deploy commit is in DEPLOYMENT_PROOF.md
+main:            v55 pending merge — attractions images complete, sort control, Leaflet map view
 live:            v54 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
-pending action:  none
+pending action:  after merge, DEPLOY v55 (same wrangler command; verify v=55 on both origins)
 ```
 
 ## Standing facts
@@ -26,7 +26,7 @@ pending action:  none
   the `?v=` query strings (manifest link, SW registration, manifest start_url, SW FILES
   list), and `app-version.json`. The service worker self-updates clients on relaunch.
 
-## Deploy task for the local agent (v54)
+## Deploy task for the local agent (current release)
 
 ```text
 You are working with repo vitalychernobyl/gelman-travel-guide on the owner's machine
@@ -34,7 +34,7 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
 
 1. git checkout main && git pull origin main
    Confirm: git log --oneline -1 shows 75b9fa4 or later, and
-   grep -o 'service-worker.js?v=[0-9]*' index.html prints v=54.
+   grep -o 'service-worker.js?v=[0-9]*' index.html prints the version named in "Current state".
 2. npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
 3. Verify (may take a minute):
    curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*'   # v=54
