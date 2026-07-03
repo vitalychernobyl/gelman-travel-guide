@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=28">
+  <link rel="manifest" href="manifest.webmanifest?v=29">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -530,37 +530,37 @@
     }
     .attraction-card summary {
       display: grid;
-      grid-template-columns: 72px minmax(0, 1fr);
-      gap: 9px;
+      gap: 0;
       min-height: 86px;
-      padding: 8px;
+      padding: 0;
       list-style: none;
       cursor: pointer;
     }
     .attraction-card summary::-webkit-details-marker { display: none; }
     .attraction-thumb {
-      width: 72px;
-      height: 72px;
-      border-radius: 14px;
+      width: 100%;
+      height: 156px;
       object-fit: cover;
       background: var(--soft);
+      display: block;
     }
     .attraction-main {
       display: grid;
-      gap: 4px;
+      gap: 7px;
       min-width: 0;
+      padding: 10px 10px 11px;
     }
     .attraction-main h3 {
       margin: 0;
       color: var(--accent-deep);
-      font-size: .94rem;
+      font-size: 1.02rem;
       line-height: 1.05;
     }
     .attraction-main p {
       margin: 0;
       color: var(--muted);
-      font-size: .76rem;
-      line-height: 1.18;
+      font-size: .82rem;
+      line-height: 1.28;
     }
     .attraction-tags {
       display: flex;
@@ -578,16 +578,33 @@
     }
     .attraction-extra {
       display: grid;
-      gap: 7px;
-      padding: 0 10px 10px 89px;
+      gap: 9px;
+      padding: 0 10px 12px;
       color: var(--muted);
-      font-size: .78rem;
+      font-size: .82rem;
+      line-height: 1.3;
     }
-    .attraction-extra a {
-      color: var(--accent-deep);
-      font-weight: 850;
+    .attraction-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      margin-top: 2px;
+    }
+    .attraction-actions a {
+      display: grid;
+      place-items: center;
+      min-height: 38px;
+      padding: 6px 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: var(--accent-ink);
+      font-size: .74rem;
+      font-weight: 900;
+      text-align: center;
       text-decoration: none;
     }
+    .attraction-actions a:nth-child(2) { background: #25211c; }
+    .attraction-actions a:nth-child(3) { background: #6f7d65; }
     .ticket {
       position: relative;
       display: grid;
@@ -1611,7 +1628,7 @@
           city: "Vienna",
           hotel: "NH Danube City",
           items: [
-            ["Schönbrunn Palace", "Palace", "Schönbrunn", "From about €22; gardens free", "40-45 min from hotel", "Imperial summer palace with formal gardens and big-family-photo energy.", "Best for the full Vienna postcard: palace rooms, gardens, Gloriette views, and room to wander.", "Book timed palace tickets if you want interiors. The gardens are the easy low-friction option if everyone is fading.", "https://www.schoenbrunn.at/en/"],
+            { title: "Schönbrunn Palace", category: "Palace", location: "Schönbrunn", price: "From about €22; gardens free", distance: "40-45 min from hotel", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Wien_-_Schloss_Sch%C3%B6nbrunn.JPG/960px-Wien_-_Schloss_Sch%C3%B6nbrunn.JPG", description: "Vienna's big imperial summer palace: yellow facade, formal gardens, Gloriette hill views, and enough room for everyone to wander without negotiating every doorway together.", why: "This is the classic Vienna postcard stop. It works for palace interiors, garden walks, family photos, coffee breaks, and a graceful escape route if people are museumed out.", details: "Book timed palace tickets if you want interiors. If energy is low, skip the rooms and do gardens plus Gloriette instead; it still feels like the full Schönbrunn experience.", link: "https://www.schoenbrunn.at/en/", tickets: "https://www.schoenbrunn.at/en/tickets-and-prices", map: "https://www.google.com/maps/search/?api=1&query=Sch%C3%B6nbrunn%20Palace%2C%20Vienna" },
             ["Belvedere Museum", "Museum", "Landstrasse", "From about €17", "30-35 min from hotel", "Baroque palace museum best known for Klimt's The Kiss.", "Good because the building is gorgeous even before the art starts, and the collection is compact enough to survive.", "Upper Belvedere is the main pick. Buy timed tickets if you care about Klimt and want fewer line surprises.", "https://www.belvedere.at/en"],
             ["St. Stephen's Cathedral", "Landmark", "Stephansplatz", "Free entry; tower/tours extra", "20-25 min from hotel", "Central Gothic cathedral with towers, tiled roof, and classic old-city gravity.", "Good first-stop landmark because everything radiates from here and it helps everyone orient.", "Do the square even if you skip the paid tower. North Tower elevator is the easier view option.", "https://www.stephanskirche.at/"],
             ["Vienna Prater", "Fun", "Leopoldstadt", "Free entry; rides paid", "12-18 min from hotel", "Historic amusement park with the Giant Ferris Wheel.", "Good for a lower-culture, higher-snack reset after museums and palaces.", "Entry is free, pay per ride. The Ferris Wheel is the iconic one; Prater also works just for wandering.", "https://www.praterwien.com/en"],
@@ -1623,7 +1640,7 @@
             ["Naschmarkt", "Food", "Wieden/Mariahilf", "Free entry; food varies", "30-35 min from hotel", "Outdoor market with food stalls, restaurants, spices, and snack wandering.", "Good when the group needs food choices without choosing one perfect restaurant.", "Better earlier in the day. Saturdays add flea-market chaos if that sounds fun rather than cursed.", "https://www.wien.info/en/dine-drink/markets/naschmarkt-351688"],
             ["Karlskirche", "Church", "Karlsplatz", "Entry varies", "25-30 min from hotel", "Baroque church with a dramatic dome and reflecting pool.", "Good because the outside is striking and Karlsplatz connects easily to other central stops.", "Best paired with Secession, Naschmarkt, or a Ring walk.", "https://www.wien.info/en/sights-a-z/st-charles-church-341990"],
             ["Hundertwasserhaus", "Architecture", "Landstrasse", "Outside free", "20-25 min from hotel", "Colorful apartment building by Friedensreich Hundertwasser.", "Good for weird, quick, photogenic Vienna that is not another palace.", "You view it from outside. Pair with Kunst Haus Wien nearby if the style hooks you.", "https://www.wien.info/en/sights-a-z/hundertwasser-house-vienna-340026"],
-            ["Kunst Haus Wien", "Museum", "Landstrasse", "About €15", "20-25 min from hotel", "Hundertwasser museum with uneven floors, greenery, and strong personality.", "Good when you want art plus an actually unusual building.", "More interesting if Hundertwasserhaus made people curious. Also a solid rainy-day pick.", "https://www.kunsthauswien.com/en/"],
+            { title: "Kunst Haus Wien", category: "Museum", location: "Landstrasse", price: "About €15", distance: "20-25 min from hotel", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Wien_-_Hundertwasserhaus_%2803%29.JPG/960px-Wien_-_Hundertwasserhaus_%2803%29.JPG", description: "A museum that feels like the building itself is part of the exhibit: uneven floors, plants, tile, color, and Hundertwasser's full refusal to make anything boring.", why: "Good when the group wants something more playful than another palace. It is art, architecture, and weird Vienna personality in one compact stop, with enough texture to keep non-museum people awake.", details: "Pair it with Hundertwasserhaus if everyone likes the style. It is also a strong rainy-day option because the building has a cafe and the visit does not need to eat the whole day.", link: "https://www.kunsthauswien.com/en/", tickets: "https://www.kunsthauswien.com/en/visit/tickets/", map: "https://www.google.com/maps/search/?api=1&query=Kunst%20Haus%20Wien" },
             ["Danube Tower", "View", "Donauturm", "About €18", "10-15 min from hotel", "Tall observation tower near Danube Park.", "Good because it is close to NH Danube City and gives an easy city-scale view.", "Best nearby add-on from the hotel. Go for clear weather; skip if visibility is gray soup.", "https://www.donauturm.at/en/"],
             ["Danube Island", "Outdoors", "Donauinsel", "Free", "10-20 min from hotel", "Long recreation island for walking, biking, river views, and decompression.", "Good because it is close, free, and useful when everyone needs air instead of another admission ticket.", "Pick a short stretch rather than trying to understand the whole island.", "https://www.wien.info/en/livable-vienna/sports/danube-island-347082"],
             ["Café Central", "Cafe", "Innere Stadt", "Menu prices", "25-30 min from hotel", "Historic Viennese cafe with pastries, coffee, and high-ceiling drama.", "Good for the classic cafe experience, especially if dessert is part of the itinerary constitution.", "Expect a line at peak times. Go off-hours or keep it as a flexible treat.", "https://www.cafecentral.wien/en/"],
@@ -1638,10 +1655,13 @@
           city: "Amsterdam",
           hotel: "Avani Museum Quarter",
           items: [
-            ["Rijksmuseum", "Museum", "Museumplein", "About €25", "5 min from hotel", "Dutch masters and a grand museum garden.", "Best nearby heavyweight museum; easy from Avani.", "Book timed tickets for a calmer visit.", "https://www.rijksmuseum.nl/en"],
+            { title: "Rijksmuseum", category: "Museum", location: "Museumplein", price: "About €25", distance: "5 min from hotel", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/South_facade_of_the_Rijksmuseum_Amsterdam_%28DSCF0528%29.jpg/960px-South_facade_of_the_Rijksmuseum_Amsterdam_%28DSCF0528%29.jpg", description: "Amsterdam's major art museum, close enough to Avani that it can be a proper visit or a short greatest-hits strike: Rembrandt, Vermeer, ship models, Delftware, and a grand building.", why: "Best nearby heavyweight museum. It is polished, easy to navigate from the hotel, and the garden/cafe make it less punishing than a pure march through paintings.", details: "Book a timed ticket if the group cares about avoiding friction. The Gallery of Honour and Night Watch area are the obvious core route if attention spans are limited.", link: "https://www.rijksmuseum.nl/en", tickets: "https://www.rijksmuseum.nl/en/tickets", map: "https://www.google.com/maps/search/?api=1&query=Rijksmuseum%2C%20Amsterdam" },
             ["Van Gogh Museum", "Museum", "Museumplein", "About €24", "6 min from hotel", "Van Gogh paintings, drawings, and letters.", "Good because it is close and emotionally direct.", "Timed tickets are usually essential.", "https://www.vangoghmuseum.nl/en"],
             ["Anne Frank House", "History", "Jordaan", "About €16", "20-25 min from hotel", "Timed-entry museum in the original canal house.", "Important and memorable, but needs booking discipline.", "Reserve ahead; walk-up is not the plan.", "https://www.annefrank.org/en/"],
-            ["Vondelpark", "Park", "Amsterdam-Zuid", "Free", "12 min from hotel", "Big urban park near the museum district.", "Good reset walk near the hotel.", "Useful between museum slots.", "https://www.iamsterdam.com/en/explore/areas/oud-zuid/vondelpark"]
+            ["Vondelpark", "Park", "Amsterdam-Zuid", "Free", "12 min from hotel", "Big urban park near the museum district.", "Good reset walk near the hotel.", "Useful between museum slots.", "https://www.iamsterdam.com/en/explore/areas/oud-zuid/vondelpark"],
+            { title: "Stubbe's Haring", category: "Food", location: "Singel canal", price: "Snack prices", distance: "20-25 min from hotel", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Haring_04.jpg/960px-Haring_04.jpg", description: "A tiny classic herring stand near the canals. This is the quick Amsterdam fish stop: herring with onions and pickles, eaten standing up like you suddenly understand Dutch weather.", why: "Best for the actual herring ritual without making dinner complicated. It is fast, memorable, and very Amsterdam in the best slightly-briny way.", details: "Order herring with onions and pickles if you want the canonical version. If raw herring is a hard no, use it as a photo/snack stop and keep moving.", link: "https://www.google.com/search?q=Stubbe%27s+Haring+Amsterdam", tickets: "https://www.google.com/search?q=Stubbe%27s+Haring+Amsterdam", map: "https://www.google.com/maps/search/?api=1&query=Stubbe%27s%20Haring%20Amsterdam" },
+            { title: "Vishuisje Herengracht", category: "Food", location: "Herengracht", price: "Snack / casual meal", distance: "20-25 min from hotel", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/2021-10-13-Kibbeling-4943.jpg/960px-2021-10-13-Kibbeling-4943.jpg", description: "Canal-side fish counter energy: herring if you are feeling traditional, fried fish if the group wants something warmer and less philosophically slippery.", why: "Good compromise fish stop because not everyone has to commit to raw herring. It keeps the seafood mission casual and easy to fold into canal wandering.", details: "Use it as a snack stop rather than a formal restaurant plan. Herring, kibbeling, and simple fish plates are the point.", link: "https://www.google.com/search?q=Vishuisje+Herengracht+Amsterdam", tickets: "https://www.google.com/search?q=Vishuisje+Herengracht+Amsterdam", map: "https://www.google.com/maps/search/?api=1&query=Vishuisje%20Herengracht%20Amsterdam" },
+            { title: "The Seafood Bar", category: "Food", location: "Amsterdam", price: "Restaurant prices", distance: "10-25 min from hotel", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Plateau_van_zeevruchten.jpg/960px-Plateau_van_zeevruchten.jpg", description: "A polished seafood restaurant option when the group wants a real sit-down meal: oysters, fish, shellfish platters, fries, and enough non-herring choices to preserve family peace.", why: "Best when you want seafood without gambling on a tiny stand being enough food for everyone. It feels like an actual dinner plan, not just a snack mission.", details: "Reserve if aiming for dinner. Check the nearest branch from where you are that day; Amsterdam has multiple locations.", link: "https://www.theseafoodbar.com/", tickets: "https://www.theseafoodbar.com/reservations", map: "https://www.google.com/maps/search/?api=1&query=The%20Seafood%20Bar%20Amsterdam" }
           ]
         },
         london: {
@@ -1733,15 +1753,32 @@
       }
       function renderAttractions(city) {
         const data = ATTRACTIONS[city] || ATTRACTIONS.vienna;
+        const normalizeAttraction = item => {
+          if (!Array.isArray(item)) return item;
+          const [title, category, location, price, distance, description, why, details, link] = item;
+          return { title, category, location, price, distance, description, why, details, link };
+        };
         attractionContent.innerHTML = `
           <section class="card wide attraction-city" data-attraction-city="${escapeHTML(city)}">
             <h2><span class="city-mark">${escapeHTML(data.code)}</span> ${escapeHTML(data.city)} <span class="meta">${data.items.length} picks near ${escapeHTML(data.hotel)}</span></h2>
             <div class="attraction-stack">
               ${data.items.map((item, index) => {
-                const [title, category, location, price, distance, description, why, details, link] = item;
+                const attraction = normalizeAttraction(item);
+                const title = attraction.title;
+                const category = attraction.category;
+                const location = attraction.location;
+                const price = attraction.price;
+                const distance = attraction.distance;
+                const description = attraction.description;
+                const why = attraction.why;
+                const details = attraction.details;
+                const link = attraction.link;
+                const ticketLink = attraction.tickets || link;
+                const mapLink = attraction.map || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${title} ${location}`)}`;
+                const image = attraction.image || attractionThumb(title, category);
                 return `<details class="attraction-card"${index === 0 ? " open" : ""}>
                   <summary>
-                    <img class="attraction-thumb" src="${attractionThumb(title, category)}" alt="">
+                    <img class="attraction-thumb" src="${escapeHTML(image)}" alt="${escapeHTML(title)}">
                     <div class="attraction-main">
                       <h3>${escapeHTML(title)}</h3>
                       <p>${escapeHTML(description)}</p>
@@ -1756,7 +1793,11 @@
                     <div><strong>Why it is good:</strong> ${escapeHTML(why)}</div>
                     <div><strong>Location:</strong> ${escapeHTML(location)}</div>
                     <div><strong>More:</strong> ${escapeHTML(details)}</div>
-                    <a href="${escapeHTML(link)}" target="_blank" rel="noopener">Open official info</a>
+                    <div class="attraction-actions">
+                      <a href="${escapeHTML(link)}" target="_blank" rel="noopener">Details</a>
+                      <a href="${escapeHTML(ticketLink)}" target="_blank" rel="noopener">Tickets</a>
+                      <a href="${escapeHTML(mapLink)}" target="_blank" rel="noopener">Map</a>
+                    </div>
                   </div>
                 </details>`;
               }).join("")}
@@ -1874,7 +1915,7 @@
       showPage(localStorage.gelmanPage || "dictionary");
       updateFlightCountdowns();
       setInterval(updateFlightCountdowns, 60000);
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=27");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=29");
     })();
   </script>
 </body>
