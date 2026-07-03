@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=24">
+  <link rel="manifest" href="manifest.webmanifest?v=25">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -50,15 +50,18 @@
     .app-top {
       display: grid;
       gap: 8px;
-      margin: 0 -2px 10px;
+      margin: 0 -2px 9px;
       padding: 0 2px;
     }
     .app-title {
       margin: 0;
-      font-size: 1.35rem;
-      line-height: 1;
-      font-weight: 950;
+      color: #fffefa;
+      font-size: clamp(1.42rem, 7vw, 2.25rem);
+      line-height: .94;
+      font-weight: 1000;
       letter-spacing: 0;
+      text-align: center;
+      text-shadow: 0 3px 18px rgba(0, 0, 0, .42);
     }
     .trip-city-tabs {
       display: flex;
@@ -85,9 +88,9 @@
     }
     .hero {
       position: relative;
-      min-height: 172px;
+      min-height: 194px;
       margin: 0 -10px 8px;
-      padding: 12px 18px 16px;
+      padding: 16px 18px 18px;
       display: grid;
       place-items: center;
       overflow: hidden;
@@ -101,9 +104,15 @@
         linear-gradient(180deg, rgba(0, 0, 0, .06), rgba(0, 0, 0, .05) 38%, rgba(0, 0, 0, .42)),
         var(--hero-image, url("vienna-hero.png?v=1")) center / cover no-repeat;
     }
-    .hero-logo {
+    .hero-brand {
       position: relative;
       z-index: 1;
+      display: grid;
+      justify-items: center;
+      gap: 7px;
+    }
+    .hero-logo {
+      position: relative;
       width: 116px;
       height: 116px;
       border-radius: 50%;
@@ -965,11 +974,11 @@
 </head>
 <body>
   <div class="app">
-    <header class="app-top">
-      <h1 class="app-title">Gelman Travel</h1>
-    </header>
     <section class="hero" aria-label="City hero">
-      <img class="hero-logo" src="app-logo-circle.png?v=17" alt="Gelman Travel Guide logo">
+      <div class="hero-brand">
+        <img class="hero-logo" src="app-logo-circle.png?v=17" alt="Gelman Travel Guide logo">
+        <h1 class="app-title">Gelman Travel</h1>
+      </div>
     </section>
     <header class="app-top">
       <div class="trip-city-tabs" aria-label="Choose city">
@@ -1618,7 +1627,7 @@
       applyPrefs();
       showTripCity(activeCity);
       showPage(localStorage.gelmanPage || "dictionary");
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=24");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=25");
     })();
   </script>
 </body>
