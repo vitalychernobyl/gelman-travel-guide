@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=29">
+  <link rel="manifest" href="manifest.webmanifest?v=30">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -1032,38 +1032,41 @@
       left: 0;
       right: 0;
       bottom: 0;
-      z-index: 3;
+      z-index: 8;
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 6px;
+      gap: 8px;
       width: min(780px, 100%);
       margin: 0 auto;
-      padding: 8px 10px calc(env(safe-area-inset-bottom) + 9px);
-      background: rgba(249, 249, 247, .94);
-      border-top: 1px solid var(--line);
-      backdrop-filter: blur(14px);
+      padding: 9px 10px calc(env(safe-area-inset-bottom) + 10px);
+      background: linear-gradient(180deg, rgba(255, 177, 94, .96), rgba(217, 120, 35, .98));
+      border-top: 2px solid rgba(168, 79, 21, .42);
+      box-shadow: 0 -14px 34px rgba(59, 52, 43, .26);
+      backdrop-filter: blur(18px);
     }
     .tab {
       display: grid;
       place-items: center;
       gap: 2px;
-      min-height: 48px;
-      border-radius: 999px;
-      border: 1px solid transparent;
-      background: transparent;
-      font-size: .75rem;
-      color: var(--muted);
+      min-height: 52px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, .28);
+      background: rgba(255, 255, 255, .2);
+      font-size: .78rem;
+      color: #fffefa;
+      font-weight: 950;
+      text-shadow: 0 1px 5px rgba(70, 41, 18, .24);
     }
     .tab svg {
-      width: 19px;
-      height: 19px;
-      stroke-width: 2.3;
+      width: 21px;
+      height: 21px;
+      stroke-width: 2.5;
     }
     .tab[aria-current="page"] {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: var(--accent-ink);
-      box-shadow: var(--shadow);
+      background: #25211c;
+      border-color: rgba(255, 255, 255, .34);
+      color: #fffefa;
+      box-shadow: 0 10px 22px rgba(37, 33, 28, .32);
     }
     .float-controls {
       position: fixed;
@@ -1915,7 +1918,7 @@
       showPage(localStorage.gelmanPage || "dictionary");
       updateFlightCountdowns();
       setInterval(updateFlightCountdowns, 60000);
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=29");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=30");
     })();
   </script>
 </body>
