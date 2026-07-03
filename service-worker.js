@@ -1,10 +1,10 @@
-const CACHE = "gelman-travel-guide-v44";
+const CACHE = "gelman-travel-guide-v45";
 const FILES = [
   "./",
   "./index.html",
-  "./?v=44",
+  "./?v=45",
   "./manifest.webmanifest",
-  "./manifest.webmanifest?v=44",
+  "./manifest.webmanifest?v=45",
   "./app-logo.png",
   "./app-logo.png?v=17",
   "./apple-touch-icon.png",
@@ -77,6 +77,12 @@ const FILES = [
   "./attractions/vienna-spanish-riding-school.jpg?v=1",
   "./attractions/amsterdam-rijksmuseum.jpg",
   "./attractions/amsterdam-rijksmuseum.jpg?v=1",
+  "./attractions/amsterdam-albert-cuyp-market.jpg",
+  "./attractions/amsterdam-albert-cuyp-market.jpg?v=1",
+  "./attractions/amsterdam-centraal-station.jpg",
+  "./attractions/amsterdam-centraal-station.jpg?v=1",
+  "./attractions/amsterdam-canal-tour.jpg",
+  "./attractions/amsterdam-canal-tour.jpg?v=1",
   "./attractions/amsterdam-van-gogh-museum.jpg",
   "./attractions/amsterdam-van-gogh-museum.jpg?v=1",
   "./attractions/amsterdam-anne-frank-house.jpg",

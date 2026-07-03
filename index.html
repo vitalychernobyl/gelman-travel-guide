@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=44">
+  <link rel="manifest" href="manifest.webmanifest?v=45">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -201,9 +201,45 @@
       font-size: .82rem;
       line-height: 1.05;
     }
-    .share-button {
+    .weather-chip {
       position: absolute;
       top: max(10px, env(safe-area-inset-top));
+      left: 10px;
+      z-index: 2;
+      max-width: 152px;
+      padding: 8px 10px;
+      border: 1px solid rgba(255, 255, 255, .58);
+      border-radius: 16px;
+      background: rgba(37, 33, 28, .62);
+      color: #fffefa;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .2);
+      backdrop-filter: blur(14px);
+    }
+    .weather-chip span {
+      display: block;
+      color: #f7c99e;
+      font-size: .58rem;
+      font-weight: 950;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .weather-chip strong {
+      display: block;
+      margin-top: 3px;
+      font-size: .82rem;
+      line-height: 1.05;
+    }
+    .weather-chip small {
+      display: block;
+      margin-top: 2px;
+      color: rgba(255, 254, 250, .82);
+      font-size: .62rem;
+      font-weight: 850;
+      line-height: 1.15;
+    }
+    .share-button {
+      position: absolute;
+      top: max(82px, calc(env(safe-area-inset-top) + 82px));
       left: 10px;
       z-index: 2;
       display: inline-grid;
@@ -619,6 +655,51 @@
     .attraction-stack {
       display: grid;
       gap: 9px;
+    }
+    .featured-attractions {
+      display: grid;
+      gap: 8px;
+      margin: 8px 0 10px;
+    }
+    .featured-attractions h3 {
+      margin: 0;
+      color: #6b6359;
+      font-size: .74rem;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .featured-rail {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+      gap: 8px;
+    }
+    .featured-card {
+      display: grid;
+      gap: 7px;
+      padding: 10px;
+      border: 1px solid #ded7cc;
+      border-radius: 16px;
+      background: #fffdfa;
+      box-shadow: 0 8px 18px rgba(83, 68, 50, .08);
+    }
+    .featured-card b {
+      color: var(--accent-deep);
+      font-size: .92rem;
+      line-height: 1.05;
+    }
+    .featured-card span {
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 850;
+      line-height: 1.18;
+    }
+    .featured-card a {
+      justify-self: start;
+      color: var(--ink);
+      font-size: .7rem;
+      font-weight: 950;
+      text-decoration: none;
     }
     .attraction-card {
       overflow: hidden;
@@ -1490,6 +1571,7 @@
   <div class="app">
     <section class="hero" aria-label="City hero">
       <div class="hero-status" id="heroStatus" aria-live="polite"><span>Stay</span><strong>Jul 3-6</strong></div>
+      <div class="weather-chip" id="weatherChip" aria-live="polite"><span>Amsterdam</span><strong>66/57°F</strong><small>Tomorrow 72/62°F</small></div>
       <button class="share-button" id="shareButton" type="button" aria-label="Share current Gelman Travel page">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 16V3"/><path d="m7 8 5-5 5 5"/></svg>
         <span>Share</span>
@@ -1944,6 +2026,7 @@
       const dictionaryContent = document.querySelector("#dictionaryContent");
       const attractionContent = document.querySelector("#attractionContent");
       const heroStatus = document.querySelector("#heroStatus");
+      const weatherChip = document.querySelector("#weatherChip");
       const tripCityScroller = document.querySelector(".trip-city-tabs");
       const installSheet = document.querySelector("#installSheet");
       const installLater = document.querySelector("#installLater");
@@ -1972,6 +2055,13 @@
         london: { stayLabel: "Jul 6-11", statusLabel: "Stay", flightDate: "2026-07-11", leaveAt: "2026-07-11T12:20:00" },
         washington: { stayLabel: "Jul 11-12", statusLabel: "Stay", flightDate: "2026-07-12", leaveAt: "2026-07-12T04:55:00" },
         sarasota: { stayLabel: "Arrive Jul 12", statusLabel: "Next" }
+      };
+      const CITY_WEATHER = {
+        vienna: { label: "Vienna", latitude: 48.2082, longitude: 16.3738, fallback: { today: "72/58°F", tomorrow: "74/60°F", note: "Check live" } },
+        amsterdam: { label: "Amsterdam", latitude: 52.3676, longitude: 4.9041, fallback: { today: "66/57°F", tomorrow: "72/62°F", note: "Cloudy" } },
+        london: { label: "London", latitude: 51.5072, longitude: -0.1276, fallback: { today: "70/57°F", tomorrow: "70/58°F", note: "Check live" } },
+        washington: { label: "DC", latitude: 38.9072, longitude: -77.0369, fallback: { today: "87/71°F", tomorrow: "88/72°F", note: "Check live" } },
+        sarasota: { label: "Sarasota", latitude: 27.3364, longitude: -82.5307, fallback: { today: "90/78°F", tomorrow: "90/78°F", note: "Check live" } }
       };
       const DICTIONARIES = {
         vienna: [
@@ -2131,11 +2221,17 @@
           code: "AMS",
           city: "Amsterdam",
           hotel: "Avani Museum Quarter",
-          filters: ["Museum", "Fish", "Coffee", "Nightlife", "Outdoors"],
+          filters: ["Museum", "Fish", "Coffee", "Canal", "Landmark", "Nightlife", "Outdoors"],
+          featured: ["Café Luce", "Albert Cuyp Fish Market", "Van Gogh Museum", "Amsterdam City Center & Centraal", "Vondelpark", "Blue Boat Canal Cruise", "Flagship Anne Frank Canal Tour"],
           items: [
+            { title: "Café Luce", featured: true, category: "Coffee", rating: 4.8, location: "Amsterdam", price: "Cafe / restaurant prices", distance: "Check live map", description: "Saved from the Google result you sent: a quick cafe/restaurant candidate to keep at the very top of the Amsterdam list.", why: "Useful because it is a user-picked stop rather than another generic recommendation. Tap the map/Uber buttons from the card when you are ready to go.", details: "Exact public listing was not cleanly discoverable from search, so this is stored as a Google lookup/Maps target for fast access in Amsterdam.", link: "https://www.google.com/search?q=Cafe+Luce+Amsterdam", map: "https://www.google.com/maps/search/?api=1&query=Cafe%20Luce%20Amsterdam" },
+            { title: "Albert Cuyp Fish Market", featured: true, category: "Fish", rating: 4.8, location: "Albert Cuypstraat, De Pijp", price: "Market prices", distance: "10-15 min from hotel", description: "The nearby Albert Cuyp Market is the easy fish-market move from the hotel: herring, kibbeling, snacks, and enough stalls to satisfy everyone.", why: "This is the practical fish stop near Avani Museum Quarter. Go for lunch or a snack crawl, not a formal dinner.", details: "Open Monday-Saturday roughly 9:30 AM-5:00 PM and closed Sunday. Fish stalls vary by day, so earlier is better.", link: "https://albertcuyp-markt.amsterdam/", map: "https://www.google.com/maps/search/?api=1&query=Albert%20Cuyp%20Market%2C%20Amsterdam" },
             { title: "Rijksmuseum", category: "Museum", rating: 4.7, location: "Museumplein", price: "About €25", distance: "5 min walk from hotel", description: "Amsterdam's heavyweight art museum: Rembrandt, Vermeer, ship models, Delftware, and a grand building five minutes from the hotel.", why: "Best nearby museum anchor. The Gallery of Honour works even as a short greatest-hits strike.", details: "Book a timed ticket. Night Watch room plus Gallery of Honour is the core route if attention spans are limited.", link: "https://www.rijksmuseum.nl/en" },
-            { title: "Van Gogh Museum", category: "Museum", rating: 4.6, location: "Museumplein", price: "About €24", distance: "3 min walk from hotel", description: "The world's largest Van Gogh collection: paintings, drawings, and letters arranged chronologically.", why: "Close, emotionally direct, and doable in 90 minutes without museum fatigue.", details: "Timed tickets are essentially mandatory; book days ahead in July.", link: "https://www.vangoghmuseum.nl/en" },
+            { title: "Van Gogh Museum", featured: true, category: "Museum", rating: 4.7, location: "Museumplein", price: "About €25", distance: "3 min walk from hotel", description: "The world's largest Van Gogh collection: paintings, drawings, and letters arranged chronologically.", why: "Close, emotionally direct, and doable in 90 minutes without museum fatigue.", details: "Timed tickets are essentially mandatory; book days ahead in July.", link: "https://www.vangoghmuseum.nl/en" },
             { title: "Anne Frank House", category: "Museum", rating: 4.5, location: "Jordaan", price: "About €16", distance: "20-25 min from hotel", description: "Timed-entry museum in the original canal house with the secret annex.", why: "Important and memorable; the most affecting hour in Amsterdam.", details: "Tickets release online in advance and sell out; walk-up is not a plan.", link: "https://www.annefrank.org/en/" },
+            { title: "Amsterdam City Center & Centraal", featured: true, category: "Landmark", rating: 4.7, location: "Centraal Station / Damrak", price: "Free to wander", distance: "20-25 min from hotel", description: "The classic city-center arrival view: Centraal Station, Damrak, tram noise, canal houses, and the feeling that Amsterdam has fully started.", why: "Good visual anchor for the first Amsterdam wander and an easy place to meet, start a canal walk, or catch transit.", details: "Best as a loose walk rather than a single ticketed attraction. Pair with Damrak, Oudezijds, or a canal-side coffee stop.", link: "https://www.iamsterdam.com/en/whats-on/calendar/attractions-and-sights/places-of-interest/central-station", map: "https://www.google.com/maps/search/?api=1&query=Amsterdam%20Centraal%20Station" },
+            { title: "Blue Boat Canal Cruise", featured: true, category: "Canal", rating: 4.6, location: "Stadhouderskade near Rijksmuseum", price: "About €26-€29", distance: "8-10 min walk from hotel", description: "Blue Boat's canal cruise is the easy nearby boat option from the Museumplein side of town, with a roughly 75-90 minute Amsterdam loop.", why: "Closest low-effort canal tour from the hotel area. It gives the family the canal-house postcard without turning the day into logistics.", details: "Book the 1.5-hour style cruise if available; otherwise the standard city canal cruise is the practical nearby fallback.", link: "https://www.blueboat.nl/", map: "https://www.google.com/maps/search/?api=1&query=Blue%20Boat%20Company%20Stadhouderskade%20Amsterdam" },
+            { title: "Flagship Anne Frank Canal Tour", featured: true, category: "Canal", rating: 4.6, location: "Anne Frank House / Prinsengracht", price: "About €26 per person", distance: "20-25 min from hotel", description: "Flagship runs open-boat canal tours near the Anne Frank House, useful if you want the Jordaan/Prinsengracht side by water.", why: "Pairs naturally with Anne Frank House or a Jordaan walk, and feels smaller and more personal than the big glass tourist boats.", details: "User note: about €26 per person. Check live pricing and departure time before walking over.", link: "https://flagshipamsterdam.com/", map: "https://www.google.com/maps/search/?api=1&query=Flagship%20Amsterdam%20Anne%20Frank%20House%20Canal%20Tour" },
             { title: "NEMO Science Museum", category: "Museum", rating: 4.5, location: "Oosterdok", price: "About €17.50", distance: "25-30 min from hotel", description: "Hands-on science museum in the big green ship-shaped building, with a free rooftop terrace.", why: "Best pick if anyone in the group is under 16 or over-museumed; everything is touchable.", details: "The rooftop square is free even without a museum ticket and has wide harbor views.", link: "https://www.nemosciencemuseum.nl/en/" },
             { title: "Rembrandt House Museum", category: "Museum", rating: 4.5, location: "Jodenbreestraat", price: "About €17.50", distance: "20-25 min from hotel", description: "Rembrandt's actual house and studio, restored with his etchings and daily demonstrations.", why: "Small, personal, and quick — the anti-blockbuster museum stop.", details: "Etching and paint-making demos run through the day and are worth timing.", link: "https://www.rembrandthuis.nl/en/" },
             { title: "National Maritime Museum", category: "Museum", rating: 4.5, location: "Kattenburgerplein", price: "About €17.50", distance: "25-30 min from hotel", description: "Dutch seafaring history in a grand arsenal building, with a replica East Indiaman ship to board.", why: "The replica ship keeps it fun; the courtyard roof is architectural dessert.", details: "Combine with NEMO next door; both share the harbor area.", link: "https://www.hetscheepvaartmuseum.com/" },
@@ -2173,7 +2269,7 @@
             { title: "Leidseplein", category: "Nightlife", rating: 4.4, location: "Leidseplein", price: "Varies", distance: "8-10 min from hotel", description: "The classic entertainment square: theaters, comedy, big cafes, and late-night everything.", why: "Walking distance home is the killer feature at 1am.", details: "Boom Chicago comedy is the reliable non-drinking option.", link: "https://www.iamsterdam.com/en/see-and-do/neighbourhoods/leidseplein" },
             { title: "Rembrandtplein", category: "Nightlife", rating: 4.3, location: "Rembrandtplein", price: "Varies", distance: "15-20 min from hotel", description: "The glossier nightlife square: clubs, grand cafes, and the 3D Night Watch statue group.", why: "Bigger and brasher than Leidseplein if the night wants an upgrade.", details: "The bronze Night Watch figures make the obligatory group photo.", link: "https://www.iamsterdam.com/en/see-and-do/neighbourhoods/rembrandtplein" },
             { title: "Red Light District walk", category: "Nightlife", rating: 4.2, location: "De Wallen", price: "Free to wander", distance: "20-25 min from hotel", description: "The infamous medieval quarter — canals, neon, and the oldest architecture in the city.", why: "Historically fascinating at dusk; the buildings predate the reputation.", details: "Go early evening for atmosphere without the stag-party tide; no photos of windows.", link: "https://www.iamsterdam.com/en/see-and-do/neighbourhoods/red-light-district" },
-            { title: "Vondelpark", category: "Outdoors", rating: 4.7, location: "Vondelpark", price: "Free", distance: "5 min walk from hotel", description: "Amsterdam's central park: ponds, rose garden, open-air theatre, and the whole city on wheels.", why: "Five minutes from the hotel — the default morning walk and evening decompress.", details: "Free open-air theatre shows summer weekends; the rose garden peaks in July.", link: "https://www.hetvondelpark.net/" },
+            { title: "Vondelpark", featured: true, category: "Outdoors", rating: 4.7, location: "Vondelpark", price: "Free", distance: "5 min walk from hotel", description: "Amsterdam's central park: ponds, rose garden, open-air theatre, and the whole city on wheels.", why: "Five minutes from the hotel — the default morning walk and evening decompress.", details: "Free open-air theatre shows summer weekends; the rose garden peaks in July.", link: "https://www.hetvondelpark.net/" },
             { title: "Amsterdamse Bos", category: "Outdoors", rating: 4.6, location: "Amstelveen", price: "Free", distance: "25-35 min from hotel", description: "A forest three times Central Park's size: rowing lake, goat farm, open-air theatre.", why: "The full nature reset when the canals start feeling small.", details: "Rent bikes or a canoe; the goat farm is the family magnet.", link: "https://www.amsterdamsebos.nl/" },
             { title: "Westerpark", category: "Outdoors", rating: 4.6, location: "Westerpark", price: "Free", distance: "25-30 min from hotel", description: "Landscaped park flowing into the Westergas culture yard — green space with espresso backup.", why: "Park walk and lunch terraces in one stop.", details: "Sunday markets at Westergas some weekends; check the agenda.", link: "https://westergas.nl/" },
             { title: "Amstelpark", category: "Outdoors", rating: 4.6, location: "Buitenveldert", price: "Free", distance: "20-25 min from hotel", description: "Manicured park from the 1972 Floriade: rosarium, rhododendron valley, mini-train.", why: "The quietest, most flower-dense park on the list.", details: "The Rosarium peaks exactly in early July — good timing.", link: "https://www.amsterdam.nl/parkeninamsterdam/amstelpark/" },
@@ -2377,13 +2473,13 @@
       }
       function showInstallSheet(force = false) {
         if (!installSheet || isStandalone()) return;
-        if (!force && localStorage.gelmanInstallSeenV44) return;
+        if (!force && localStorage.gelmanInstallSeenV45) return;
         installSheet.hidden = false;
       }
       function hideInstallSheet(markSeen = true) {
         if (!installSheet) return;
         installSheet.hidden = true;
-        if (markSeen) localStorage.gelmanInstallSeenV44 = "1";
+        if (markSeen) localStorage.gelmanInstallSeenV45 = "1";
       }
       function enhanceHotelLocation(card) {
         const body = card.querySelector(".hotel-key-body");
@@ -2462,8 +2558,13 @@
         "MAK": "attractions/vienna-mak.jpg?v=1",
         "Spanish Riding School": "attractions/vienna-spanish-riding-school.jpg?v=1",
         "Rijksmuseum": "attractions/amsterdam-rijksmuseum.jpg?v=1",
+        "Café Luce": "attractions/amsterdam-bocca-coffee.jpg?v=1",
+        "Albert Cuyp Fish Market": "attractions/amsterdam-albert-cuyp-market.jpg?v=1",
         "Van Gogh Museum": "attractions/amsterdam-van-gogh-museum.jpg?v=1",
         "Anne Frank House": "attractions/amsterdam-anne-frank-house.jpg?v=1",
+        "Amsterdam City Center & Centraal": "attractions/amsterdam-centraal-station.jpg?v=1",
+        "Blue Boat Canal Cruise": "attractions/amsterdam-canal-tour.jpg?v=1",
+        "Flagship Anne Frank Canal Tour": "attractions/amsterdam-canal-tour.jpg?v=1",
         "Vondelpark": "attractions/amsterdam-vondelpark.jpg?v=1",
         "Stubbe's Haring": "attractions/amsterdam-stubbes-haring.jpg?v=1",
         "Vishuisje Herengracht": "attractions/amsterdam-vishuisje-herengracht.jpg?v=1",
@@ -2549,7 +2650,7 @@
           </section>
         `).join("");
       }
-      const ATTRACTION_FILTER_LABELS = { Museum: "Museums", Fish: "Fish", Coffee: "Coffee", Nightlife: "Nightlife", Outdoors: "Outdoors" };
+      const ATTRACTION_FILTER_LABELS = { Museum: "Museums", Fish: "Fish", Coffee: "Coffee", Canal: "Canals", Landmark: "Landmarks", Nightlife: "Nightlife", Outdoors: "Outdoors" };
       const attractionFilterChoice = {};
       function renderAttractions(city) {
         const data = ATTRACTIONS[city] || ATTRACTIONS.vienna;
@@ -2558,8 +2659,21 @@
           const [title, category, location, price, distance, description, why, details, link] = item;
           return { title, category, location, price, distance, description, why, details, link };
         };
-        let items = data.items.map(normalizeAttraction);
-        if (items.some(item => item.rating)) items = items.slice().sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        const featuredTitles = data.featured || [];
+        let items = data.items.map(normalizeAttraction).map((item, index) => ({
+          ...item,
+          _index: index,
+          _featuredRank: featuredTitles.indexOf(item.title)
+        }));
+        if (items.some(item => item.rating || item.featured || item._featuredRank >= 0)) {
+          items = items.slice().sort((a, b) => {
+            const aFeatured = a.featured || a._featuredRank >= 0;
+            const bFeatured = b.featured || b._featuredRank >= 0;
+            if (aFeatured !== bFeatured) return aFeatured ? -1 : 1;
+            if (a._featuredRank >= 0 || b._featuredRank >= 0) return (a._featuredRank < 0 ? 999 : a._featuredRank) - (b._featuredRank < 0 ? 999 : b._featuredRank);
+            return (b.rating || 0) - (a.rating || 0) || a._index - b._index;
+          });
+        }
         const filters = data.filters || [];
         const activeFilter = filters.includes(attractionFilterChoice[city]) ? attractionFilterChoice[city] : "All";
         const shown = activeFilter === "All" ? items : items.filter(item => item.category === activeFilter);
@@ -2567,9 +2681,22 @@
           <div class="attraction-filters" role="tablist" aria-label="Filter attractions">
             ${["All", ...filters].map(filter => `<button type="button" class="attraction-filter" data-filter="${escapeHTML(filter)}" aria-pressed="${filter === activeFilter}">${escapeHTML(filter === "All" ? "All" : ATTRACTION_FILTER_LABELS[filter] || filter)}</button>`).join("")}
           </div>` : "";
+        const featuredItems = featuredTitles.map(title => items.find(item => item.title === title)).filter(Boolean);
+        const featuredPanel = featuredItems.length ? `
+          <div class="featured-attractions" aria-label="Featured Amsterdam picks">
+            <h3>Recommended first</h3>
+            <div class="featured-rail">
+              ${featuredItems.map(item => `<article class="featured-card">
+                <b>${escapeHTML(item.title)}</b>
+                <span>${escapeHTML(item.distance)} • ${escapeHTML(item.price)}</span>
+                <a href="${escapeHTML(item.link)}" target="_blank" rel="noopener">Open details</a>
+              </article>`).join("")}
+            </div>
+          </div>` : "";
         attractionContent.innerHTML = `
           <section class="card wide attraction-city" data-attraction-city="${escapeHTML(city)}">
             <h2><span class="city-mark">${escapeHTML(data.code)}</span> ${escapeHTML(data.city)} <span class="meta">${shown.length} picks near ${escapeHTML(data.hotel)}</span></h2>
+            ${featuredPanel}
             ${filterChips}
             <div class="attraction-stack">
               ${shown.map((item, index) => {
@@ -2661,6 +2788,45 @@
         }
         heroStatus.innerHTML = `<span>${escapeHTML(label)}</span><strong>${escapeHTML(value)}</strong>`;
       }
+      function renderWeather(city, today, tomorrow, note = "") {
+        const meta = CITY_WEATHER[city] || CITY_WEATHER.amsterdam;
+        if (!weatherChip) return;
+        weatherChip.innerHTML = `<span>${escapeHTML(meta.label)}</span><strong>${escapeHTML(today)}</strong><small>${escapeHTML(tomorrow ? `Tomorrow ${tomorrow}` : note)}</small>`;
+      }
+      function fallbackWeather(city) {
+        const meta = CITY_WEATHER[city] || CITY_WEATHER.amsterdam;
+        renderWeather(city, meta.fallback.today, meta.fallback.tomorrow, meta.fallback.note);
+      }
+      function weatherSummary(code) {
+        if ([0, 1].includes(code)) return "Clear";
+        if ([2, 3].includes(code)) return "Cloudy";
+        if ([45, 48].includes(code)) return "Fog";
+        if ([51, 53, 55, 56, 57].includes(code)) return "Drizzle";
+        if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return "Rain";
+        if ([71, 73, 75, 77, 85, 86].includes(code)) return "Snow";
+        if ([95, 96, 99].includes(code)) return "Storm";
+        return "";
+      }
+      async function updateWeather(city) {
+        const meta = CITY_WEATHER[city] || CITY_WEATHER.amsterdam;
+        fallbackWeather(city);
+        try {
+          const url = `https://api.open-meteo.com/v1/forecast?latitude=${meta.latitude}&longitude=${meta.longitude}&daily=weather_code,temperature_2m_max,temperature_2m_min&temperature_unit=fahrenheit&timezone=auto&forecast_days=2`;
+          const response = await fetch(url, { cache: "no-store" });
+          if (!response.ok) throw new Error("weather fetch failed");
+          const data = await response.json();
+          const daily = data.daily || {};
+          const hi = daily.temperature_2m_max || [];
+          const lo = daily.temperature_2m_min || [];
+          const codes = daily.weather_code || [];
+          if (hi.length < 2 || lo.length < 2) throw new Error("weather incomplete");
+          const today = `${Math.round(hi[0])}/${Math.round(lo[0])}°F${weatherSummary(codes[0]) ? ` ${weatherSummary(codes[0])}` : ""}`;
+          const tomorrow = `${Math.round(hi[1])}/${Math.round(lo[1])}°F${weatherSummary(codes[1]) ? ` ${weatherSummary(codes[1])}` : ""}`;
+          renderWeather(city, today, tomorrow);
+        } catch {
+          fallbackWeather(city);
+        }
+      }
       let cityScrollTimer = 0;
       let cityCentering = false;
       function centerTripCity(city) {
@@ -2679,6 +2845,7 @@
         root.style.setProperty("--hero-image", `url("${HEROES[city] || HEROES.amsterdam}")`);
         tripCityTabs.forEach(tab => tab.setAttribute("aria-pressed", tab.dataset.tripCity === city));
         updateHeroStatus();
+        updateWeather(city);
         renderDictionary(city);
         renderAttractions(city);
         showCity(city);
@@ -2832,7 +2999,7 @@
       setTimeout(() => showInstallSheet(false), 900);
       setInterval(updateFlightCountdowns, 60000);
       if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-        navigator.serviceWorker.register("service-worker.js?v=44", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=45", { updateViaCache: "none" }).then(registration => {
           const checkForUpdate = () => registration.update().catch(() => {});
           document.addEventListener("visibilitychange", () => {
             if (document.visibilityState === "visible") checkForUpdate();
