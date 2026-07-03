@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=31">
+  <link rel="manifest" href="manifest.webmanifest?v=33">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -683,6 +683,25 @@
         linear-gradient(90deg, transparent 35%, currentColor 35% 65%, transparent 65%);
       transform: none;
     }
+    .airline-aa .ticket {
+      border-color: rgba(0, 80, 145, .26);
+      background: linear-gradient(135deg, #fff 0%, #fff 58%, #edf5ff 100%);
+    }
+    .airline-aa .ticket-main {
+      border-top: 5px solid #005daa;
+    }
+    .airline-aa .airline {
+      color: #005daa;
+      font-weight: 950;
+    }
+    .airline-aa .airline-logo::before {
+      width: 20px;
+      height: 11px;
+      border-radius: 2px 10px 2px 10px;
+      background: linear-gradient(90deg, #005daa 0 48%, #ffffff 48% 54%, #c41230 54% 100%);
+      transform: skewX(-18deg);
+      box-shadow: 0 0 0 1px rgba(0, 80, 145, .18);
+    }
     details.ticket-card {
       border: 0;
       background: transparent;
@@ -836,6 +855,8 @@
     .airline-ba .plane-line { background: #f4e9ec; color: #b31b34; }
     .airline-ua .ticket-stub { background: linear-gradient(180deg, #1f5fbf, #0b234f); }
     .airline-ua .plane-line { background: #e9f1ff; color: #164b9a; }
+    .airline-aa .ticket-stub { background: linear-gradient(180deg, #005daa, #c41230); }
+    .airline-aa .plane-line { background: #eef4ff; color: #c41230; }
     .wordmark {
       display: block;
       font-size: .72rem;
@@ -1038,10 +1059,10 @@
       gap: 8px;
       width: min(780px, 100%);
       margin: 0 auto;
-      padding: 9px 10px calc(env(safe-area-inset-bottom) + 10px);
-      background: linear-gradient(180deg, rgba(255, 177, 94, .96), rgba(217, 120, 35, .98));
-      border-top: 2px solid rgba(168, 79, 21, .42);
-      box-shadow: 0 -14px 34px rgba(59, 52, 43, .26);
+      padding: 10px 10px calc(env(safe-area-inset-bottom) + 10px);
+      background: linear-gradient(180deg, rgba(255, 252, 247, .98), rgba(246, 239, 231, .98));
+      border-top: 1px solid rgba(168, 79, 21, .22);
+      box-shadow: 0 -12px 30px rgba(59, 52, 43, .18);
       backdrop-filter: blur(18px);
     }
     .tab {
@@ -1050,12 +1071,13 @@
       gap: 2px;
       min-height: 52px;
       border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, .28);
-      background: rgba(255, 255, 255, .2);
+      border: 1px solid rgba(168, 79, 21, .16);
+      background: rgba(255, 255, 255, .76);
       font-size: .78rem;
-      color: #fffefa;
+      color: #5d5147;
       font-weight: 950;
-      text-shadow: 0 1px 5px rgba(70, 41, 18, .24);
+      text-shadow: none;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .72);
     }
     .tab svg {
       width: 21px;
@@ -1063,10 +1085,10 @@
       stroke-width: 2.5;
     }
     .tab[aria-current="page"] {
-      background: #25211c;
-      border-color: rgba(255, 255, 255, .34);
+      background: linear-gradient(135deg, #ff6a3d, #d97823);
+      border-color: rgba(168, 79, 21, .3);
       color: #fffefa;
-      box-shadow: 0 10px 22px rgba(37, 33, 28, .32);
+      box-shadow: 0 10px 22px rgba(217, 120, 35, .32);
     }
     .float-controls {
       position: fixed;
@@ -1375,9 +1397,47 @@
       <section class="city-plan" data-city="washington">
         <div class="city-title-row">
           <span class="city-mark">DC</span>
-          <div><h2>Washington, DC</h2><p>Sun, Jul 12 - Mon, Jul 13, 2026</p></div>
+          <div><h2>Washington, DC</h2><p>Sat, Jul 11 - Sun, Jul 12, 2026</p></div>
         </div>
         <div class="plan-grid">
+          <details class="ticket-card airline-aa" data-flight-date="2026-07-12" data-leave-at="2026-07-12T04:55:00">
+            <summary>
+              <article class="ticket">
+                <div class="ticket-main">
+                  <div class="airline"><span class="airline-logo">American Airlines</span><span>AA2697</span></div>
+                  <div class="route">
+                    <div class="city"><strong>Washington</strong><span>DCA</span></div>
+                    <div class="plane-line">→</div>
+                    <div class="city"><strong>Sarasota</strong><span>SRQ</span></div>
+                  </div>
+                  <div class="ticket-meta">
+                    <div><span>Date</span><strong>Jul 12</strong></div>
+                    <div><span>Depart</span><strong>8:20 AM</strong></div>
+                    <div><span>Arrive</span><strong>10:53 AM</strong></div>
+                    <div><span>Duration</span><strong>2h 33m</strong></div>
+                  </div>
+                  <div class="ticket-hints">
+                    <div class="ticket-hint"><span>Leave by</span><strong>4:55 AM</strong></div>
+                    <div class="ticket-hint"><span>Boarding</span><strong>7:35 AM</strong></div>
+                  </div>
+                  <div class="ticket-countdown" aria-live="polite"><span>Leave countdown</span><strong>Calculating...</strong></div>
+                </div>
+                <div class="ticket-stub"><div><span class="wordmark">American</span><strong>SRQ</strong><span class="brand-sash"></span></div></div>
+              </article>
+            </summary>
+            <div class="ticket-extra info-list">
+              <div class="info-row"><span>Code</span><strong>QIBCMI</strong></div>
+              <div class="info-row"><span>Class</span><strong>Economy</strong></div>
+              <div class="info-row"><span>Seats</span><strong>13B, 13A</strong></div>
+              <div class="info-row"><span>Arrive DCA</span><strong>5:20 AM, 3 hours before departure</strong></div>
+              <div class="info-row"><span>From</span><strong>Ronald Reagan Washington National Airport (DCA)</strong></div>
+              <div class="info-row"><span>To</span><strong>Sarasota Bradenton International Airport (SRQ)</strong></div>
+              <div class="ticket-actions">
+                <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=Ronald%20Reagan%20Washington%20National%20Airport%2C%20Arlington%2C%20VA" target="_blank" rel="noopener">Airport Directions</a>
+                <a class="directions-button app-button" href="https://apps.apple.com/us/app/american-airlines/id382698565" target="_blank" rel="noopener">American App</a>
+              </div>
+            </div>
+          </details>
           <article class="hotel-key">
             <img src="dc-building-key.png?v=1" alt="Arlington building exterior">
             <div class="hotel-key-body">
@@ -1385,8 +1445,9 @@
               <div class="info-list">
                 <div class="info-row"><span>Address</span><strong>1111 Arlington Blvd, Arlington, VA 22209</strong></div>
                 <div class="info-row"><span>Flight</span><strong>United UA925 from London</strong></div>
-                <div class="info-row"><span>Dates</span><strong>Sun, Jul 12 - Mon, Jul 13</strong></div>
+                <div class="info-row"><span>Dates</span><strong>Sat, Jul 11 - Sun, Jul 12</strong></div>
                 <div class="info-row"><span>Arrival</span><strong>UA925 lands Jul 11 at 8:00 PM at IAD</strong></div>
+                <div class="info-row"><span>Next flight</span><strong>AA2697 to Sarasota departs DCA Jul 12 at 8:20 AM</strong></div>
                 <div class="info-row"><span>Code</span><strong>I3VRZG</strong></div>
               </div>
               <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=1111%20Arlington%20Blvd%2C%20Arlington%2C%20VA%2022209" target="_blank" rel="noopener">Open Directions</a>
@@ -1408,7 +1469,7 @@
       <section class="city-plan" data-city="sarasota">
         <div class="city-title-row">
           <span class="city-mark">SRQ</span>
-          <div><h2>Sarasota</h2><p>Arrive Mon, Jul 13, 2026</p></div>
+          <div><h2>Sarasota</h2><p>Arrive Sun, Jul 12, 2026</p></div>
         </div>
         <div class="plan-grid">
           <article class="hotel-key">
@@ -1417,8 +1478,8 @@
               <h3>Sarasota stay</h3>
               <div class="info-list">
                 <div class="info-row"><span>Address</span><strong>8337 Eagle Lake Dr, Sarasota, FL 34241</strong></div>
-                <div class="info-row"><span>Airport</span><strong>Depart Washington and arrive Jul 13 at SRQ - details to come</strong></div>
-                <div class="info-row"><span>Status</span><strong>Add flight number and arrival time here.</strong></div>
+                <div class="info-row"><span>Airport</span><strong>AA2697 arrives SRQ Jul 12 at 10:53 AM</strong></div>
+                <div class="info-row"><span>From</span><strong>DCA at 8:20 AM, seats 13B and 13A</strong></div>
               </div>
               <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=8337%20Eagle%20Lake%20Dr%2C%20Sarasota%2C%20FL%2034241" target="_blank" rel="noopener">Open Directions</a>
             </div>
@@ -1429,7 +1490,7 @@
               <h3>Priority Pass Lounges</h3>
               <div class="info-list">
                 <div class="info-row"><span>Check</span><strong>Open Priority Pass app for SRQ or connection airport options.</strong></div>
-                <div class="info-row"><span>Arrival</span><strong>SRQ on Jul 13, details to come.</strong></div>
+                <div class="info-row"><span>Arrival</span><strong>AA2697 lands at SRQ on Jul 12 at 10:53 AM.</strong></div>
               </div>
             </div>
           </article>
@@ -1496,8 +1557,8 @@
         vienna: { stayLabel: "Jul 2-3", statusLabel: "Stay", flightDate: "2026-07-03", leaveAt: "2026-07-03T11:15:00" },
         amsterdam: { stayLabel: "Jul 3-6", statusLabel: "Stay", flightDate: "2026-07-06", leaveAt: "2026-07-06T11:05:00" },
         london: { stayLabel: "Jul 6-11", statusLabel: "Stay", flightDate: "2026-07-11", leaveAt: "2026-07-11T12:20:00" },
-        washington: { stayLabel: "Jul 12-13", statusLabel: "Stay" },
-        sarasota: { stayLabel: "Arrive Jul 13", statusLabel: "Next" }
+        washington: { stayLabel: "Jul 11-12", statusLabel: "Stay", flightDate: "2026-07-12", leaveAt: "2026-07-12T04:55:00" },
+        sarasota: { stayLabel: "Arrive Jul 12", statusLabel: "Next" }
       };
       const DICTIONARIES = {
         vienna: [
@@ -1924,7 +1985,7 @@
       showPage("plans");
       updateFlightCountdowns();
       setInterval(updateFlightCountdowns, 60000);
-      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=31");
+      if ("serviceWorker" in navigator && location.protocol.startsWith("http")) navigator.serviceWorker.register("service-worker.js?v=33");
     })();
   </script>
 </body>
