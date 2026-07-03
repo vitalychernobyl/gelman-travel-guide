@@ -1,10 +1,13 @@
-const CACHE = "gelman-travel-guide-v48";
+const APP_VERSION = "49";
+const CACHE = `gelman-travel-guide-v${APP_VERSION}`;
 const FILES = [
   "./",
   "./index.html",
-  "./?v=48",
+  "./?v=49",
+  "./app-version.json",
+  "./app-version.json?v=49",
   "./manifest.webmanifest",
-  "./manifest.webmanifest?v=48",
+  "./manifest.webmanifest?v=49",
   "./app-logo.png",
   "./app-logo.png?v=17",
   "./apple-touch-icon.png",
@@ -169,21 +172,32 @@ self.addEventListener("install", event => {
 });
 
 self.addEventListener("message", event => {
-  if (event.data === "SKIP_WAITING") self.skipWaiting();
-  if (event.data === "CLEAR_CACHES") {
+  const type = typeof event.data === "string" ? event.data : event.data?.type;
+  if (type === "SKIP_WAITING") self.skipWaiting();
+  if (type === "CLEAR_CACHES") {
     event.waitUntil(caches.keys().then(keys => Promise.all(keys.map(key => caches.delete(key)))));
   }
 });
 
 self.addEventListener("activate", event => {
   event.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key))))
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key))))
+      .then(() => self.clients.claim())
+      .then(() => self.clients.matchAll({ type: "window", includeUncontrolled: true }))
+      .then(clients => clients.forEach(client => client.postMessage({ type: "APP_UPDATED", version: APP_VERSION })))
   );
-  self.clients.claim();
 });
 
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
+  const url = new URL(event.request.url);
+  if (url.pathname.endsWith("/app-version.json")) {
+    event.respondWith(
+      fetch(new Request(event.request, { cache: "no-store" })).catch(() => caches.match("./app-version.json"))
+    );
+    return;
+  }
   event.respondWith(
     fetch(event.request)
       .then(response => {

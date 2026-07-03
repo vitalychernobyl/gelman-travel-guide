@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=48">
+  <link rel="manifest" href="manifest.webmanifest?v=49">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -1996,6 +1996,10 @@
   <script>
     (() => {
       const root = document.documentElement;
+      const APP_VERSION = "49";
+      const VERSION_URL = "app-version.json";
+      const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
+      const UPDATE_RELOAD_AT_KEY = "gelmanLastForcedReloadAt";
       const pages = [...document.querySelectorAll("[data-page]")];
       const tabs = [...document.querySelectorAll(".tab")];
       const tripCityTabs = [...document.querySelectorAll("[data-trip-city]")];
@@ -3025,38 +3029,115 @@
       showInstallBanner();
       setTimeout(scrollToHashTarget, 320);
       setInterval(updateFlightCountdowns, 60000);
+      function cacheBustedUrl(version) {
+        const url = new URL(location.href);
+        url.searchParams.set("appv", version || APP_VERSION);
+        url.searchParams.set("fresh", Date.now().toString(36));
+        return url.toString();
+      }
+
+      function pendingReloadVersion() {
+        return sessionStorage.getItem(UPDATE_RELOAD_KEY) || APP_VERSION;
+      }
+
+      function shouldForceReload(version) {
+        if (!version || version === APP_VERSION) return false;
+        const lastVersion = sessionStorage.getItem(UPDATE_RELOAD_KEY);
+        const lastAt = Number(sessionStorage.getItem(UPDATE_RELOAD_AT_KEY) || 0);
+        return lastVersion !== version || Date.now() - lastAt > 60000;
+      }
+
+      async function clearAppCaches() {
+        if (!window.caches) return;
+        const keys = await caches.keys();
+        await Promise.all(keys.filter(key => key.startsWith("gelman-travel-guide-")).map(key => caches.delete(key)));
+      }
+
+      async function reloadForFreshVersion(version) {
+        if (!shouldForceReload(version)) return;
+        sessionStorage.setItem(UPDATE_RELOAD_KEY, version);
+        sessionStorage.setItem(UPDATE_RELOAD_AT_KEY, Date.now().toString());
+        try {
+          await clearAppCaches();
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(registrations.map(registration => registration.unregister()));
+        } catch (error) {
+          console.warn("Forced app update cleanup failed", error);
+        } finally {
+          location.replace(cacheBustedUrl(version));
+        }
+      }
+
+      async function checkPublishedVersion() {
+        try {
+          const response = await fetch(`${VERSION_URL}?t=${Date.now()}`, {
+            cache: "no-store",
+            headers: { "Cache-Control": "no-cache" }
+          });
+          if (!response.ok) return;
+          const info = await response.json();
+          if (shouldForceReload(info.version)) await reloadForFreshVersion(info.version);
+        } catch (error) {
+          console.warn("App version check failed", error);
+        }
+      }
+
       if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-        navigator.serviceWorker.register("service-worker.js?v=48", { updateViaCache: "none" }).then(registration => {
-          const checkForUpdate = () => registration.update().catch(() => {});
+        let reloadingForUpdate = false;
+        const triggerServiceWorkerUpdate = registration => {
+          registration.waiting?.postMessage({ type: "SKIP_WAITING" });
+          registration.update().catch(() => {});
+        };
+
+        navigator.serviceWorker.register("service-worker.js?v=49", { updateViaCache: "none" }).then(registration => {
+          registration.addEventListener("updatefound", () => {
+            const newWorker = registration.installing;
+            if (!newWorker) return;
+            newWorker.addEventListener("statechange", () => {
+              if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+                newWorker.postMessage({ type: "SKIP_WAITING" });
+              }
+            });
+          });
+
+          const checkForUpdate = () => {
+            triggerServiceWorkerUpdate(registration);
+            checkPublishedVersion();
+          };
+
+          checkForUpdate();
           document.addEventListener("visibilitychange", () => {
             if (document.visibilityState === "visible") checkForUpdate();
           });
-          window.addEventListener("pageshow", event => {
-            if (event.persisted) checkForUpdate();
-          });
-          setInterval(checkForUpdate, 30 * 60 * 1000);
+          window.addEventListener("pageshow", () => checkForUpdate());
+          window.addEventListener("online", checkForUpdate);
+          setInterval(checkForUpdate, 5 * 60 * 1000);
         });
-        let reloadingForUpdate = false;
+
         navigator.serviceWorker.addEventListener("controllerchange", () => {
           if (reloadingForUpdate || !navigator.serviceWorker.controller) return;
           reloadingForUpdate = true;
-          location.reload();
+          location.replace(cacheBustedUrl(pendingReloadVersion()));
         });
+
+        navigator.serviceWorker.addEventListener("message", event => {
+          if (event.data?.type === "APP_UPDATED") reloadForFreshVersion(event.data.version);
+        });
+
         window.forceAppUpdate = async () => {
           try {
-            const registration = await navigator.serviceWorker.getRegistration();
-            if (registration) {
-              registration.active?.postMessage("CLEAR_CACHES");
-              await registration.unregister();
-            }
-            if (window.caches) {
-              const keys = await caches.keys();
-              await Promise.all(keys.map(key => caches.delete(key)));
-            }
+            await clearAppCaches();
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(registrations.map(registration => registration.unregister()));
           } finally {
-            location.reload();
+            location.replace(cacheBustedUrl(APP_VERSION));
           }
         };
+      } else if (location.protocol.startsWith("http")) {
+        checkPublishedVersion();
+        document.addEventListener("visibilitychange", () => {
+          if (document.visibilityState === "visible") checkPublishedVersion();
+        });
       }
     })();
   </script>
