@@ -1,10 +1,10 @@
-const CACHE = "gelman-travel-guide-v43";
+const CACHE = "gelman-travel-guide-v44";
 const FILES = [
   "./",
   "./index.html",
-  "./?v=43",
+  "./?v=44",
   "./manifest.webmanifest",
-  "./manifest.webmanifest?v=43",
+  "./manifest.webmanifest?v=44",
   "./app-logo.png",
   "./app-logo.png?v=17",
   "./apple-touch-icon.png",

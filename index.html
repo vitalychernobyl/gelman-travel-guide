@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=43">
+  <link rel="manifest" href="manifest.webmanifest?v=44">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -705,7 +705,7 @@
     }
     .attraction-actions {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: 1fr 1fr auto auto;
       gap: 6px;
       margin-top: 2px;
     }
@@ -732,8 +732,13 @@
       background: #f2f1ee;
       color: #5f5850;
     }
-    .attraction-actions a:nth-child(2) { background: #25211c; }
-    .attraction-actions a:nth-child(3) { background: #6f7d65; }
+    .attraction-actions .ticket-link { background: #25211c; }
+    .attraction-actions .uber-button { background: #25211c; }
+    .attraction-actions .map-action {
+      min-height: 38px;
+      background: #f2f1ee;
+      color: #5f5850;
+    }
     .btn-icon {
       display: inline-grid;
       place-items: center;
@@ -1130,12 +1135,35 @@
       box-shadow: 0 8px 16px rgba(217, 120, 35, .22);
     }
     .directions-button::before { content: "⌖"; }
+    .map-action {
+      grid-auto-flow: row;
+      width: 40px;
+      min-width: 40px;
+      padding: 0;
+      border: 1px solid #d8d3ca;
+      background: #f2f1ee;
+      color: #5f5850;
+      font-size: 0;
+      box-shadow: none;
+    }
+    .map-action::before {
+      content: "⌖";
+      font-size: 1rem;
+      line-height: 1;
+    }
+    .map-action .action-label { display: none; }
+    .uber-button {
+      background: #25211c;
+      color: #fffaf2;
+      box-shadow: 0 8px 16px rgba(37, 33, 28, .16);
+    }
+    .directions-button.uber-button::before { content: "U"; }
     .app-button::before { content: "▣"; }
     .site-button::before { content: "↗"; }
     .ticket-button::before { content: "▤"; }
     .mini-actions {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
       gap: 7px;
     }
     .mini-actions .directions-button {
@@ -1153,9 +1181,27 @@
       padding-inline: 8px;
       font-size: .78rem;
     }
+    .ticket-actions .map-action {
+      min-height: 38px;
+      padding: 0;
+      font-size: 0;
+    }
     .ticket-actions .app-button {
       background: #25211c;
       box-shadow: 0 8px 16px rgba(37, 33, 28, .14);
+    }
+    .copy-address {
+      cursor: pointer;
+      border-bottom: 1px dotted rgba(174, 78, 21, .5);
+      color: var(--ink);
+    }
+    .copy-address::after {
+      content: " copy";
+      margin-left: 4px;
+      color: var(--accent-deep);
+      font-size: .64rem;
+      font-weight: 950;
+      text-transform: uppercase;
     }
     .lounge-pass {
       overflow: hidden;
@@ -2220,6 +2266,89 @@
         clearTimeout(showShareStatus.timer);
         showShareStatus.timer = setTimeout(() => { shareStatus.hidden = true; }, 2200);
       }
+      function googleMapsDirections(destination) {
+        return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}&travelmode=driving`;
+      }
+      function normalizeGoogleMapsHref(href, fallbackDestination = "") {
+        try {
+          const url = new URL(href, location.href);
+          const isGoogleMaps = url.hostname.includes("google.") && url.pathname.includes("/maps");
+          if (!isGoogleMaps) return href;
+          if (url.pathname.includes("/dir/")) {
+            url.searchParams.set("api", "1");
+            if (!url.searchParams.get("destination") && fallbackDestination) url.searchParams.set("destination", fallbackDestination);
+            if (!url.searchParams.get("travelmode")) url.searchParams.set("travelmode", "driving");
+            return url.toString();
+          }
+          const destination = url.searchParams.get("query") || fallbackDestination;
+          return destination ? googleMapsDirections(destination) : href;
+        } catch {
+          return fallbackDestination ? googleMapsDirections(fallbackDestination) : href;
+        }
+      }
+      function uberDeepLink(name, destination) {
+        const url = new URL("https://m.uber.com/ul/");
+        url.searchParams.set("action", "setPickup");
+        url.searchParams.set("pickup", "my_location");
+        url.searchParams.set("dropoff[formatted_address]", destination);
+        if (name) url.searchParams.set("dropoff[nickname]", name);
+        return url.toString();
+      }
+      function actionLink(className, href, label, ariaLabel = label) {
+        const link = document.createElement("a");
+        link.className = className;
+        link.href = href;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.setAttribute("aria-label", ariaLabel);
+        link.title = ariaLabel;
+        link.textContent = label;
+        return link;
+      }
+      function iconizeMapLink(link, fallbackDestination = "") {
+        const label = link.textContent.trim() || "Directions";
+        link.href = normalizeGoogleMapsHref(link.href, fallbackDestination);
+        link.classList.add("map-action");
+        link.setAttribute("aria-label", `${label} in Google Maps`);
+        link.title = `${label} in Google Maps`;
+        link.innerHTML = `<span class="action-label">${escapeHTML(label)}</span>`;
+      }
+      function addressRowIn(scope) {
+        return [...scope.querySelectorAll(".info-row")].find(row => row.querySelector("span")?.textContent.trim().toLowerCase() === "address");
+      }
+      function prepareCopyAddresses(scope = document) {
+        scope.querySelectorAll(".info-row").forEach(row => {
+          if (row.querySelector("span")?.textContent.trim().toLowerCase() !== "address") return;
+          const value = row.querySelector("strong");
+          const address = value?.textContent.trim();
+          if (!value || !address) return;
+          value.classList.add("copy-address");
+          value.dataset.copyAddress = address;
+          value.tabIndex = 0;
+          value.setAttribute("role", "button");
+          value.setAttribute("aria-label", `Copy address: ${address}`);
+          value.title = "Tap to copy address";
+        });
+      }
+      async function copyText(text) {
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const area = document.createElement("textarea");
+          area.value = text;
+          area.setAttribute("readonly", "");
+          area.style.position = "fixed";
+          area.style.opacity = "0";
+          document.body.append(area);
+          area.select();
+          document.execCommand("copy");
+          area.remove();
+        }
+        showShareStatus("Copied");
+      }
+      function enhanceMapLinks(scope = document) {
+        scope.querySelectorAll('a.directions-button[href*="google."][href*="/maps"]').forEach(link => iconizeMapLink(link));
+      }
       async function shareCurrentPage() {
         const url = buildShareUrl();
         const city = shareCityLabel(activeCity);
@@ -2248,13 +2377,42 @@
       }
       function showInstallSheet(force = false) {
         if (!installSheet || isStandalone()) return;
-        if (!force && localStorage.gelmanInstallSeenV42) return;
+        if (!force && localStorage.gelmanInstallSeenV44) return;
         installSheet.hidden = false;
       }
       function hideInstallSheet(markSeen = true) {
         if (!installSheet) return;
         installSheet.hidden = true;
-        if (markSeen) localStorage.gelmanInstallSeenV42 = "1";
+        if (markSeen) localStorage.gelmanInstallSeenV44 = "1";
+      }
+      function enhanceHotelLocation(card) {
+        const body = card.querySelector(".hotel-key-body");
+        const heading = body?.querySelector("h3");
+        if (!body || !heading) return;
+        prepareCopyAddresses(body);
+        const addressRow = addressRowIn(body);
+        const address = addressRow?.querySelector("strong")?.textContent.trim();
+        if (!address) return;
+        const name = heading.textContent.trim();
+        const destination = `${name}, ${address}`;
+        let actions = body.querySelector(".mini-actions");
+        if (!actions) {
+          actions = document.createElement("div");
+          actions.className = "mini-actions";
+          body.querySelectorAll(":scope > a.directions-button").forEach(link => actions.append(link));
+          body.append(actions);
+        }
+        const mapLinks = [...actions.querySelectorAll('a[href*="google."][href*="/maps"]')];
+        if (mapLinks.length) {
+          mapLinks.forEach(link => iconizeMapLink(link, destination));
+        } else {
+          actions.prepend(actionLink("directions-button map-action", googleMapsDirections(destination), "Map", `Google Maps directions to ${name}`));
+        }
+        if (!actions.querySelector(".uber-button")) {
+          const uber = actionLink("directions-button uber-button", uberDeepLink(name, destination), "Uber", `Open Uber to ${name}`);
+          const site = actions.querySelector(".site-button");
+          actions.insertBefore(uber, site || null);
+        }
       }
       function enhanceHotelCards() {
         document.querySelectorAll("article.hotel-key").forEach(article => {
@@ -2275,6 +2433,7 @@
           preview.append(title, meta);
           summary.append(image, preview);
           details.append(summary, body);
+          enhanceHotelLocation(details);
           article.replaceWith(details);
         });
       }
@@ -2426,7 +2585,9 @@
                 const link = attraction.link;
                 const ticketLink = attraction.tickets || link;
                 const ticketLabel = attraction.ticketLabel || attractionActionLabel(category, price);
-                const mapLink = attraction.map || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${title} ${location}`)}`;
+                const destination = attraction.address || `${title}, ${location}, ${data.city}`;
+                const mapLink = attraction.map ? normalizeGoogleMapsHref(attraction.map, destination) : googleMapsDirections(destination);
+                const uberLink = uberDeepLink(title, destination);
                 const fallbackImage = attractionThumb(title, category);
                 const image = ATTRACTION_IMAGES[title] || attraction.image || fallbackImage;
                 return `<details class="attraction-card"${index === 0 ? " open" : ""}>
@@ -2449,8 +2610,9 @@
                     <div><strong>More:</strong> ${escapeHTML(details)}</div>
                     <div class="attraction-actions">
                       <button class="detail-action" type="button" data-detail-toggle><span class="btn-icon" aria-hidden="true">⌃</span><span>Details</span></button>
-                      <a href="${escapeHTML(ticketLink)}" target="_blank" rel="noopener"><span class="btn-icon" aria-hidden="true">▤</span><span>${escapeHTML(ticketLabel)}</span></a>
-                      <a href="${escapeHTML(mapLink)}" target="_blank" rel="noopener"><span class="btn-icon" aria-hidden="true">⌖</span><span>Directions</span></a>
+                      <a class="ticket-link" href="${escapeHTML(ticketLink)}" target="_blank" rel="noopener"><span class="btn-icon" aria-hidden="true">▤</span><span>${escapeHTML(ticketLabel)}</span></a>
+                      <a class="map-action" href="${escapeHTML(mapLink)}" target="_blank" rel="noopener" aria-label="Google Maps directions to ${escapeHTML(title)}" title="Google Maps directions to ${escapeHTML(title)}"><span class="action-label">Directions</span></a>
+                      <a class="uber-button" href="${escapeHTML(uberLink)}" target="_blank" rel="noopener" aria-label="Open Uber to ${escapeHTML(title)}" title="Open Uber to ${escapeHTML(title)}"><span class="btn-icon" aria-hidden="true">U</span><span>Uber</span></a>
                     </div>
                   </div>
                 </details>`;
@@ -2636,6 +2798,12 @@
       });
       shareButton?.addEventListener("click", shareCurrentPage);
       document.addEventListener("click", event => {
+        const address = event.target.closest("[data-copy-address]");
+        if (address) {
+          event.preventDefault();
+          copyText(address.dataset.copyAddress);
+          return;
+        }
         const detailButton = event.target.closest("[data-detail-toggle]");
         if (!detailButton) return;
         const card = detailButton.closest("details");
@@ -2643,10 +2811,19 @@
         card.open = true;
         card.querySelector("summary")?.scrollIntoView({ block: "nearest", behavior: "smooth" });
       });
+      document.addEventListener("keydown", event => {
+        if (!["Enter", " "].includes(event.key)) return;
+        const address = event.target.closest("[data-copy-address]");
+        if (!address) return;
+        event.preventDefault();
+        copyText(address.dataset.copyAddress);
+      });
       tabs.forEach(tab => tab.addEventListener("click", () => showPage(tab.dataset.target)));
       tripCityTabs.forEach(tab => tab.addEventListener("click", () => showTripCity(tab.dataset.tripCity, true, true)));
       cityTabs.forEach(tab => tab.addEventListener("click", () => showCity(tab.dataset.cityTarget)));
       enhanceHotelCards();
+      enhanceMapLinks();
+      prepareCopyAddresses();
       applyPrefs();
       const sharedCity = startParams.get("city");
       showTripCity(DICTIONARIES[sharedCity] ? sharedCity : (rememberedCityChoice() || cityForToday()));
@@ -2655,7 +2832,7 @@
       setTimeout(() => showInstallSheet(false), 900);
       setInterval(updateFlightCountdowns, 60000);
       if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-        navigator.serviceWorker.register("service-worker.js?v=43", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=44", { updateViaCache: "none" }).then(registration => {
           const checkForUpdate = () => registration.update().catch(() => {});
           document.addEventListener("visibilitychange", () => {
             if (document.visibilityState === "visible") checkForUpdate();
