@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=27">
+  <link rel="manifest" href="manifest.webmanifest?v=28">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
@@ -45,13 +45,14 @@
     .app {
       width: min(780px, 100%);
       margin: 0 auto;
-      padding: calc(env(safe-area-inset-top) + 10px) 10px calc(env(safe-area-inset-bottom) + 92px);
+      padding: env(safe-area-inset-top) 10px calc(env(safe-area-inset-bottom) + 92px);
     }
     .app-top {
       display: grid;
       gap: 8px;
-      margin: 0 -2px 9px;
-      padding: 0 2px;
+      width: 100%;
+      margin: 0;
+      padding: 0;
     }
     .app-title {
       margin: 0;
@@ -67,17 +68,34 @@
       display: flex;
       gap: 7px;
       overflow-x: auto;
-      padding: 2px 1px 4px;
+      width: min(100vw, 780px);
+      margin-inline: -18px;
+      padding: 1px max(44vw, 132px) 4px;
       -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: 50%;
       scrollbar-width: none;
     }
     .trip-city-tabs::-webkit-scrollbar { display: none; }
     .trip-city-tab {
       flex: 0 0 auto;
       min-height: 34px;
-      padding: 7px 12px;
+      padding: 7px 13px;
+      scroll-snap-align: center;
       font-size: .82rem;
       font-weight: 900;
+      border-color: rgba(255, 255, 255, .7);
+      background: rgba(255, 255, 255, .72);
+      color: #25211c;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .1);
+      backdrop-filter: blur(12px);
+      transition: transform .18s ease, background .18s ease, color .18s ease;
+    }
+    .trip-city-tab[aria-pressed="true"] {
+      transform: scale(1.06);
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
     }
     .logo {
       width: 72px;
@@ -88,9 +106,9 @@
     }
     .hero {
       position: relative;
-      min-height: 194px;
-      margin: 0 -10px 8px;
-      padding: 16px 18px 18px;
+      min-height: 228px;
+      margin: 0 -10px 9px;
+      padding: 18px 18px 12px;
       display: grid;
       place-items: center;
       overflow: hidden;
@@ -109,7 +127,8 @@
       z-index: 1;
       display: grid;
       justify-items: center;
-      gap: 7px;
+      gap: 8px;
+      width: 100%;
     }
     .hero-logo {
       position: relative;
@@ -120,6 +139,35 @@
       box-shadow: 0 14px 34px rgba(0, 0, 0, .28);
       background: #ffffff;
       object-fit: cover;
+    }
+    .hero-status {
+      position: absolute;
+      top: max(10px, env(safe-area-inset-top));
+      right: 10px;
+      z-index: 2;
+      max-width: 132px;
+      padding: 8px 10px;
+      border: 1px solid rgba(255, 255, 255, .58);
+      border-radius: 16px;
+      background: rgba(37, 33, 28, .58);
+      color: #fffefa;
+      text-align: right;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .2);
+      backdrop-filter: blur(14px);
+    }
+    .hero-status span {
+      display: block;
+      color: #f7c99e;
+      font-size: .58rem;
+      font-weight: 950;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .hero-status strong {
+      display: block;
+      margin-top: 3px;
+      font-size: .82rem;
+      line-height: 1.05;
     }
     .hero-copy {
       position: relative;
@@ -1052,20 +1100,21 @@
 <body>
   <div class="app">
     <section class="hero" aria-label="City hero">
+      <div class="hero-status" id="heroStatus" aria-live="polite"><span>Stay</span><strong>Jul 2-3</strong></div>
       <div class="hero-brand">
         <img class="hero-logo" src="app-logo-circle.png?v=17" alt="Gelman Travel Guide logo">
         <h1 class="app-title">Gelman Travel</h1>
+        <header class="app-top">
+          <div class="trip-city-tabs" aria-label="Choose city">
+            <button class="trip-city-tab" type="button" data-trip-city="vienna" aria-pressed="true">Vienna</button>
+            <button class="trip-city-tab" type="button" data-trip-city="amsterdam" aria-pressed="false">Amsterdam</button>
+            <button class="trip-city-tab" type="button" data-trip-city="london" aria-pressed="false">London</button>
+            <button class="trip-city-tab" type="button" data-trip-city="washington" aria-pressed="false">Washington</button>
+            <button class="trip-city-tab" type="button" data-trip-city="sarasota" aria-pressed="false">Sarasota</button>
+          </div>
+        </header>
       </div>
     </section>
-    <header class="app-top">
-      <div class="trip-city-tabs" aria-label="Choose city">
-        <button class="trip-city-tab" type="button" data-trip-city="vienna" aria-pressed="true">Vienna</button>
-        <button class="trip-city-tab" type="button" data-trip-city="amsterdam" aria-pressed="false">Amsterdam</button>
-        <button class="trip-city-tab" type="button" data-trip-city="london" aria-pressed="false">London</button>
-        <button class="trip-city-tab" type="button" data-trip-city="washington" aria-pressed="false">Washington</button>
-        <button class="trip-city-tab" type="button" data-trip-city="sarasota" aria-pressed="false">Sarasota</button>
-      </div>
-    </header>
     <main id="dictionary" class="page" data-page="dictionary">
       <nav class="section-nav" aria-label="Dictionary sections" id="dictionaryNav"></nav>
       <div id="dictionaryContent" class="dictionary-content" aria-live="polite"></div>
@@ -1306,7 +1355,7 @@
       <section class="city-plan" data-city="washington">
         <div class="city-title-row">
           <span class="city-mark">DC</span>
-          <div><h2>Washington, DC</h2><p>Sat, Jul 11, 2026 onward</p></div>
+          <div><h2>Washington, DC</h2><p>Sun, Jul 12 - Mon, Jul 13, 2026</p></div>
         </div>
         <div class="plan-grid">
           <article class="hotel-key">
@@ -1316,7 +1365,8 @@
               <div class="info-list">
                 <div class="info-row"><span>Address</span><strong>1111 Arlington Blvd, Arlington, VA 22209</strong></div>
                 <div class="info-row"><span>Flight</span><strong>United UA925 from London</strong></div>
-                <div class="info-row"><span>Time</span><strong>8:00 PM at IAD</strong></div>
+                <div class="info-row"><span>Dates</span><strong>Sun, Jul 12 - Mon, Jul 13</strong></div>
+                <div class="info-row"><span>Arrival</span><strong>UA925 lands Jul 11 at 8:00 PM at IAD</strong></div>
                 <div class="info-row"><span>Code</span><strong>I3VRZG</strong></div>
               </div>
               <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=1111%20Arlington%20Blvd%2C%20Arlington%2C%20VA%2022209" target="_blank" rel="noopener">Open Directions</a>
@@ -1338,7 +1388,7 @@
       <section class="city-plan" data-city="sarasota">
         <div class="city-title-row">
           <span class="city-mark">SRQ</span>
-          <div><h2>Sarasota</h2><p>Florida time</p></div>
+          <div><h2>Sarasota</h2><p>Arrive Mon, Jul 13, 2026</p></div>
         </div>
         <div class="plan-grid">
           <article class="hotel-key">
@@ -1347,7 +1397,7 @@
               <h3>Sarasota stay</h3>
               <div class="info-list">
                 <div class="info-row"><span>Address</span><strong>8337 Eagle Lake Dr, Sarasota, FL 34241</strong></div>
-                <div class="info-row"><span>Airport</span><strong>Arriving Jul 13 at SRQ - details to come</strong></div>
+                <div class="info-row"><span>Airport</span><strong>Depart Washington and arrive Jul 13 at SRQ - details to come</strong></div>
                 <div class="info-row"><span>Status</span><strong>Add flight number and arrival time here.</strong></div>
               </div>
               <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=8337%20Eagle%20Lake%20Dr%2C%20Sarasota%2C%20FL%2034241" target="_blank" rel="noopener">Open Directions</a>
@@ -1410,6 +1460,8 @@
       const dictionaryNav = document.querySelector("#dictionaryNav");
       const dictionaryContent = document.querySelector("#dictionaryContent");
       const attractionContent = document.querySelector("#attractionContent");
+      const heroStatus = document.querySelector("#heroStatus");
+      const tripCityScroller = document.querySelector(".trip-city-tabs");
       let size = Number(localStorage.gelmanFont || 15);
       let density = localStorage.gelmanDensity || "compact";
       let activeCity = localStorage.gelmanTripCity || "vienna";
@@ -1419,6 +1471,13 @@
         london: "london-hero.png?v=1",
         washington: "washington-hero.png?v=1",
         sarasota: "sarasota-hero.png?v=1"
+      };
+      const CITY_META = {
+        vienna: { stayLabel: "Jul 2-3", statusLabel: "Stay", flightDate: "2026-07-03", leaveAt: "2026-07-03T11:15:00" },
+        amsterdam: { stayLabel: "Jul 3-6", statusLabel: "Stay", flightDate: "2026-07-06", leaveAt: "2026-07-06T11:05:00" },
+        london: { stayLabel: "Jul 6-11", statusLabel: "Stay", flightDate: "2026-07-11", leaveAt: "2026-07-11T12:20:00" },
+        washington: { stayLabel: "Jul 12-13", statusLabel: "Stay" },
+        sarasota: { stayLabel: "Arrive Jul 13", statusLabel: "Next" }
       };
       const DICTIONARIES = {
         vienna: [
@@ -1705,15 +1764,46 @@
           </section>
         `;
       }
-      function showTripCity(city) {
+      function currentNow() {
+        const testToday = new URLSearchParams(location.search).get("today");
+        return testToday ? new Date(`${testToday}T08:00:00`) : new Date();
+      }
+      function updateHeroStatus() {
+        const meta = CITY_META[activeCity] || CITY_META.vienna;
+        const now = currentNow();
+        let label = meta.statusLabel || "Stay";
+        let value = meta.stayLabel;
+        if (meta.leaveAt) {
+          const leaveAt = new Date(meta.leaveAt);
+          const delta = leaveAt.getTime() - now.getTime();
+          if (delta <= 86400000 && delta > -3600000) {
+            label = "Leave";
+            value = delta > 0 ? `In ${formatDuration(delta)}` : "Now";
+          }
+        }
+        heroStatus.innerHTML = `<span>${escapeHTML(label)}</span><strong>${escapeHTML(value)}</strong>`;
+      }
+      let cityScrollTimer = 0;
+      let cityCentering = false;
+      function centerTripCity(city) {
+        const tab = tripCityTabs.find(item => item.dataset.tripCity === city);
+        if (!tab) return;
+        const left = tab.offsetLeft - (tripCityScroller.clientWidth / 2) + (tab.offsetWidth / 2);
+        cityCentering = true;
+        tripCityScroller.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
+        setTimeout(() => { cityCentering = false; }, 520);
+      }
+      function showTripCity(city, center = true) {
         if (!DICTIONARIES[city]) city = "vienna";
         activeCity = city;
         localStorage.gelmanTripCity = city;
         root.style.setProperty("--hero-image", `url("${HEROES[city] || HEROES.vienna}")`);
         tripCityTabs.forEach(tab => tab.setAttribute("aria-pressed", tab.dataset.tripCity === city));
+        updateHeroStatus();
         renderDictionary(city);
         renderAttractions(city);
         showCity(city);
+        if (center) requestAnimationFrame(() => centerTripCity(city));
       }
       function showCity(city) {
         if (!cityPlans.some(plan => plan.dataset.city === city)) city = "vienna";
@@ -1739,9 +1829,7 @@
         return `${mins}m`;
       }
       function updateFlightCountdowns() {
-        const params = new URLSearchParams(location.search);
-        const testToday = params.get("today");
-        const now = testToday ? new Date(`${testToday}T08:00:00`) : new Date();
+        const now = currentNow();
         const today = todayKey(now);
         document.querySelectorAll(".ticket-card[data-flight-date]").forEach(card => {
           const target = card.querySelector(".ticket-countdown strong");
@@ -1753,7 +1841,21 @@
           const delta = leaveAt.getTime() - now.getTime();
           target.textContent = delta > 0 ? `Leave in ${formatDuration(delta)}` : `Leave time passed ${formatDuration(delta)} ago`;
         });
+        updateHeroStatus();
       }
+      tripCityScroller.addEventListener("scroll", () => {
+        if (cityCentering) return;
+        clearTimeout(cityScrollTimer);
+        cityScrollTimer = setTimeout(() => {
+          const center = tripCityScroller.getBoundingClientRect().left + tripCityScroller.clientWidth / 2;
+          const nearest = tripCityTabs.reduce((best, tab) => {
+            const rect = tab.getBoundingClientRect();
+            const distance = Math.abs(rect.left + rect.width / 2 - center);
+            return distance < best.distance ? { tab, distance } : best;
+          }, { tab: tripCityTabs[0], distance: Infinity }).tab;
+          if (nearest && nearest.dataset.tripCity !== activeCity) showTripCity(nearest.dataset.tripCity, true);
+        }, 120);
+      }, { passive: true });
 
       document.querySelector("#smaller").onclick = () => { size = Math.max(12, size - 1); localStorage.gelmanFont = size; applyPrefs(); };
       document.querySelector("#larger").onclick = () => { size = Math.min(22, size + 1); localStorage.gelmanFont = size; applyPrefs(); };
