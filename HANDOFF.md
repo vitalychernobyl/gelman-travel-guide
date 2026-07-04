@@ -9,8 +9,8 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v56 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v56 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+main:            v57 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v57 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
 
@@ -42,6 +42,15 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v57 changed (context for reviewers)
+
+- Ticket cards are shorter in collapsed view.
+- Collapsed tickets now show only essential date/time or date/departure metadata.
+- Advanced ticket details moved into expandable popouts: arrivals, durations, aircraft,
+  class, booking codes, seats, operators, airport arrival guidance, and plan confirmation
+  details.
+- Bumped service worker, manifest, and app-version to v57.
 
 ## What v56 changed (context for reviewers)
 

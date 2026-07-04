@@ -7,8 +7,8 @@ Last verified: 2026-07-04
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-Latest app commit at deploy: 67e8e94 Improve weather chip and default font
-Cache version: service-worker.js?v=56
+Latest app commit at deploy: 9f14f5b Compact ticket cards
+Cache version: service-worker.js?v=57
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
-Deployment URL: https://ba57d680.gelman-travel-guide.pages.dev
+Deployment URL: https://f5a45c3c.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
@@ -28,18 +28,18 @@ Wrangler: 4.107.0
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=56
+service-worker.js?v=57
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=56
+service-worker.js?v=57
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"56","publishedAt":"2026-07-04T03:30:00-04:00"}
+{"version":"57","publishedAt":"2026-07-04T05:47:00-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=56' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=57' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=56",
+  "start_url": "./?v=57",
   "display": "standalone",
 
 curl -sI 'https://antonreport.com/gelmantravel/vendor/leaflet.css?v=1' | sed -n '1,4p'
@@ -54,6 +54,14 @@ curl -sI 'https://antonreport.com/gelmantravel/london-stay-house.webp' | sed -n 
 HTTP/2 200
 content-type: image/webp
 ```
+
+## v57 Change
+
+- Ticket cards are shorter in collapsed view.
+- Collapsed tickets now show only the essential date/time or date/departure metadata.
+- Advanced ticket details moved into each expandable popout: arrivals, durations, aircraft, class, booking codes, seats, operators, airport arrival guidance, and plan confirmation details.
+- The tap-for-details indicator remains visible but uses less vertical space.
+- Service worker, manifest, and app-version are bumped to v57 so installed Home Screen apps refresh.
 
 ## v56 Change
 
@@ -76,6 +84,19 @@ content-type: image/webp
 ## Browser QA
 
 ```text
+v57 ticket QA:
+- Local mobile viewport: 396x695, in-app Browser.
+- Amsterdam plans collapsed ticket heights: 184px before deploy.
+- Public antonreport.com mobile viewport: 396x695.
+- Live Amsterdam plans collapsed ticket heights: 177px, 177px.
+- Live ticket summaries show only two metadata fields:
+  - Van Gogh: Date Jul 4; Time 10:30 AM.
+  - British Airways: Date Jul 6; Depart 14:20.
+- Expanded British Airways ticket shows Arrival, Duration, Aircraft, Operated, Class,
+  Arrive AMS, From, To, plus Airport Directions, BA App, and Uber actions.
+- No horizontal overflow.
+- No console warnings or errors.
+
 Local mobile viewport: 396x695, in-app Browser plus clean Chrome context
 
 Weather chip:
@@ -112,12 +133,11 @@ You are working with repo vitalychernobyl/gelman-travel-guide.
 
 The app is a static no-build PWA deployed from the repo root to Cloudflare Pages project gelman-travel-guide.
 
-Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v56 is live:
-- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=56
-- https://antonreport.com/gelmantravel/ serves service-worker.js?v=56
-- https://antonreport.com/gelmantravel/app-version.json returns {"version":"56",...}
-- Weather chip uses a condition icon with today's temp on one larger row.
-- Default font is 16px and user font choices persist in localStorage.
+Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v57 is live:
+- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=57
+- https://antonreport.com/gelmantravel/ serves service-worker.js?v=57
+- https://antonreport.com/gelmantravel/app-version.json returns {"version":"57",...}
+- Ticket cards are shorter and only show essential metadata while advanced ticket details live in the expandable popout.
 
 Cloudflare Pages project gelman-travel-guide has Git Provider: No, so auto-deploy after GitHub merges is not configured. If asked to deploy future changes, use:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
