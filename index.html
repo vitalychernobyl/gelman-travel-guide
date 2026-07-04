@@ -765,28 +765,28 @@
       margin-top: 2px;
     }
     .attraction-actions a,
-    .attraction-actions button {
+    .attraction-actions button,
+    .directions-button {
       display: grid;
       place-items: center;
       min-height: 38px;
-      padding: 6px 7px;
+      padding: 6px 11px;
       border-radius: 999px;
-      border: 0;
-      background: var(--accent);
-      color: var(--accent-ink);
+      border: 1px solid #d8d3ca;
+      background: #f2f1ee;
+      color: #4e4942;
       font: inherit;
-      font-size: .74rem;
+      font-size: .76rem;
       font-weight: 900;
       text-align: center;
       text-decoration: none;
       flex: 0 1 auto;
       min-width: 0;
+      box-shadow: none;
     }
     .attraction-actions .ticket-link {
-      border: 1px solid #c9e4cf;
-      background: #eef9ef;
-      color: #24502c;
-      padding-inline: 10px;
+      background: #f2f1ee;
+      color: #4e4942;
     }
     .attraction-actions .uber-button {
       background: #090909;
@@ -800,14 +800,13 @@
       width: auto;
       min-width: 0;
       min-height: 38px;
-      padding: 6px 7px;
+      padding: 6px 11px;
       border: 0;
       background: #1a73e8;
       color: #ffffff;
-      font-size: .74rem;
+      font-size: .76rem;
       box-shadow: 0 8px 16px rgba(26, 115, 232, .2);
     }
-    .attraction-actions .map-icon { display: none; }
     .attraction-actions .action-label { display: inline; }
     .ticket {
       position: relative;
@@ -1208,48 +1207,23 @@
       font-size: 1rem;
       line-height: 1.08;
     }
-    .directions-button {
-      display: grid;
-      grid-auto-flow: column;
-      gap: 6px;
-      place-items: center;
-      min-height: 44px;
-      border-radius: 999px;
-      background: var(--accent);
-      color: var(--accent-ink);
-      font-weight: 900;
-      text-decoration: none;
-      box-shadow: 0 8px 16px rgba(217, 120, 35, .22);
-    }
-    .directions-button::before { content: "⌖"; }
     .map-action {
-      grid-auto-flow: row;
-      width: 40px;
-      min-width: 40px;
-      padding: 0;
-      border: 1px solid #d8d3ca;
-      background: #f2f1ee;
-      color: #5f5850;
-      font-size: 0;
-      box-shadow: none;
+      width: auto;
+      min-width: 0;
+      border: 0;
+      background: #1a73e8;
+      color: #ffffff;
+      font-size: .76rem;
+      box-shadow: 0 8px 16px rgba(26, 115, 232, .2);
     }
     .map-action::before { content: none; }
-    .map-action .map-icon {
-      width: 18px;
-      height: 18px;
-      stroke-width: 2.7;
-    }
-    .map-action .action-label { display: none; }
+    .map-action .action-label { display: inline; }
     .attraction-actions .map-action .action-label { display: inline; }
     .uber-button {
-      background: #25211c;
+      background: #090909;
       color: #fffaf2;
       box-shadow: 0 8px 16px rgba(37, 33, 28, .16);
     }
-    .directions-button.uber-button::before { content: "U"; }
-    .app-button::before { content: "▣"; }
-    .site-button::before { content: "↗"; }
-    .ticket-button::before { content: "▤"; }
     .mini-actions {
       display: flex;
       align-items: center;
@@ -1257,12 +1231,10 @@
     }
     .mini-actions .directions-button {
       min-height: 38px;
-      padding: 0 13px;
       font-size: .78rem;
     }
     .mini-actions .map-action {
-      flex: 0 0 40px;
-      padding: 0;
+      flex: 0 0 auto;
     }
     .mini-actions .uber-button {
       order: 20;
@@ -1279,20 +1251,17 @@
       flex: 0 1 auto;
       min-width: 0;
       min-height: 38px;
-      padding-inline: 8px;
       font-size: .78rem;
     }
     .ticket-actions .map-action {
-      flex: 0 0 40px;
-      width: 40px;
-      min-width: 40px;
+      flex: 0 0 auto;
+      width: auto;
+      min-width: 0;
       min-height: 38px;
-      padding: 0;
-      font-size: 0;
     }
     .ticket-actions .app-button {
-      background: #25211c;
-      box-shadow: 0 8px 16px rgba(37, 33, 28, .14);
+      background: #f2f1ee;
+      color: #4e4942;
     }
     .ticket-actions .uber-button {
       order: 20;
@@ -2486,9 +2455,6 @@
       function shareIconHTML() {
         return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 16V3"/><path d="m7 8 5-5 5 5"/></svg>';
       }
-      function mapIconHTML() {
-        return '<svg class="map-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m12 3 7 18-7-4-7 4 7-18Z"/><path d="M12 3v14"/></svg>';
-      }
       function slugify(value) {
         return String(value).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/&/g, " and ").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
       }
@@ -2734,7 +2700,7 @@
         link.classList.add("map-action");
         link.setAttribute("aria-label", `${label} in the Google Maps app`);
         link.title = `${label} in the Google Maps app`;
-        link.innerHTML = `${mapIconHTML()}<span class="action-label">${escapeHTML(label)}</span>`;
+        link.innerHTML = `<span class="action-label">${escapeHTML(label)}</span>`;
       }
       function addressRowIn(scope) {
         return [...scope.querySelectorAll(".info-row")].find(row => row.querySelector("span")?.textContent.trim().toLowerCase() === "address");
