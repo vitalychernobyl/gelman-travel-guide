@@ -9,8 +9,8 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v59 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v59 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+main:            v60 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v60 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
 
@@ -42,6 +42,14 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v60 changed (context for reviewers)
+
+- Added expiry timestamps to all plan tickets.
+- Expired tickets fade out, show `Past trip`, and move below hotel/lounge/active plan
+  cards within the same city.
+- Expiry refreshes on load and on the existing minute-based countdown interval.
+- Bumped service worker, manifest, and app-version to v60.
 
 ## What v59 changed (context for reviewers)
 

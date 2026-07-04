@@ -7,8 +7,8 @@ Last verified: 2026-07-04
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-Latest app commit at deploy: a535be7 Add Rijksmuseum guided tour ticket
-Cache version: service-worker.js?v=59
+Latest app commit at deploy: 52e9e5f Fade and move expired tickets
+Cache version: service-worker.js?v=60
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
-Deployment URL: https://be6001c5.gelman-travel-guide.pages.dev
+Deployment URL: https://723ac89b.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
@@ -28,18 +28,18 @@ Wrangler: 4.107.0
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=59
+service-worker.js?v=60
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=59
+service-worker.js?v=60
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"59","publishedAt":"2026-07-04T07:17:19-04:00"}
+{"version":"60","publishedAt":"2026-07-04T07:42:00-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=59' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=60' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=59",
+  "start_url": "./?v=60",
   "display": "standalone",
 
 curl -sI 'https://wttr.in/Amsterdam?u' | sed -n '1,8p'
@@ -59,6 +59,15 @@ curl -sI 'https://antonreport.com/gelmantravel/london-stay-house.webp' | sed -n 
 HTTP/2 200
 content-type: image/webp
 ```
+
+## v60 Change
+
+- Added expiry timestamps to all plan ticket cards.
+- Expired tickets are visually faded, marked with `Past trip`, and moved below the
+  other plan cards in that city.
+- Expiry checks run on load and with the existing once-per-minute ticket countdown loop.
+- Service worker, manifest, and app-version are bumped to v60 so installed Home Screen
+  apps refresh.
 
 ## v59 Change
 
@@ -111,6 +120,18 @@ content-type: image/webp
 ## Browser QA
 
 ```text
+v60 expired-ticket QA:
+- Local mobile viewport: 396x695, in-app Browser.
+- Amsterdam current-date state: Van Gogh Museum is expired, opacity is 0.46, and it
+  renders after Rijksmuseum Guided Tour, British Airways, hotel, and lounge cards.
+- Vienna current-date state: Austrian Airlines OS315 is expired, faded, marked as
+  `Past trip`, and renders after NH Danube City and SKY Lounge.
+- Public antonreport.com mobile viewport: 396x695.
+- Live Vienna plans order: NH Danube City, Priority Pass: SKY Lounge,
+  Austrian Airlines [expired].
+- No horizontal overflow.
+- No console warnings or errors.
+
 v59 Rijksmuseum ticket QA:
 - Local mobile viewport: 396x695, in-app Browser.
 - Amsterdam plans page shows 3 ticket cards: Van Gogh Museum, Rijksmuseum Guided Tour,
@@ -178,7 +199,7 @@ URL: https://antonreport.com/gelmantravel/
 - The app is a static HTML/CSS/JS PWA with no build step.
 - The repo root is the Pages deploy directory.
 - The Cloudflare Pages project is not Git-connected, so future merges will not auto-deploy unless Git integration is configured.
-- The Worker that fronts `https://antonreport.com/gelmantravel*` was not changed for v59.
+- The Worker that fronts `https://antonreport.com/gelmantravel*` was not changed for v60.
 
 ## Handoff Prompt
 
@@ -187,12 +208,11 @@ You are working with repo vitalychernobyl/gelman-travel-guide.
 
 The app is a static no-build PWA deployed from the repo root to Cloudflare Pages project gelman-travel-guide.
 
-Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v59 is live:
-- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=59
-- https://antonreport.com/gelmantravel/ serves service-worker.js?v=59
-- https://antonreport.com/gelmantravel/app-version.json returns {"version":"59",...}
-- Amsterdam plans include the Rijksmuseum Guided Tour ticket with Cobra Café directions
-  and Uber deep link.
+Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v60 is live:
+- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=60
+- https://antonreport.com/gelmantravel/ serves service-worker.js?v=60
+- https://antonreport.com/gelmantravel/app-version.json returns {"version":"60",...}
+- Expired plan tickets fade out, show `Past trip`, and move below the active plan cards.
 
 Cloudflare Pages project gelman-travel-guide has Git Provider: No, so auto-deploy after GitHub merges is not configured. If asked to deploy future changes, use:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
