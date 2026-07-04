@@ -9,9 +9,9 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v55 pending merge — attractions images complete, sort control, Leaflet map view
-live:            v54 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
-pending action:  after merge, DEPLOY v55 (same wrangler command; verify v=55 on both origins)
+main:            v55 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v55 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+pending action:  none
 ```
 
 ## Standing facts
@@ -26,23 +26,30 @@ pending action:  after merge, DEPLOY v55 (same wrangler command; verify v=55 on 
   the `?v=` query strings (manifest link, SW registration, manifest start_url, SW FILES
   list), and `app-version.json`. The service worker self-updates clients on relaunch.
 
-## Deploy task for the local agent (current release)
+## Deploy task for the local agent (future release)
 
 ```text
 You are working with repo vitalychernobyl/gelman-travel-guide on the owner's machine
-(Cloudflare-authenticated). Code is already merged; do not change any code.
+(Cloudflare-authenticated). Use this only after a future code change has been merged.
 
 1. git checkout main && git pull origin main
-   Confirm: git log --oneline -1 shows 75b9fa4 or later, and
-   grep -o 'service-worker.js?v=[0-9]*' index.html prints the version named in "Current state".
+   Confirm: grep -o 'service-worker.js?v=[0-9]*' index.html prints the new release version.
 2. npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
 3. Verify (may take a minute):
-   curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*'   # v=54
-   curl -s https://antonreport.com/gelmantravel/  | grep -o 'service-worker.js?v=[0-9]*'   # v=54
+   curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*'
+   curl -s https://antonreport.com/gelmantravel/  | grep -o 'service-worker.js?v=[0-9]*'
 4. Update DEPLOYMENT_PROOF.md (repository state, deployment URL, live verification
    output) and the "Current state" block in HANDOFF.md, then commit and push both
-   to main with message "Update deployment proof for v54".
+   to main with the release version in the commit message.
 ```
+
+## What v55 changed (context for reviewers)
+
+- Removed icons from all card action buttons in plans and attractions.
+- Unified card actions: directions/map links are blue, Uber links are black, and
+  site/menu/ticket/app/info links are grey.
+- Rebased onto the attraction image, sort control, and Leaflet map-view work from PR #4,
+  then redeployed v55 manually.
 
 ## What v54 changed (context for reviewers)
 
