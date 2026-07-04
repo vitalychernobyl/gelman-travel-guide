@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=57">
+  <link rel="manifest" href="manifest.webmanifest?v=58">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -185,8 +185,10 @@
       background: rgba(37, 33, 28, .58);
       color: #fffefa;
       text-align: right;
+      text-decoration: none;
       box-shadow: 0 10px 24px rgba(0, 0, 0, .2);
       backdrop-filter: blur(14px);
+      cursor: pointer;
     }
     .hero-status span {
       display: block;
@@ -216,6 +218,14 @@
       line-height: 1;
       text-overflow: ellipsis;
     }
+    .weather-line.weather-next {
+      margin-top: 3px;
+      color: rgba(255, 254, 250, .84);
+    }
+    .weather-line.weather-next strong {
+      font-size: .68rem;
+      font-weight: 900;
+    }
     .weather-icon {
       flex: 0 0 auto;
       display: inline-grid;
@@ -228,23 +238,17 @@
       line-height: 1;
       text-align: center;
     }
+    .weather-line.weather-next .weather-icon {
+      width: 17px;
+      height: 17px;
+      font-size: .78rem;
+    }
     .weather-icon.weather-rain,
     .weather-icon.weather-storm {
       background: #1677d2;
       color: #ffffff;
       font-size: 1rem;
       box-shadow: 0 0 0 2px rgba(255, 255, 255, .72), 0 0 0 5px rgba(22, 119, 210, .26);
-    }
-    .hero-status small {
-      display: block;
-      margin-top: 4px;
-      overflow: hidden;
-      color: rgba(255, 254, 250, .82);
-      font-size: .68rem;
-      font-weight: 850;
-      line-height: 1.15;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
     .share-button {
       position: absolute;
@@ -1657,7 +1661,7 @@
       </button>
     </div>
     <section class="hero" aria-label="City hero">
-      <div class="hero-status" id="heroStatus" aria-live="polite"><span>AMS · Stay Jul 3-6</span><div class="weather-line"><span class="weather-icon weather-cloudy" aria-hidden="true">☁</span><strong>66/57° Cloudy</strong></div><small>Sat: 72/62°</small></div>
+      <a class="hero-status" id="heroStatus" href="https://wttr.in/Amsterdam?u" aria-live="polite" aria-label="Open Amsterdam weather forecast"><span>AMS · Stay Jul 3-6</span><div class="weather-line"><span class="weather-icon weather-cloudy" aria-hidden="true">☁</span><strong>66/57°</strong></div><div class="weather-line weather-next"><span class="weather-icon weather-rain" aria-hidden="true">☔</span><strong>Sat 72/62°</strong></div></a>
       <button class="share-button" id="shareButton" type="button" aria-label="Share current Gelman Travel page">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 16V3"/><path d="m7 8 5-5 5 5"/></svg>
         <span>Share</span>
@@ -2126,7 +2130,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "57";
+      const APP_VERSION = "58";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -2181,11 +2185,11 @@
       };
       const MAP_LINK_SELECTOR = 'a[href*="google."][href*="/maps"], a[href^="comgooglemaps:"], a[data-web-map-url], a.map-action';
       const CITY_WEATHER = {
-        vienna: { label: "Vienna", short: "VIE", latitude: 48.2082, longitude: 16.3738, fallback: { today: "72/58°", tomorrow: "74/60°", todayCondition: "Clear", tomorrowCondition: "Cloudy" } },
-        amsterdam: { label: "Amsterdam", short: "AMS", latitude: 52.3676, longitude: 4.9041, fallback: { today: "66/57°", tomorrow: "72/62°", todayCondition: "Cloudy", tomorrowCondition: "Drizzle" } },
-        london: { label: "London", short: "LDN", latitude: 51.5072, longitude: -0.1276, fallback: { today: "70/57°", tomorrow: "70/58°", todayCondition: "Cloudy", tomorrowCondition: "Rain" } },
-        washington: { label: "DC", short: "DC", latitude: 38.9072, longitude: -77.0369, fallback: { today: "87/71°", tomorrow: "88/72°", todayCondition: "Clear", tomorrowCondition: "Cloudy" } },
-        sarasota: { label: "Sarasota", short: "SRQ", latitude: 27.3364, longitude: -82.5307, fallback: { today: "90/78°", tomorrow: "90/78°", todayCondition: "Storm", tomorrowCondition: "Rain" } }
+        vienna: { label: "Vienna", short: "VIE", weatherQuery: "Vienna", latitude: 48.2082, longitude: 16.3738, fallback: { today: "72/58°", tomorrow: "74/60°", todayCondition: "Clear", tomorrowCondition: "Cloudy" } },
+        amsterdam: { label: "Amsterdam", short: "AMS", weatherQuery: "Amsterdam", latitude: 52.3676, longitude: 4.9041, fallback: { today: "66/57°", tomorrow: "72/62°", todayCondition: "Cloudy", tomorrowCondition: "Drizzle" } },
+        london: { label: "London", short: "LDN", weatherQuery: "London", latitude: 51.5072, longitude: -0.1276, fallback: { today: "70/57°", tomorrow: "70/58°", todayCondition: "Cloudy", tomorrowCondition: "Rain" } },
+        washington: { label: "DC", short: "DC", weatherQuery: "Washington DC", latitude: 38.9072, longitude: -77.0369, fallback: { today: "87/71°", tomorrow: "88/72°", todayCondition: "Clear", tomorrowCondition: "Cloudy" } },
+        sarasota: { label: "Sarasota", short: "SRQ", weatherQuery: "Sarasota Florida", latitude: 27.3364, longitude: -82.5307, fallback: { today: "90/78°", tomorrow: "90/78°", todayCondition: "Storm", tomorrowCondition: "Rain" } }
       };
       const DICTIONARIES = {
         vienna: [
@@ -3253,14 +3257,25 @@
         const cityLabel = weatherMeta.short || weatherMeta.label || activeCity;
         const condition = weather.todayCondition || "";
         const icon = weatherIcon(condition);
+        const tomorrowCondition = weather.tomorrowCondition || "";
+        const tomorrowIcon = weatherIcon(tomorrowCondition);
         const todayWeather = weather.today || "";
         const todayWeatherLabel = todayWeather ? `${todayWeather}${condition ? ` ${condition}` : ""}` : "";
-        const nextWeather = weather.tomorrow ? `${weather.tomorrowLabel || "Next"}: ${weather.tomorrow}${weather.tomorrowCondition ? ` ${weather.tomorrowCondition}` : ""}` : "";
+        const nextWeather = weather.tomorrow ? `${weather.tomorrowLabel || "Next"} ${weather.tomorrow}` : "";
+        const nextWeatherLabel = weather.tomorrow ? `${weather.tomorrowLabel || "Next"} ${weather.tomorrow}${tomorrowCondition ? ` ${tomorrowCondition}` : ""}` : "";
+        if (heroStatus) {
+          heroStatus.href = weatherLink(weatherMeta);
+          heroStatus.setAttribute("aria-label", `Open ${weatherMeta.label || activeCity} weather forecast`);
+        }
         heroStatus.innerHTML = `
           <span>${escapeHTML(cityLabel)} · ${escapeHTML(label)} ${escapeHTML(value || "")}</span>
           ${todayWeather ? `<div class="weather-line" aria-label="${escapeHTML(todayWeatherLabel)}"><span class="weather-icon ${escapeHTML(icon.className)}" aria-hidden="true">${escapeHTML(icon.symbol)}</span><strong>${escapeHTML(todayWeather)}</strong></div>` : ""}
-          ${nextWeather ? `<small>${escapeHTML(nextWeather)}</small>` : ""}
+          ${nextWeather ? `<div class="weather-line weather-next" aria-label="${escapeHTML(nextWeatherLabel)}"><span class="weather-icon ${escapeHTML(tomorrowIcon.className)}" aria-hidden="true">${escapeHTML(tomorrowIcon.symbol)}</span><strong>${escapeHTML(nextWeather)}</strong></div>` : ""}
         `;
+      }
+      function weatherLink(meta) {
+        const city = meta.weatherQuery || meta.label || "Amsterdam";
+        return `https://wttr.in/${encodeURIComponent(city)}?u`;
       }
       function shortTemps(max, min) {
         return `${Math.round(max)}/${Math.round(min)}°`;
@@ -3569,7 +3584,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=57", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=58", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;

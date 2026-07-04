@@ -1,13 +1,13 @@
-const APP_VERSION = "57";
+const APP_VERSION = "58";
 const CACHE = `gelman-travel-guide-v${APP_VERSION}`;
 const FILES = [
   "./",
   "./index.html",
-  "./?v=57",
+  "./?v=58",
   "./app-version.json",
-  "./app-version.json?v=57",
+  "./app-version.json?v=58",
   "./manifest.webmanifest",
-  "./manifest.webmanifest?v=57",
+  "./manifest.webmanifest?v=58",
   "./app-logo.png",
   "./app-logo.png?v=17",
   "./apple-touch-icon.png",
