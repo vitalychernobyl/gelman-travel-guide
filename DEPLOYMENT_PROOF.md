@@ -7,8 +7,8 @@ Last verified: 2026-07-04
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-Latest app commit at deploy: 9f14f5b Compact ticket cards
-Cache version: service-worker.js?v=57
+Latest app commit at deploy: f47e87a Link weather chip and add tomorrow icon
+Cache version: service-worker.js?v=58
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
-Deployment URL: https://f5a45c3c.gelman-travel-guide.pages.dev
+Deployment URL: https://06296e2f.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
@@ -28,19 +28,24 @@ Wrangler: 4.107.0
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=57
+service-worker.js?v=58
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=57
+service-worker.js?v=58
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"57","publishedAt":"2026-07-04T05:47:00-04:00"}
+{"version":"58","publishedAt":"2026-07-04T06:54:25-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=57' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=58' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=57",
+  "start_url": "./?v=58",
   "display": "standalone",
+
+curl -sI 'https://wttr.in/Amsterdam?u' | sed -n '1,8p'
+HTTP/2 200
+cache-control: public, max-age=600
+content-type: text/plain; charset=utf-8
 
 curl -sI 'https://antonreport.com/gelmantravel/vendor/leaflet.css?v=1' | sed -n '1,4p'
 HTTP/2 200
@@ -54,6 +59,14 @@ curl -sI 'https://antonreport.com/gelmantravel/london-stay-house.webp' | sed -n 
 HTTP/2 200
 content-type: image/webp
 ```
+
+## v58 Change
+
+- Weather chip is now a tappable link to a fast text weather page: `https://wttr.in/<city>?u`.
+- Tomorrow weather now has its own icon, using the same condition mapping as today's weather.
+- The weather chip remains compact with today's temperature on one row and tomorrow's day/temperature on the second row.
+- Added explicit weather link queries for Vienna, Amsterdam, London, Washington DC, and Sarasota Florida.
+- Service worker, manifest, and app-version are bumped to v58 so installed Home Screen apps refresh.
 
 ## v57 Change
 
@@ -84,6 +97,18 @@ content-type: image/webp
 ## Browser QA
 
 ```text
+v58 weather QA:
+- Local mobile viewport: 396x695, in-app Browser.
+- Amsterdam weather chip renders as an `<a>` tag.
+- Weather chip href: https://wttr.in/Amsterdam?u
+- Weather chip has 2 icons: today's icon and tomorrow's icon.
+- Tomorrow rain/drizzle icon uses the prominent blue rain treatment.
+- Local click on the weather chip navigates to https://wttr.in/Amsterdam?u.
+- Public antonreport.com mobile viewport: 396x695.
+- Live weather chip text: "AMS · Stay Jul 3-6 ☁71/61° ☔Sun 68/64°".
+- Live weather chip has no logo overlap and no horizontal overflow.
+- No console warnings or errors.
+
 v57 ticket QA:
 - Local mobile viewport: 396x695, in-app Browser.
 - Amsterdam plans collapsed ticket heights: 184px before deploy.
@@ -133,11 +158,11 @@ You are working with repo vitalychernobyl/gelman-travel-guide.
 
 The app is a static no-build PWA deployed from the repo root to Cloudflare Pages project gelman-travel-guide.
 
-Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v57 is live:
-- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=57
-- https://antonreport.com/gelmantravel/ serves service-worker.js?v=57
-- https://antonreport.com/gelmantravel/app-version.json returns {"version":"57",...}
-- Ticket cards are shorter and only show essential metadata while advanced ticket details live in the expandable popout.
+Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v58 is live:
+- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=58
+- https://antonreport.com/gelmantravel/ serves service-worker.js?v=58
+- https://antonreport.com/gelmantravel/app-version.json returns {"version":"58",...}
+- Weather chip links to wttr.in and shows icons for both today and tomorrow.
 
 Cloudflare Pages project gelman-travel-guide has Git Provider: No, so auto-deploy after GitHub merges is not configured. If asked to deploy future changes, use:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main

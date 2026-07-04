@@ -9,8 +9,8 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v57 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v57 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+main:            v58 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v58 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
 
@@ -42,6 +42,13 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v58 changed (context for reviewers)
+
+- Weather chip is now a tappable link to fast text forecast pages on `wttr.in`.
+- Tomorrow weather now has its own condition icon.
+- Weather chip remains compact: today on the first weather row, tomorrow on the second.
+- Bumped service worker, manifest, and app-version to v58.
 
 ## What v57 changed (context for reviewers)
 
