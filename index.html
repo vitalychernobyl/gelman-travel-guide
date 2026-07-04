@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=61">
+  <link rel="manifest" href="manifest.webmanifest?v=62">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -2218,7 +2218,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "61";
+      const APP_VERSION = "62";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -2439,8 +2439,9 @@
           hotel: "Avani Museum Quarter",
           filters: ["Top10", "Museum", "Fish", "Food", "Coffee", "Canal", "Landmark", "Nightlife", "Outdoors"],
           defaultFilter: "Top10",
-          featured: ["Café Luce", "Loetje Amsterdam Café", "Albert Cuyp Fish Market", "Van Gogh Museum", "Amsterdam City Center & Centraal", "Vondelpark", "Blue Boat Canal Cruise", "Flagship Anne Frank Canal Tour"],
+          featured: ["Frens Haringhandel", "Café Luce", "Loetje Amsterdam Café", "Albert Cuyp Fish Market", "Van Gogh Museum", "Amsterdam City Center & Centraal", "Vondelpark", "Blue Boat Canal Cruise", "Flagship Anne Frank Canal Tour"],
           items: [
+            { title: "Frens Haringhandel", featured: true, category: "Fish", rating: 4.9, location: "Koningsplein / Singel", price: "Snack prices", distance: "15-20 min from hotel", description: "The herring stand to hit first: a classic Koningsplein fish cart for Dutch herring with onion and pickle, plus kibbeling, smoked eel, salmon, shrimp, and oysters.", why: "This is the top fish snack recommendation because it is central, fast, properly Dutch, and purpose-built for the Amsterdam herring ritual. Order herring cut into pieces if the tail-first method feels like too much theatre before lunch.", details: "Official hours: Monday-Sunday 11:00 AM-5:00 PM. Frens says it has served Amsterdam since 1976 and has been on Koningsplein since 1986. Go during the day; fish stands are not late-night infrastructure.", link: "https://frens-haring.nl/en/", map: "https://www.google.com/maps/search/?api=1&query=Frens%20Haringhandel%2C%20Koningsplein%2C%20Amsterdam" },
             { title: "Café Luce", featured: true, category: "Coffee", rating: 4.8, location: "Amsterdam", price: "Cafe / restaurant prices", distance: "Check live map", description: "Saved from the Google result you sent: a quick cafe/restaurant candidate to keep at the very top of the Amsterdam list.", why: "Useful because it is a user-picked stop rather than another generic recommendation. Tap the map/Uber buttons from the card when you are ready to go.", details: "Exact public listing was not cleanly discoverable from search, so this is stored as a Google lookup/Maps target for fast access in Amsterdam.", link: "https://www.google.com/search?q=Cafe+Luce+Amsterdam", map: "https://www.google.com/maps/search/?api=1&query=Cafe%20Luce%20Amsterdam" },
             { title: "Loetje Amsterdam Café", featured: true, category: "Food", rating: 4.3, location: "Johannes Vermeerstraat 52", price: "Menu prices", distance: "4-6 min walk from hotel", description: "Classic Amsterdam steak-and-gravy spot right by Museumplein and the Concertgebouw, close enough to the hotel to be an easy dinner fallback.", why: "This is the original Loetje cafe and the low-drama nearby meal move: steak in Loetje jus, fries, bread for the gravy, terrace if the weather behaves, and enough non-steak options to keep everyone civil.", details: "Official listing says daily 10:00-22:30. Reservations are recommended on busy nights; walk from Avani Museum Quarter instead of turning it into logistics.", link: "https://www.loetje.nl/en/locations/amsterdam-cafe/", map: "https://www.google.com/maps/search/?api=1&query=Loetje%20Amsterdam%20Caf%C3%A9%2C%20Johannes%20Vermeerstraat%2052%2C%20Amsterdam" },
             { title: "Albert Cuyp Fish Market", featured: true, category: "Fish", rating: 4.8, location: "Albert Cuypstraat, De Pijp", price: "Market prices", distance: "10-15 min from hotel", description: "The nearby Albert Cuyp Market is the easy fish-market move from the hotel: herring, kibbeling, snacks, and enough stalls to satisfy everyone.", why: "This is the practical fish stop near Avani Museum Quarter. Go for lunch or a snack crawl, not a formal dinner.", details: "Open Monday-Saturday roughly 9:30 AM-5:00 PM and closed Sunday. Fish stalls vary by day, so earlier is better.", link: "https://albertcuyp-markt.amsterdam/", map: "https://www.google.com/maps/search/?api=1&query=Albert%20Cuyp%20Market%2C%20Amsterdam" },
@@ -2677,6 +2678,7 @@
         "MAK": [48.20742, 16.381507],
         "Spanish Riding School": [48.207307, 16.366707],
         "Loetje Amsterdam Café": [52.354367, 4.884237],
+        "Frens Haringhandel": [52.367292, 4.889438],
         "Albert Cuyp Fish Market": [52.355233, 4.891779],
         "Rijksmuseum": [52.359843, 4.88504],
         "Cobra Café": [52.3589397, 4.8842999],
@@ -3058,6 +3060,7 @@
         "Oosterpark": "attractions/amsterdam-oosterpark.jpg?v=1",
         "Rembrandtpark": "attractions/amsterdam-rembrandtpark.jpg?v=1",
         "Café Luce": "attractions/amsterdam-bocca-coffee.jpg?v=1",
+        "Frens Haringhandel": "attractions/amsterdam-frens-haringhandel.jpg?v=1",
         "Loetje Amsterdam Café": "attractions/amsterdam-loetje-cafe.jpg?v=1",
         "Albert Cuyp Fish Market": "attractions/amsterdam-albert-cuyp-market.jpg?v=1",
         "Van Gogh Museum": "attractions/amsterdam-van-gogh-museum.jpg?v=1",
@@ -3725,7 +3728,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=61", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=62", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;

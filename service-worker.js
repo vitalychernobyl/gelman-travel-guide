@@ -1,13 +1,13 @@
-const APP_VERSION = "61";
+const APP_VERSION = "62";
 const CACHE = `gelman-travel-guide-v${APP_VERSION}`;
 const FILES = [
   "./",
   "./index.html",
-  "./?v=61",
+  "./?v=62",
   "./app-version.json",
-  "./app-version.json?v=61",
+  "./app-version.json?v=62",
   "./manifest.webmanifest",
-  "./manifest.webmanifest?v=61",
+  "./manifest.webmanifest?v=62",
   "./app-logo.png",
   "./app-logo.png?v=17",
   "./apple-touch-icon.png",
@@ -132,6 +132,8 @@ const FILES = [
   "./attractions/amsterdam-oude-kerk.jpg?v=1",
   "./attractions/amsterdam-albert-cuyp-market.jpg",
   "./attractions/amsterdam-albert-cuyp-market.jpg?v=1",
+  "./attractions/amsterdam-frens-haringhandel.jpg",
+  "./attractions/amsterdam-frens-haringhandel.jpg?v=1",
   "./attractions/amsterdam-loetje-cafe.jpg",
   "./attractions/amsterdam-loetje-cafe.jpg?v=1",
   "./attractions/amsterdam-centraal-station.jpg",
