@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=56">
+  <link rel="manifest" href="manifest.webmanifest?v=57">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -847,10 +847,10 @@
     .ticket {
       position: relative;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 86px;
+      grid-template-columns: minmax(0, 1fr) 74px;
       overflow: hidden;
       border: 1px solid var(--line);
-      border-radius: 22px;
+      border-radius: 20px;
       background: var(--panel);
       box-shadow: var(--shadow);
     }
@@ -979,23 +979,23 @@
     details.ticket-card summary::after {
       content: "⌄  Tap for details  ⌄";
       position: absolute;
-      left: 14px;
-      right: 101px;
-      bottom: 11px;
+      left: 12px;
+      right: 86px;
+      bottom: 6px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 4px;
-      min-height: 27px;
-      padding: 0 9px;
+      min-height: 21px;
+      padding: 0 8px;
       border-radius: 999px;
       border: 1px solid #d8d3ca;
       background: rgba(236, 235, 231, .95);
       color: #5f5850;
-      font-size: .68rem;
+      font-size: .59rem;
       font-weight: 950;
       text-transform: uppercase;
-      box-shadow: 0 7px 16px rgba(59, 52, 43, .1);
+      box-shadow: 0 5px 12px rgba(59, 52, 43, .09);
       pointer-events: none;
       z-index: 2;
     }
@@ -1016,25 +1016,25 @@
     .ticket-hints {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 7px;
-      margin-top: 2px;
+      gap: 6px;
+      margin-top: 0;
     }
     .ticket-hint {
-      padding: 7px 8px;
-      border-radius: 13px;
+      padding: 4px 6px;
+      border-radius: 10px;
       background: var(--accent-soft);
       color: var(--accent-deep);
     }
     .ticket-hint span {
       display: block;
-      font-size: .64rem;
+      font-size: .55rem;
       font-weight: 900;
       text-transform: uppercase;
     }
     .ticket-hint strong {
       display: block;
       margin-top: 1px;
-      font-size: .9rem;
+      font-size: .78rem;
       line-height: 1.05;
     }
     .ticket-countdown {
@@ -1064,9 +1064,9 @@
     .ticket::after {
       content: "";
       position: absolute;
-      right: 76px;
-      width: 18px;
-      height: 18px;
+      right: 64px;
+      width: 15px;
+      height: 15px;
       border-radius: 50%;
       background: var(--bg);
       border: 1px solid var(--line);
@@ -1076,22 +1076,22 @@
     .ticket::after { bottom: -10px; }
     .ticket-main {
       display: grid;
-      gap: 8px;
-      padding: 14px 14px 49px;
+      gap: 6px;
+      padding: 9px 11px 32px;
     }
     .airline {
       display: flex;
       justify-content: space-between;
       gap: 8px;
       color: var(--muted);
-      font-size: .78rem;
+      font-size: .69rem;
       font-weight: 800;
       text-transform: uppercase;
     }
     .route {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-      gap: 8px;
+      gap: 5px;
       align-items: center;
     }
     .city {
@@ -1099,20 +1099,20 @@
     }
     .city strong {
       display: block;
-      font-size: 1rem;
+      font-size: .91rem;
       line-height: 1.05;
     }
     .city span {
       color: var(--muted);
-      font-size: .76rem;
+      font-size: .7rem;
       font-weight: 800;
       text-transform: uppercase;
     }
     .plane-line {
       display: grid;
       place-items: center;
-      width: 28px;
-      height: 28px;
+      width: 22px;
+      height: 22px;
       border-radius: 999px;
       background: var(--accent-soft);
       color: var(--accent-deep);
@@ -1121,14 +1121,14 @@
     .ticket-meta {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 6px;
+      gap: 4px;
       color: var(--muted);
-      font-size: .78rem;
+      font-size: .68rem;
     }
     .ticket-meta strong {
       display: block;
       color: var(--ink);
-      font-size: .86rem;
+      font-size: .78rem;
     }
     .ticket + .info-list {
       margin-top: 9px;
@@ -1136,7 +1136,7 @@
     .ticket-stub {
       display: grid;
       place-items: center;
-      padding: 10px 7px;
+      padding: 7px 5px;
       border-left: 1px dashed #c7c7c7;
       background: linear-gradient(180deg, var(--accent), var(--accent-deep));
       color: var(--accent-ink);
@@ -1151,7 +1151,7 @@
     .airline-aa .plane-line { background: #eef4ff; color: #c41230; }
     .wordmark {
       display: block;
-      font-size: .72rem;
+      font-size: .62rem;
       font-weight: 950;
       line-height: 1;
       text-transform: uppercase;
@@ -1719,8 +1719,6 @@
                   <div class="ticket-meta">
                     <div><span>Date</span><strong>Jul 3</strong></div>
                     <div><span>Depart</span><strong>2:55 PM</strong></div>
-                    <div><span>Arrive</span><strong>4:50 PM</strong></div>
-                    <div><span>Class</span><strong>Economy</strong></div>
                   </div>
                   <div class="ticket-hints">
                     <div class="ticket-hint"><span>Leave by</span><strong>11:15 AM</strong></div>
@@ -1733,7 +1731,9 @@
             </summary>
             <div class="ticket-extra info-list">
               <div class="info-row"><span>Code</span><strong>B94UZE</strong></div>
+              <div class="info-row"><span>Arrival</span><strong>4:50 PM in Amsterdam (AMS)</strong></div>
               <div class="info-row"><span>Duration</span><strong>1h 55m, direct</strong></div>
+              <div class="info-row"><span>Class</span><strong>Economy</strong></div>
               <div class="info-row"><span>Arrive VIE</span><strong>11:55 AM, 3 hours before departure</strong></div>
               <div class="info-row"><span>Bag drop</span><strong>Area 3, Counter no. 361-368</strong></div>
               <div class="info-row"><span>Deadline</span><strong>2:05 PM</strong></div>
@@ -1796,8 +1796,6 @@
                   <div class="ticket-meta">
                     <div><span>Date</span><strong>Jul 4</strong></div>
                     <div><span>Time</span><strong>10:30 AM</strong></div>
-                    <div><span>Tickets</span><strong>4 adults</strong></div>
-                    <div><span>Audio</span><strong>Included</strong></div>
                   </div>
                   <div class="ticket-hints">
                     <div class="ticket-hint"><span>Leave by</span><strong>10:05 AM</strong></div>
@@ -1838,8 +1836,6 @@
                   <div class="ticket-meta">
                     <div><span>Date</span><strong>Jul 6</strong></div>
                     <div><span>Depart</span><strong>14:20</strong></div>
-                    <div><span>Arrive</span><strong>14:25</strong></div>
-                    <div><span>Aircraft</span><strong>E190</strong></div>
                   </div>
                   <div class="ticket-hints">
                     <div class="ticket-hint"><span>Leave by</span><strong>11:05 AM</strong></div>
@@ -1851,7 +1847,9 @@
               </article>
             </summary>
             <div class="ticket-extra info-list">
+              <div class="info-row"><span>Arrival</span><strong>14:25 at London City (LCY)</strong></div>
               <div class="info-row"><span>Duration</span><strong>1h 5m, direct</strong></div>
+              <div class="info-row"><span>Aircraft</span><strong>Embraer 190</strong></div>
               <div class="info-row"><span>Operated</span><strong>BA Cityflyer</strong></div>
               <div class="info-row"><span>Class</span><strong>Economy, Selling Class O</strong></div>
               <div class="info-row"><span>Arrive AMS</span><strong>11:20 AM, 3 hours before departure</strong></div>
@@ -1916,8 +1914,6 @@
                   <div class="ticket-meta">
                     <div><span>Date</span><strong>Jul 11</strong></div>
                     <div><span>Depart</span><strong>4:40 PM</strong></div>
-                    <div><span>Arrive</span><strong>8:00 PM</strong></div>
-                    <div><span>Duration</span><strong>8h 20m</strong></div>
                   </div>
                   <div class="ticket-hints">
                     <div class="ticket-hint"><span>Leave by</span><strong>12:20 PM</strong></div>
@@ -1930,6 +1926,9 @@
             </summary>
             <div class="ticket-extra info-list">
               <div class="info-row"><span>Code</span><strong>I3VRZG</strong></div>
+              <div class="info-row"><span>Arrival</span><strong>8:00 PM at Washington Dulles (IAD)</strong></div>
+              <div class="info-row"><span>Duration</span><strong>8h 20m</strong></div>
+              <div class="info-row"><span>Operated by</span><strong>United Airlines</strong></div>
               <div class="info-row"><span>Anton</span><strong>Seat 44L, Travel Options Bundle</strong></div>
               <div class="info-row"><span>Slava</span><strong>Seat 44C, Travel Options Bundle</strong></div>
               <div class="info-row"><span>Alex</span><strong>Seat 44B, Travel Options Bundle</strong></div>
@@ -1992,8 +1991,6 @@
                   <div class="ticket-meta">
                     <div><span>Date</span><strong>Jul 12</strong></div>
                     <div><span>Depart</span><strong>8:20 AM</strong></div>
-                    <div><span>Arrive</span><strong>10:53 AM</strong></div>
-                    <div><span>Duration</span><strong>2h 33m</strong></div>
                   </div>
                   <div class="ticket-hints">
                     <div class="ticket-hint"><span>Leave by</span><strong>4:55 AM</strong></div>
@@ -2006,6 +2003,8 @@
             </summary>
             <div class="ticket-extra info-list">
               <div class="info-row"><span>Code</span><strong>QIBCMI</strong></div>
+              <div class="info-row"><span>Arrival</span><strong>10:53 AM at Sarasota Bradenton (SRQ)</strong></div>
+              <div class="info-row"><span>Duration</span><strong>2h 33m</strong></div>
               <div class="info-row"><span>Class</span><strong>Economy</strong></div>
               <div class="info-row"><span>Seats</span><strong>13B, 13A</strong></div>
               <div class="info-row"><span>Arrive DCA</span><strong>5:20 AM, 3 hours before departure</strong></div>
@@ -2127,7 +2126,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "56";
+      const APP_VERSION = "57";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -3570,7 +3569,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=56", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=57", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
