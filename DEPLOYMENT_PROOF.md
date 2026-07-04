@@ -7,8 +7,8 @@ Last verified: 2026-07-04
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-Latest app commit at deploy: a6af4a6 Add Amsterdam top museum landmarks
-Cache version: service-worker.js?v=61
+Latest app commit at deploy: 9ad611a Add Frens Haringhandel recommendation
+Cache version: service-worker.js?v=62
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
-Deployment URL: https://0790ae0f.gelman-travel-guide.pages.dev
+Deployment URL: https://c853285b.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
@@ -28,18 +28,18 @@ Wrangler: 4.107.0
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=61
+service-worker.js?v=62
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=61
+service-worker.js?v=62
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"61","publishedAt":"2026-07-04T11:35:00-04:00"}
+{"version":"62","publishedAt":"2026-07-04T13:22:00-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=61' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=62' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=61",
+  "start_url": "./?v=62",
   "display": "standalone",
 
 curl -sI 'https://wttr.in/Amsterdam?u' | sed -n '1,8p'
@@ -55,6 +55,10 @@ curl -sI 'https://antonreport.com/gelmantravel/attractions/amsterdam-loetje-cafe
 HTTP/2 200
 content-type: image/jpeg
 
+curl -sI 'https://antonreport.com/gelmantravel/attractions/amsterdam-frens-haringhandel.jpg?v=1' | sed -n '1,4p'
+HTTP/2 200
+content-type: image/jpeg
+
 curl -sI 'https://antonreport.com/gelmantravel/attractions/amsterdam-royal-palace.jpg?v=1' | sed -n '1,4p'
 HTTP/2 200
 content-type: image/jpeg
@@ -67,6 +71,16 @@ curl -sI 'https://antonreport.com/gelmantravel/london-stay-house.webp' | sed -n 
 HTTP/2 200
 content-type: image/webp
 ```
+
+## v62 Change
+
+- Added Frens Haringhandel as the top Amsterdam Fish recommendation.
+- Frens appears first when filtering Amsterdam attractions by `Fish`.
+- Card includes official site link, Google Maps app directions, Uber destination
+  coordinates, daily 11:00 AM-5:00 PM hours, and local image
+  `attractions/amsterdam-frens-haringhandel.jpg`.
+- Service worker, manifest, and app-version are bumped to v62 so installed Home Screen
+  apps refresh.
 
 ## v61 Change
 
@@ -142,6 +156,18 @@ content-type: image/webp
 ## Browser QA
 
 ```text
+v62 Frens Haringhandel QA:
+- Local mobile viewport: 396x695, in-app Browser.
+- Amsterdam attractions Fish filter shows Frens Haringhandel first, followed by
+  Albert Cuyp Fish Market, John Dory, Stubbe's Haring, and Vishuisje Herengracht.
+- Frens local image loads at 400x400 with no broken thumbnails.
+- Frens Directions link uses `comgooglemaps://` and the Uber link includes destination
+  coordinates 52.367292, 4.889438.
+- Public antonreport.com mobile viewport: 396x695.
+- Live `https://antonreport.com/gelmantravel/?city=amsterdam&page=photos&appv=62`
+  serves `manifest.webmanifest?v=62`, Frens is first in Fish, has no broken thumbnails,
+  no horizontal overflow, and no console warnings or errors.
+
 v61 Amsterdam Top 10 QA:
 - Local mobile viewport: 396x695, in-app Browser.
 - Amsterdam attractions default filter is `Top 10`.
@@ -235,7 +261,7 @@ URL: https://antonreport.com/gelmantravel/
 - The app is a static HTML/CSS/JS PWA with no build step.
 - The repo root is the Pages deploy directory.
 - The Cloudflare Pages project is not Git-connected, so future merges will not auto-deploy unless Git integration is configured.
-- The Worker that fronts `https://antonreport.com/gelmantravel*` was not changed for v61.
+- The Worker that fronts `https://antonreport.com/gelmantravel*` was not changed for v62.
 
 ## Handoff Prompt
 
@@ -244,12 +270,12 @@ You are working with repo vitalychernobyl/gelman-travel-guide.
 
 The app is a static no-build PWA deployed from the repo root to Cloudflare Pages project gelman-travel-guide.
 
-Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v61 is live:
-- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=61
-- https://antonreport.com/gelmantravel/ serves service-worker.js?v=61
-- https://antonreport.com/gelmantravel/app-version.json returns {"version":"61",...}
-- Amsterdam attractions default to a Top 10 museums/landmarks list with no broken
-  thumbnails, including new Royal Palace Amsterdam and Oude Kerk cards.
+Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v62 is live:
+- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=62
+- https://antonreport.com/gelmantravel/ serves service-worker.js?v=62
+- https://antonreport.com/gelmantravel/app-version.json returns {"version":"62",...}
+- Amsterdam Fish recommendations now show Frens Haringhandel first with a local image,
+  official site link, Google Maps app directions, and Uber destination coordinates.
 
 Cloudflare Pages project gelman-travel-guide has Git Provider: No, so auto-deploy after GitHub merges is not configured. If asked to deploy future changes, use:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main

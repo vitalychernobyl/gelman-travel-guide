@@ -9,8 +9,8 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v61 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v61 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+main:            v62 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v62 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
 
@@ -42,6 +42,15 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v62 changed (context for reviewers)
+
+- Added Frens Haringhandel as the top Amsterdam Fish recommendation.
+- Frens appears first when filtering Amsterdam attractions by `Fish`.
+- Card includes official site link, Google Maps app directions, Uber destination
+  coordinates, daily 11:00 AM-5:00 PM hours, and local image
+  `attractions/amsterdam-frens-haringhandel.jpg`.
+- Bumped service worker, manifest, and app-version to v62.
 
 ## What v61 changed (context for reviewers)
 
