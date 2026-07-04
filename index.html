@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=58">
+  <link rel="manifest" href="manifest.webmanifest?v=59">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -970,6 +970,34 @@
       background: #eef7ef;
       color: #26513e;
     }
+    .viator-ticket .ticket {
+      border-color: rgba(20, 122, 98, .26);
+      background: linear-gradient(135deg, #fffefa 0%, #fffefa 58%, #edf8f4 100%);
+    }
+    .viator-ticket .ticket-main {
+      border-top: 5px solid #147a62;
+    }
+    .viator-ticket .airline {
+      color: #147a62;
+      font-weight: 950;
+    }
+    .viator-ticket .airline-logo::before {
+      width: 17px;
+      height: 17px;
+      border-radius: 5px;
+      background: linear-gradient(135deg, #f7cf4a 0 44%, #147a62 44% 100%);
+      transform: rotate(-8deg);
+    }
+    .viator-ticket .ticket-stub {
+      background: linear-gradient(160deg, #147a62, #07513d);
+    }
+    .viator-ticket .ticket-stub .wordmark {
+      color: #f7cf4a;
+    }
+    .viator-ticket .ticket-hint {
+      background: #edf8f4;
+      color: #0f654f;
+    }
     details.ticket-card {
       border: 0;
       background: transparent;
@@ -1827,6 +1855,48 @@
               </div>
             </div>
           </details>
+          <details class="ticket-card viator-ticket" id="plan-amsterdam-rijksmuseum-guided-tour" data-uber-coords="52.3589397,4.8842999">
+            <summary>
+              <article class="ticket">
+                <div class="ticket-main">
+                  <div class="airline"><span class="airline-logo">Rijksmuseum Guided Tour</span><span>Viator</span></div>
+                  <div class="route">
+                    <div class="city"><strong>Rijksmuseum</strong><span>Guided tour</span></div>
+                    <div class="plane-line">→</div>
+                    <div class="city"><strong>1:00 PM</strong><span>English guide</span></div>
+                  </div>
+                  <div class="ticket-meta">
+                    <div><span>Date</span><strong>Jul 5</strong></div>
+                    <div><span>Start</span><strong>1:00 PM</strong></div>
+                  </div>
+                  <div class="ticket-hints">
+                    <div class="ticket-hint"><span>Leave by</span><strong>12:30 PM</strong></div>
+                    <div class="ticket-hint"><span>Meet guide</span><strong>12:45 PM</strong></div>
+                  </div>
+                </div>
+                <div class="ticket-stub"><div><span class="wordmark">Viator</span><strong>RJK</strong><span class="brand-sash"></span></div></div>
+              </article>
+            </summary>
+            <div class="ticket-extra info-list">
+              <div class="info-row"><span>Booking ref</span><strong>1391714033</strong></div>
+              <div class="info-row"><span>Voucher barcode</span><strong>1391714033</strong></div>
+              <div class="info-row"><span>Travellers</span><strong>Alex Gelman • 4 adults</strong></div>
+              <div class="info-row"><span>Provider</span><strong>EuroQuest Travel</strong></div>
+              <div class="info-row"><span>Language</span><strong>English - guide</strong></div>
+              <div class="info-row"><span>Important</span><strong>This is not your entry ticket. Use the ticket delivery details from Viator/Booking.com.</strong></div>
+              <div class="info-row"><span>Address</span><strong>Cobra Café, Hobbemastraat 18, 1071 ZB Amsterdam, Netherlands</strong></div>
+              <div class="info-row"><span>Meeting point</span><strong>Outside Cobra Café at Museumplein, by the parking/toilet entrance of the café</strong></div>
+              <div class="info-row"><span>Guide</span><strong>Meet 15 minutes before start; guide holds an orange umbrella</strong></div>
+              <div class="info-row"><span>Duration</span><strong>120 minutes</strong></div>
+              <div class="info-row"><span>End point</span><strong>Ends back at the meeting point</strong></div>
+              <div class="info-row"><span>Leave hotel</span><strong>12:30 PM from Avani Museum Quarter</strong></div>
+              <div class="info-row"><span>Arrive meeting point</span><strong>12:45 PM for the 1:00 PM start</strong></div>
+              <div class="ticket-actions">
+                <a class="directions-button" href="https://www.google.com/maps/dir/?api=1&amp;destination=Cobra%20Caf%C3%A9%2C%20Hobbemastraat%2018%2C%201071%20ZB%20Amsterdam%2C%20Netherlands&amp;travelmode=walking&amp;dir_action=navigate" target="_blank" rel="noopener">Directions</a>
+                <a class="directions-button ticket-button" href="https://www.viator.com/Amsterdam-attractions/Rijksmuseum/d525-a776" target="_blank" rel="noopener">Tour Info</a>
+              </div>
+            </div>
+          </details>
           <details class="ticket-card airline-ba" data-flight-date="2026-07-06" data-leave-at="2026-07-06T11:05:00">
             <summary>
               <article class="ticket">
@@ -2130,7 +2200,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "58";
+      const APP_VERSION = "59";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -2588,6 +2658,8 @@
         "Loetje Amsterdam Café": [52.354367, 4.884237],
         "Albert Cuyp Fish Market": [52.355233, 4.891779],
         "Rijksmuseum": [52.359843, 4.88504],
+        "Cobra Café": [52.3589397, 4.8842999],
+        "Cobra Cafe": [52.3589397, 4.8842999],
         "Van Gogh Museum": [52.358367, 4.88109],
         "Anne Frank House": [52.375156, 4.884081],
         "Amsterdam City Center & Centraal": [52.378901, 4.900581],
@@ -2672,13 +2744,13 @@
         }
         return best ? DESTINATION_COORDS[best] : null;
       }
-      function uberDeepLink(name, destination) {
+      function uberDeepLink(name, destination, coordsOverride = null) {
         const url = new URL("https://m.uber.com/ul/");
         url.searchParams.set("action", "setPickup");
         url.searchParams.set("pickup", "my_location");
         // Uber needs dropoff coordinates to pin the destination; the
         // address and nickname alone leave the destination blank.
-        const coords = coordsForDestination(name, destination);
+        const coords = coordsOverride || coordsForDestination(name, destination);
         if (coords) {
           url.searchParams.set("dropoff[latitude]", String(coords[0]));
           url.searchParams.set("dropoff[longitude]", String(coords[1]));
@@ -2708,10 +2780,15 @@
         }
         return "";
       }
-      function ensureUberButton(actions, name, destination) {
+      function parseCoords(value) {
+        if (!value) return null;
+        const parts = value.split(",").map(part => Number(part.trim()));
+        return parts.length === 2 && parts.every(Number.isFinite) ? parts : null;
+      }
+      function ensureUberButton(actions, name, destination, coordsOverride = null) {
         if (!actions || !destination) return;
         let uber = actions.querySelector(".uber-button");
-        const href = uberDeepLink(name, destination);
+        const href = uberDeepLink(name, destination, coordsOverride);
         const label = name ? `Open Uber to ${name}` : `Open Uber to ${destination}`;
         if (!uber) {
           uber = actionLink("directions-button uber-button", href, "Uber", label);
@@ -2890,8 +2967,9 @@
           if (!actions) return;
           const name = card.querySelector(".airline-logo")?.textContent.trim() || "Trip";
           const destination = actionDestinationFromMaps(actions) || planFallbackDestination(card, name);
+          const coordsOverride = parseCoords(card.dataset.uberCoords || actions.dataset.uberCoords || "");
           actions.querySelectorAll(MAP_LINK_SELECTOR).forEach(link => iconizeMapLink(link, destination));
-          ensureUberButton(actions, name, destination);
+          ensureUberButton(actions, name, destination, coordsOverride);
         });
       }
       function enhanceLoungeActions() {
@@ -3584,7 +3662,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=58", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=59", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
