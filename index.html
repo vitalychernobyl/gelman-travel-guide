@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=59">
+  <link rel="manifest" href="manifest.webmanifest?v=60">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -1035,6 +1035,24 @@
       display: none;
     }
     details.ticket-card[open] summary::after { content: "⌃  Details open  ⌃"; }
+    details.ticket-card.ticket-expired {
+      order: 90;
+    }
+    details.ticket-card.ticket-expired .ticket {
+      opacity: .46;
+      filter: grayscale(.25) saturate(.55);
+    }
+    details.ticket-card.ticket-expired .ticket-extra {
+      opacity: .78;
+    }
+    details.ticket-card.ticket-expired summary::after {
+      content: "Past trip  ·  tap for details";
+      background: rgba(236, 235, 231, .88);
+      color: #8a8177;
+    }
+    details.ticket-card.ticket-expired[open] summary::after {
+      content: "Past trip  ·  details open";
+    }
     .ticket-extra {
       margin-top: 0;
       padding: 10px 12px 12px;
@@ -1738,7 +1756,7 @@
           <div><h2>Vienna</h2><p>Thu, Jul 2 - Fri, Jul 3, 2026</p></div>
         </div>
         <div class="plan-grid">
-          <details class="ticket-card airline-os" data-flight-date="2026-07-03" data-leave-at="2026-07-03T11:15:00">
+          <details class="ticket-card airline-os" data-flight-date="2026-07-03" data-leave-at="2026-07-03T11:15:00" data-expires-at="2026-07-03T16:50:00+02:00">
             <summary>
               <article class="ticket">
                 <div class="ticket-main">
@@ -1815,7 +1833,7 @@
           <div><h2>Amsterdam</h2><p>Fri, Jul 3 - Mon, Jul 6, 2026</p></div>
         </div>
         <div class="plan-grid">
-          <details class="ticket-card museum-ticket" id="plan-amsterdam-van-gogh-museum">
+          <details class="ticket-card museum-ticket" id="plan-amsterdam-van-gogh-museum" data-expires-at="2026-07-04T12:30:00+02:00">
             <summary>
               <article class="ticket">
                 <div class="ticket-main">
@@ -1855,7 +1873,7 @@
               </div>
             </div>
           </details>
-          <details class="ticket-card viator-ticket" id="plan-amsterdam-rijksmuseum-guided-tour" data-uber-coords="52.3589397,4.8842999">
+          <details class="ticket-card viator-ticket" id="plan-amsterdam-rijksmuseum-guided-tour" data-expires-at="2026-07-05T15:00:00+02:00" data-uber-coords="52.3589397,4.8842999">
             <summary>
               <article class="ticket">
                 <div class="ticket-main">
@@ -1897,7 +1915,7 @@
               </div>
             </div>
           </details>
-          <details class="ticket-card airline-ba" data-flight-date="2026-07-06" data-leave-at="2026-07-06T11:05:00">
+          <details class="ticket-card airline-ba" data-flight-date="2026-07-06" data-leave-at="2026-07-06T11:05:00" data-expires-at="2026-07-06T14:25:00+01:00">
             <summary>
               <article class="ticket">
                 <div class="ticket-main">
@@ -1975,7 +1993,7 @@
           <div><h2>London</h2><p>Mon, Jul 6 - Sat, Jul 11, 2026</p></div>
         </div>
         <div class="plan-grid">
-          <details class="ticket-card airline-ua" data-flight-date="2026-07-11" data-leave-at="2026-07-11T12:20:00">
+          <details class="ticket-card airline-ua" data-flight-date="2026-07-11" data-leave-at="2026-07-11T12:20:00" data-expires-at="2026-07-11T20:00:00-04:00">
             <summary>
               <article class="ticket">
                 <div class="ticket-main">
@@ -2052,7 +2070,7 @@
           <div><h2>Washington, DC</h2><p>Sat, Jul 11 - Sun, Jul 12, 2026</p></div>
         </div>
         <div class="plan-grid">
-          <details class="ticket-card airline-aa" data-flight-date="2026-07-12" data-leave-at="2026-07-12T04:55:00">
+          <details class="ticket-card airline-aa" data-flight-date="2026-07-12" data-leave-at="2026-07-12T04:55:00" data-expires-at="2026-07-12T10:53:00-04:00">
             <summary>
               <article class="ticket">
                 <div class="ticket-main">
@@ -2200,7 +2218,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "59";
+      const APP_VERSION = "60";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -3467,6 +3485,33 @@
         if (hours) return `${hours}h ${mins}m`;
         return `${mins}m`;
       }
+      function ticketExpiry(card) {
+        const expiresAt = card.dataset.expiresAt;
+        if (!expiresAt) return null;
+        const expiry = new Date(expiresAt);
+        return Number.isNaN(expiry.getTime()) ? null : expiry;
+      }
+      function ticketTitle(card) {
+        return card.querySelector(".airline-logo")?.textContent.trim() || card.querySelector(".route")?.textContent.trim() || "Ticket";
+      }
+      function updateExpiredTickets() {
+        const now = currentNow();
+        document.querySelectorAll(".plan-grid").forEach(grid => {
+          const expired = [];
+          grid.querySelectorAll(":scope > .ticket-card").forEach(card => {
+            const expiry = ticketExpiry(card);
+            const isExpired = !!expiry && now.getTime() >= expiry.getTime();
+            card.classList.toggle("ticket-expired", isExpired);
+            if (isExpired) {
+              card.setAttribute("aria-label", `${ticketTitle(card)} expired`);
+              expired.push(card);
+            } else {
+              card.removeAttribute("aria-label");
+            }
+          });
+          expired.forEach(card => grid.append(card));
+        });
+      }
       function updateFlightCountdowns() {
         const now = currentNow();
         const today = todayKey(now);
@@ -3480,6 +3525,7 @@
           const delta = leaveAt.getTime() - now.getTime();
           target.textContent = delta > 0 ? `Leave in ${formatDuration(delta)}` : `Leave time passed ${formatDuration(delta)} ago`;
         });
+        updateExpiredTickets();
         updateHeroStatus();
       }
       const appTop = document.querySelector(".app-top");
@@ -3662,7 +3708,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=59", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=60", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
