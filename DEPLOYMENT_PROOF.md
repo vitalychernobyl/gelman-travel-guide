@@ -7,8 +7,8 @@ Last verified: 2026-07-04
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-Latest app commit at deploy: c6699d3 Unify card action button styles
-Cache version: service-worker.js?v=55
+Latest app commit at deploy: 67e8e94 Improve weather chip and default font
+Cache version: service-worker.js?v=56
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
-Deployment URL: https://43dcf39f.gelman-travel-guide.pages.dev
+Deployment URL: https://ba57d680.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
@@ -28,18 +28,18 @@ Wrangler: 4.107.0
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=55
+service-worker.js?v=56
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=55
+service-worker.js?v=56
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"55","publishedAt":"2026-07-04T00:00:00-04:00"}
+{"version":"56","publishedAt":"2026-07-04T03:30:00-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=55' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=56' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=55",
+  "start_url": "./?v=56",
   "display": "standalone",
 
 curl -sI 'https://antonreport.com/gelmantravel/vendor/leaflet.css?v=1' | sed -n '1,4p'
@@ -55,6 +55,15 @@ HTTP/2 200
 content-type: image/webp
 ```
 
+## v56 Change
+
+- Weather chip now shows today's weather as one larger one-line row with a visible condition icon.
+- Rain and storm icons use a blue circular treatment so precipitation is obvious.
+- Tomorrow weather remains as a compact secondary line.
+- Default app font increased from 15px to 16px.
+- Font size controls continue to persist in `localStorage`; reset returns to 16px.
+- Service worker, manifest, and app-version are bumped to v56 so installed Home Screen apps refresh.
+
 ## v55 Change
 
 - Removed icons from card action buttons in plans and attractions.
@@ -67,37 +76,25 @@ content-type: image/webp
 ## Browser QA
 
 ```text
-Local mobile viewport: 396x695, Chrome system binary
+Local mobile viewport: 396x695, in-app Browser plus clean Chrome context
 
-Plans page:
-- Audited plan action buttons across all five cities with all details expanded.
-- Bad icon count: 0.
-- Wrong color/style count: 0 after manual review of the only checker false positive
-  ("Airport Lounges" is a grey generic link, as intended).
-- Van Gogh expanded row:
-  Museum Directions: blue, no icon.
-  Museum Info: grey, no icon.
-  Uber: black, no icon.
+Weather chip:
+- Amsterdam hero shows a condition icon plus today's temp on one row.
+- Rain/drizzle state rendered with the obvious umbrella icon.
+- Weather chip horizontal overlap with centered logo: 0px.
+- Page horizontal overflow: 0px.
 - No horizontal overflow.
 - No console warnings or errors.
 
-Attractions page:
-- Audited attraction action buttons across all five cities with all details expanded.
-- Bad icon count: 0.
-- Bad color/style count: 0.
-- First visible row:
-  Menu: grey, no icon.
-  Directions: blue, no icon.
-  Uber: black, no icon.
-- No horizontal overflow.
-- No console warnings or errors.
+Font controls:
+- Clean Chrome context default root font: 16px.
+- After tapping A+, root font: 17px and `localStorage.gelmanFont` is "17".
+- After reload, root font remains 17px and `localStorage.gelmanFont` remains "17".
 
 Production mobile viewport: 396x695
 URL: https://antonreport.com/gelmantravel/
 
-- Plans action audit: Amsterdam page with all details expanded, 12 buttons, 0 bad icons, 0 wrong colors.
-- Attractions action audit: 168 buttons, 0 bad icons, 0 bad colors.
-- No horizontal overflow on checked pages.
+- Weather chip audit: icon present, root font 16px, no logo overlap, no horizontal overflow.
 - No console warnings or errors.
 ```
 
@@ -106,7 +103,7 @@ URL: https://antonreport.com/gelmantravel/
 - The app is a static HTML/CSS/JS PWA with no build step.
 - The repo root is the Pages deploy directory.
 - The Cloudflare Pages project is not Git-connected, so future merges will not auto-deploy unless Git integration is configured.
-- The Worker that fronts `https://antonreport.com/gelmantravel*` was not changed for v55.
+- The Worker that fronts `https://antonreport.com/gelmantravel*` was not changed for v56.
 
 ## Handoff Prompt
 
@@ -115,11 +112,12 @@ You are working with repo vitalychernobyl/gelman-travel-guide.
 
 The app is a static no-build PWA deployed from the repo root to Cloudflare Pages project gelman-travel-guide.
 
-Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v55 is live:
-- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=55
-- https://antonreport.com/gelmantravel/ serves service-worker.js?v=55
-- https://antonreport.com/gelmantravel/app-version.json returns {"version":"55",...}
-- Card action buttons are text-only: directions blue, Uber black, and site/menu/ticket/app links grey.
+Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v56 is live:
+- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=56
+- https://antonreport.com/gelmantravel/ serves service-worker.js?v=56
+- https://antonreport.com/gelmantravel/app-version.json returns {"version":"56",...}
+- Weather chip uses a condition icon with today's temp on one larger row.
+- Default font is 16px and user font choices persist in localStorage.
 
 Cloudflare Pages project gelman-travel-guide has Git Provider: No, so auto-deploy after GitHub merges is not configured. If asked to deploy future changes, use:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main

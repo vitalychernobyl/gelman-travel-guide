@@ -9,8 +9,8 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v55 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v55 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+main:            v56 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v56 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
 
@@ -42,6 +42,14 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v56 changed (context for reviewers)
+
+- Weather chip shows today's weather as a larger one-line icon + temperature row.
+- Rain/drizzle uses a prominent umbrella icon in a blue circular treatment.
+- Default app font increased to 16px.
+- Font size choices remain persisted in localStorage; reset returns to 16px.
+- Bumped service worker, manifest, and app-version to v56.
 
 ## What v55 changed (context for reviewers)
 
