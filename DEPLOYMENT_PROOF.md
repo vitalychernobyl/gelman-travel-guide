@@ -7,8 +7,8 @@ Last verified: 2026-07-04
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-Latest app commit at deploy: f47e87a Link weather chip and add tomorrow icon
-Cache version: service-worker.js?v=58
+Latest app commit at deploy: a535be7 Add Rijksmuseum guided tour ticket
+Cache version: service-worker.js?v=59
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
-Deployment URL: https://06296e2f.gelman-travel-guide.pages.dev
+Deployment URL: https://be6001c5.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
@@ -28,18 +28,18 @@ Wrangler: 4.107.0
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=58
+service-worker.js?v=59
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=58
+service-worker.js?v=59
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"58","publishedAt":"2026-07-04T06:54:25-04:00"}
+{"version":"59","publishedAt":"2026-07-04T07:17:19-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=58' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=59' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=58",
+  "start_url": "./?v=59",
   "display": "standalone",
 
 curl -sI 'https://wttr.in/Amsterdam?u' | sed -n '1,8p'
@@ -59,6 +59,20 @@ curl -sI 'https://antonreport.com/gelmantravel/london-stay-house.webp' | sed -n 
 HTTP/2 200
 content-type: image/webp
 ```
+
+## v59 Change
+
+- Added an Amsterdam Rijksmuseum Guided Tour ticket to the Amsterdam plans page.
+- Ticket details include booking reference/voucher barcode `1391714033`, provider
+  EuroQuest Travel, Alex Gelman plus 4 adults, and English guide.
+- Meeting point is Cobra Café, Hobbemastraat 18, 1071 ZB Amsterdam, Netherlands.
+- Timing shows leave hotel at 12:30 PM, meet guide at 12:45 PM, tour start at 1:00 PM,
+  120 minute duration, and return to the meeting point.
+- Details include the "not your entry ticket" warning and orange-umbrella guide note.
+- Directions open the Google Maps app to Cobra Café; Uber deep link pins Cobra Café
+  coordinates, and the address is copyable.
+- Service worker, manifest, and app-version are bumped to v59 so installed Home Screen
+  apps refresh.
 
 ## v58 Change
 
@@ -97,6 +111,21 @@ content-type: image/webp
 ## Browser QA
 
 ```text
+v59 Rijksmuseum ticket QA:
+- Local mobile viewport: 396x695, in-app Browser.
+- Amsterdam plans page shows 3 ticket cards: Van Gogh Museum, Rijksmuseum Guided Tour,
+  and British Airways BA8454.
+- Rijksmuseum ticket is collapsed by default and appears between Van Gogh and BA.
+- Collapsed summary shows Jul 5, 1:00 PM, leave by 12:30 PM, and meet guide 12:45 PM.
+- Expanded details show booking ref/voucher barcode 1391714033, EuroQuest Travel,
+  English guide, Cobra Café meeting point, orange umbrella note, 120 minute duration,
+  and end point back at the meeting point.
+- Directions link is `comgooglemaps://` with Cobra Café as destination.
+- Uber link uses Cobra Café coordinates 52.3589397, 4.8842999.
+- Address row has copy-to-clipboard behavior.
+- Public antonreport.com mobile viewport: 396x695.
+- Live card found, no horizontal overflow, no console warnings or errors.
+
 v58 weather QA:
 - Local mobile viewport: 396x695, in-app Browser.
 - Amsterdam weather chip renders as an `<a>` tag.
@@ -149,7 +178,7 @@ URL: https://antonreport.com/gelmantravel/
 - The app is a static HTML/CSS/JS PWA with no build step.
 - The repo root is the Pages deploy directory.
 - The Cloudflare Pages project is not Git-connected, so future merges will not auto-deploy unless Git integration is configured.
-- The Worker that fronts `https://antonreport.com/gelmantravel*` was not changed for v56.
+- The Worker that fronts `https://antonreport.com/gelmantravel*` was not changed for v59.
 
 ## Handoff Prompt
 
@@ -158,11 +187,12 @@ You are working with repo vitalychernobyl/gelman-travel-guide.
 
 The app is a static no-build PWA deployed from the repo root to Cloudflare Pages project gelman-travel-guide.
 
-Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v58 is live:
-- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=58
-- https://antonreport.com/gelmantravel/ serves service-worker.js?v=58
-- https://antonreport.com/gelmantravel/app-version.json returns {"version":"58",...}
-- Weather chip links to wttr.in and shows icons for both today and tomorrow.
+Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v59 is live:
+- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=59
+- https://antonreport.com/gelmantravel/ serves service-worker.js?v=59
+- https://antonreport.com/gelmantravel/app-version.json returns {"version":"59",...}
+- Amsterdam plans include the Rijksmuseum Guided Tour ticket with Cobra Café directions
+  and Uber deep link.
 
 Cloudflare Pages project gelman-travel-guide has Git Provider: No, so auto-deploy after GitHub merges is not configured. If asked to deploy future changes, use:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main

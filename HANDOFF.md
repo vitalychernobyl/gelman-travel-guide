@@ -9,8 +9,8 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v58 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v58 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+main:            v59 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v59 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
 
@@ -42,6 +42,16 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v59 changed (context for reviewers)
+
+- Added the Amsterdam Rijksmuseum Guided Tour as a plan ticket between Van Gogh and BA.
+- Ticket includes booking reference/voucher barcode `1391714033`, EuroQuest Travel,
+  4 adults, English guide, and the "not your entry ticket" warning.
+- Cobra Café is the meeting point, with leave-by 12:30 PM, meet-guide 12:45 PM,
+  1:00 PM start, 120 minute duration, and orange-umbrella guide note.
+- Directions open Google Maps to Cobra Café; Uber deep link pins Cobra Café coordinates.
+- Bumped service worker, manifest, and app-version to v59.
 
 ## What v58 changed (context for reviewers)
 
