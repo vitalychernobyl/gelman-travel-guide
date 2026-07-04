@@ -1,13 +1,13 @@
-const APP_VERSION = "60";
+const APP_VERSION = "61";
 const CACHE = `gelman-travel-guide-v${APP_VERSION}`;
 const FILES = [
   "./",
   "./index.html",
-  "./?v=60",
+  "./?v=61",
   "./app-version.json",
-  "./app-version.json?v=60",
+  "./app-version.json?v=61",
   "./manifest.webmanifest",
-  "./manifest.webmanifest?v=60",
+  "./manifest.webmanifest?v=61",
   "./app-logo.png",
   "./app-logo.png?v=17",
   "./apple-touch-icon.png",
@@ -126,6 +126,10 @@ const FILES = [
   "./attractions/vienna-spanish-riding-school.jpg?v=1",
   "./attractions/amsterdam-rijksmuseum.jpg",
   "./attractions/amsterdam-rijksmuseum.jpg?v=1",
+  "./attractions/amsterdam-royal-palace.jpg",
+  "./attractions/amsterdam-royal-palace.jpg?v=1",
+  "./attractions/amsterdam-oude-kerk.jpg",
+  "./attractions/amsterdam-oude-kerk.jpg?v=1",
   "./attractions/amsterdam-albert-cuyp-market.jpg",
   "./attractions/amsterdam-albert-cuyp-market.jpg?v=1",
   "./attractions/amsterdam-loetje-cafe.jpg",

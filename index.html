@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=60">
+  <link rel="manifest" href="manifest.webmanifest?v=61">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -2218,7 +2218,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "60";
+      const APP_VERSION = "61";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -2437,25 +2437,28 @@
           code: "AMS",
           city: "Amsterdam",
           hotel: "Avani Museum Quarter",
-          filters: ["Museum", "Fish", "Food", "Coffee", "Canal", "Landmark", "Nightlife", "Outdoors"],
+          filters: ["Top10", "Museum", "Fish", "Food", "Coffee", "Canal", "Landmark", "Nightlife", "Outdoors"],
+          defaultFilter: "Top10",
           featured: ["Café Luce", "Loetje Amsterdam Café", "Albert Cuyp Fish Market", "Van Gogh Museum", "Amsterdam City Center & Centraal", "Vondelpark", "Blue Boat Canal Cruise", "Flagship Anne Frank Canal Tour"],
           items: [
             { title: "Café Luce", featured: true, category: "Coffee", rating: 4.8, location: "Amsterdam", price: "Cafe / restaurant prices", distance: "Check live map", description: "Saved from the Google result you sent: a quick cafe/restaurant candidate to keep at the very top of the Amsterdam list.", why: "Useful because it is a user-picked stop rather than another generic recommendation. Tap the map/Uber buttons from the card when you are ready to go.", details: "Exact public listing was not cleanly discoverable from search, so this is stored as a Google lookup/Maps target for fast access in Amsterdam.", link: "https://www.google.com/search?q=Cafe+Luce+Amsterdam", map: "https://www.google.com/maps/search/?api=1&query=Cafe%20Luce%20Amsterdam" },
             { title: "Loetje Amsterdam Café", featured: true, category: "Food", rating: 4.3, location: "Johannes Vermeerstraat 52", price: "Menu prices", distance: "4-6 min walk from hotel", description: "Classic Amsterdam steak-and-gravy spot right by Museumplein and the Concertgebouw, close enough to the hotel to be an easy dinner fallback.", why: "This is the original Loetje cafe and the low-drama nearby meal move: steak in Loetje jus, fries, bread for the gravy, terrace if the weather behaves, and enough non-steak options to keep everyone civil.", details: "Official listing says daily 10:00-22:30. Reservations are recommended on busy nights; walk from Avani Museum Quarter instead of turning it into logistics.", link: "https://www.loetje.nl/en/locations/amsterdam-cafe/", map: "https://www.google.com/maps/search/?api=1&query=Loetje%20Amsterdam%20Caf%C3%A9%2C%20Johannes%20Vermeerstraat%2052%2C%20Amsterdam" },
             { title: "Albert Cuyp Fish Market", featured: true, category: "Fish", rating: 4.8, location: "Albert Cuypstraat, De Pijp", price: "Market prices", distance: "10-15 min from hotel", description: "The nearby Albert Cuyp Market is the easy fish-market move from the hotel: herring, kibbeling, snacks, and enough stalls to satisfy everyone.", why: "This is the practical fish stop near Avani Museum Quarter. Go for lunch or a snack crawl, not a formal dinner.", details: "Open Monday-Saturday roughly 9:30 AM-5:00 PM and closed Sunday. Fish stalls vary by day, so earlier is better.", link: "https://albertcuyp-markt.amsterdam/", map: "https://www.google.com/maps/search/?api=1&query=Albert%20Cuyp%20Market%2C%20Amsterdam" },
-            { title: "Rijksmuseum", category: "Museum", rating: 4.7, location: "Museumplein", price: "About €25", distance: "5 min walk from hotel", description: "Amsterdam's heavyweight art museum: Rembrandt, Vermeer, ship models, Delftware, and a grand building five minutes from the hotel.", why: "Best nearby museum anchor. The Gallery of Honour works even as a short greatest-hits strike.", details: "Book a timed ticket. Night Watch room plus Gallery of Honour is the core route if attention spans are limited.", link: "https://www.rijksmuseum.nl/en" },
-            { title: "Van Gogh Museum", featured: true, category: "Museum", rating: 4.7, location: "Museumplein", price: "About €25", distance: "3 min walk from hotel", description: "The world's largest Van Gogh collection: paintings, drawings, and letters arranged chronologically.", why: "Close, emotionally direct, and doable in 90 minutes without museum fatigue.", details: "Timed tickets are essentially mandatory; book days ahead in July.", link: "https://www.vangoghmuseum.nl/en" },
-            { title: "Anne Frank House", category: "Museum", rating: 4.5, location: "Jordaan", price: "About €16", distance: "20-25 min from hotel", description: "Timed-entry museum in the original canal house with the secret annex.", why: "Important and memorable; the most affecting hour in Amsterdam.", details: "Tickets release online in advance and sell out; walk-up is not a plan.", link: "https://www.annefrank.org/en/" },
+            { title: "Rijksmuseum", filters: ["Top10"], filterRanks: { Top10: 1 }, category: "Museum", rating: 4.7, location: "Museumplein", price: "About €25", distance: "5 min walk from hotel", description: "Amsterdam's heavyweight art museum: Rembrandt, Vermeer, ship models, Delftware, and a grand building five minutes from the hotel.", why: "Best nearby museum anchor. The Gallery of Honour works even as a short greatest-hits strike.", details: "Book a timed ticket. Night Watch room plus Gallery of Honour is the core route if attention spans are limited.", link: "https://www.rijksmuseum.nl/en" },
+            { title: "Van Gogh Museum", featured: true, filters: ["Top10"], filterRanks: { Top10: 2 }, category: "Museum", rating: 4.7, location: "Museumplein", price: "About €25", distance: "3 min walk from hotel", description: "The world's largest Van Gogh collection: paintings, drawings, and letters arranged chronologically.", why: "Close, emotionally direct, and doable in 90 minutes without museum fatigue.", details: "Timed tickets are essentially mandatory; book days ahead in July.", link: "https://www.vangoghmuseum.nl/en" },
+            { title: "Anne Frank House", filters: ["Top10"], filterRanks: { Top10: 3 }, category: "Museum", rating: 4.5, location: "Jordaan", price: "About €16", distance: "20-25 min from hotel", description: "Timed-entry museum in the original canal house with the secret annex.", why: "Important and memorable; the most affecting hour in Amsterdam.", details: "Tickets release online in advance and sell out; walk-up is not a plan.", link: "https://www.annefrank.org/en/" },
+            { title: "Royal Palace Amsterdam", filters: ["Top10"], filterRanks: { Top10: 4 }, category: "Landmark", rating: 4.6, location: "Dam Square", price: "About €12.50; exterior free", distance: "20-25 min from hotel", description: "A monumental 17th-century former city hall on Dam Square, now the Dutch king's official reception palace and open to visitors most days.", why: "Best grand civic landmark in the center: huge halls, sculpture, royal ceremony, and Dam Square energy in one stop.", details: "Check opening before going because royal events can close it. If tickets are sold out, the exterior plus Dam Square still works as a fast landmark stop.", link: "https://www.paleisamsterdam.nl/en/", tickets: "https://www.paleisamsterdam.nl/en/visit/", map: "https://www.google.com/maps/search/?api=1&query=Royal%20Palace%20Amsterdam%2C%20Dam%20Square" },
             { title: "Amsterdam City Center & Centraal", featured: true, category: "Landmark", rating: 4.7, location: "Centraal Station / Damrak", price: "Free to wander", distance: "20-25 min from hotel", description: "The classic city-center arrival view: Centraal Station, Damrak, tram noise, canal houses, and the feeling that Amsterdam has fully started.", why: "Good visual anchor for the first Amsterdam wander and an easy place to meet, start a canal walk, or catch transit.", details: "Best as a loose walk rather than a single ticketed attraction. Pair with Damrak, Oudezijds, or a canal-side coffee stop.", link: "https://www.iamsterdam.com/en/whats-on/calendar/attractions-and-sights/places-of-interest/central-station", map: "https://www.google.com/maps/search/?api=1&query=Amsterdam%20Centraal%20Station" },
             { title: "Blue Boat Canal Cruise", featured: true, category: "Canal", rating: 4.6, location: "Stadhouderskade near Rijksmuseum", price: "About €26-€29", distance: "8-10 min walk from hotel", description: "Blue Boat's canal cruise is the easy nearby boat option from the Museumplein side of town, with a roughly 75-90 minute Amsterdam loop.", why: "Closest low-effort canal tour from the hotel area. It gives the family the canal-house postcard without turning the day into logistics.", details: "Book the 1.5-hour style cruise if available; otherwise the standard city canal cruise is the practical nearby fallback.", link: "https://www.blueboat.nl/", map: "https://www.google.com/maps/search/?api=1&query=Blue%20Boat%20Company%20Stadhouderskade%20Amsterdam" },
             { title: "Flagship Anne Frank Canal Tour", featured: true, category: "Canal", rating: 4.6, location: "Anne Frank House / Prinsengracht", price: "About €26 per person", distance: "20-25 min from hotel", description: "Flagship runs open-boat canal tours near the Anne Frank House, useful if you want the Jordaan/Prinsengracht side by water.", why: "Pairs naturally with Anne Frank House or a Jordaan walk, and feels smaller and more personal than the big glass tourist boats.", details: "User note: about €26 per person. Check live pricing and departure time before walking over.", link: "https://flagshipamsterdam.com/", map: "https://www.google.com/maps/search/?api=1&query=Flagship%20Amsterdam%20Anne%20Frank%20House%20Canal%20Tour" },
-            { title: "NEMO Science Museum", category: "Museum", rating: 4.5, location: "Oosterdok", price: "About €17.50", distance: "25-30 min from hotel", description: "Hands-on science museum in the big green ship-shaped building, with a free rooftop terrace.", why: "Best pick if anyone in the group is under 16 or over-museumed; everything is touchable.", details: "The rooftop square is free even without a museum ticket and has wide harbor views.", link: "https://www.nemosciencemuseum.nl/en/" },
-            { title: "Rembrandt House Museum", category: "Museum", rating: 4.5, location: "Jodenbreestraat", price: "About €17.50", distance: "20-25 min from hotel", description: "Rembrandt's actual house and studio, restored with his etchings and daily demonstrations.", why: "Small, personal, and quick — the anti-blockbuster museum stop.", details: "Etching and paint-making demos run through the day and are worth timing.", link: "https://www.rembrandthuis.nl/en/" },
-            { title: "National Maritime Museum", category: "Museum", rating: 4.5, location: "Kattenburgerplein", price: "About €17.50", distance: "25-30 min from hotel", description: "Dutch seafaring history in a grand arsenal building, with a replica East Indiaman ship to board.", why: "The replica ship keeps it fun; the courtyard roof is architectural dessert.", details: "Combine with NEMO next door; both share the harbor area.", link: "https://www.hetscheepvaartmuseum.com/" },
-            { title: "Stedelijk Museum", category: "Museum", rating: 4.4, location: "Museumplein", price: "About €22.50", distance: "3 min walk from hotel", description: "Modern and contemporary art in the building locals call the bathtub: Mondrian, Malevich, design classics.", why: "Right next to the hotel and the palate cleanser after the old masters.", details: "The design wing is the sleeper hit if paintings are wearing thin.", link: "https://www.stedelijk.nl/en" },
+            { title: "NEMO Science Museum", filters: ["Top10"], filterRanks: { Top10: 7 }, category: "Museum", rating: 4.5, location: "Oosterdok", price: "About €17.50", distance: "25-30 min from hotel", description: "Hands-on science museum in the big green ship-shaped building, with a free rooftop terrace.", why: "Best pick if anyone in the group is under 16 or over-museumed; everything is touchable.", details: "The rooftop square is free even without a museum ticket and has wide harbor views.", link: "https://www.nemosciencemuseum.nl/en/" },
+            { title: "Rembrandt House Museum", filters: ["Top10"], filterRanks: { Top10: 6 }, category: "Museum", rating: 4.5, location: "Jodenbreestraat", price: "About €17.50", distance: "20-25 min from hotel", description: "Rembrandt's actual house and studio, restored with his etchings and daily demonstrations.", why: "Small, personal, and quick - the anti-blockbuster museum stop.", details: "Etching and paint-making demos run through the day and are worth timing.", link: "https://www.rembrandthuis.nl/en/" },
+            { title: "National Maritime Museum", filters: ["Top10"], filterRanks: { Top10: 8 }, category: "Museum", rating: 4.5, location: "Kattenburgerplein", price: "About €17.50", distance: "25-30 min from hotel", description: "Dutch seafaring history in a grand arsenal building, with a replica East Indiaman ship to board.", why: "The replica ship keeps it fun; the courtyard roof is architectural dessert.", details: "Combine with NEMO next door; both share the harbor area.", link: "https://www.hetscheepvaartmuseum.com/" },
+            { title: "Stedelijk Museum", filters: ["Top10"], filterRanks: { Top10: 5 }, category: "Museum", rating: 4.4, location: "Museumplein", price: "About €22.50", distance: "3 min walk from hotel", description: "Modern and contemporary art in the building locals call the bathtub: Mondrian, Malevich, design classics.", why: "Right next to the hotel and the palate cleanser after the old masters.", details: "The design wing is the sleeper hit if paintings are wearing thin.", link: "https://www.stedelijk.nl/en" },
             { title: "Micropia", category: "Museum", rating: 4.4, location: "Artis, Plantage", price: "About €16", distance: "25-30 min from hotel", description: "The world's only microbe museum: kiss-o-meter, glowing bacteria, and cheerful body-horror.", why: "Genuinely unlike any other museum and reliably wins over teenagers.", details: "Compact — pair it with the Artis zoo next door or the Plantage neighborhood.", link: "https://www.micropia.nl/en/" },
             { title: "H'ART Museum", category: "Museum", rating: 4.4, location: "Amstel", price: "About €17.50", distance: "20-25 min from hotel", description: "Canal-side exhibition palace (the former Hermitage) hosting rotating world-class loans.", why: "Beautiful Amstel building and rarely crowded; check the current show.", details: "Exhibitions rotate — look up what is on before committing.", link: "https://hartmuseum.nl/en/" },
-            { title: "Moco Museum", category: "Museum", rating: 4.2, location: "Museumplein", price: "About €22", distance: "4 min walk from hotel", description: "Small townhouse museum of Banksy, Warhol, and immersive digital rooms.", why: "The Instagram-friendly counterweight to the serious Museumplein neighbors.", details: "It is small for the price; go for the vibe, not for depth.", link: "https://mocomuseum.com/" },
+            { title: "Oude Kerk", filters: ["Top10"], filterRanks: { Top10: 9 }, category: "Landmark", rating: 4.4, location: "De Wallen", price: "About €13.50; exterior free", distance: "20-25 min from hotel", description: "Amsterdam's oldest building, a medieval church in De Wallen that now mixes historic architecture with contemporary art exhibitions.", why: "It gives the old city real texture: leaning houses, narrow lanes, church stone, and the Red Light District's older history before the neon.", details: "Good as a compact culture stop while walking the old center. Go earlier in the day if you want atmosphere without the late-night district crowd.", link: "https://oudekerk.nl/en/", map: "https://www.google.com/maps/search/?api=1&query=Oude%20Kerk%2C%20Amsterdam" },
+            { title: "Moco Museum", filters: ["Top10"], filterRanks: { Top10: 10 }, category: "Museum", rating: 4.2, location: "Museumplein", price: "About €22", distance: "4 min walk from hotel", description: "Small townhouse museum of Banksy, Warhol, and immersive digital rooms.", why: "The Instagram-friendly counterweight to the serious Museumplein neighbors.", details: "It is small for the price; go for the vibe, not for depth.", link: "https://mocomuseum.com/" },
             { title: "John Dory", category: "Fish", rating: 4.7, location: "Prinsengracht", price: "Tasting menus from about €48", distance: "15-20 min from hotel", description: "Canal-side fish restaurant doing refined multi-course seafood without stiffness.", why: "The strongest pure-fish kitchen in town for a proper sit-down dinner.", details: "Reserve ahead; the chef's menu is the move.", link: "https://www.johndory.nl/" },
             { title: "Stubbe's Haring", category: "Fish", rating: 4.6, location: "Singel bridge", price: "Snack prices", distance: "20-25 min from hotel", description: "The classic herring stand on the Singel: herring, onions, pickles, done standing up.", why: "The canonical Amsterdam fish ritual — fast, memorable, slightly briny.", details: "If raw herring is a hard no, treat it as a photo stop and keep moving.", link: "https://www.google.com/search?q=Stubbe%27s+Haring+Amsterdam" },
             { title: "Vishuisje Herengracht", category: "Fish", rating: 4.6, location: "Herengracht", price: "Snack / casual", distance: "20-25 min from hotel", description: "Canal-side fish counter: herring for the traditionalists, kibbeling for everyone else.", why: "The compromise fish stop — nobody has to commit to raw herring.", details: "Kibbeling (fried cod bites) is the crowd-pleaser order.", link: "https://www.google.com/search?q=Vishuisje+Herengracht+Amsterdam" },
@@ -2680,6 +2683,8 @@
         "Cobra Cafe": [52.3589397, 4.8842999],
         "Van Gogh Museum": [52.358367, 4.88109],
         "Anne Frank House": [52.375156, 4.884081],
+        "Royal Palace Amsterdam": [52.373169, 4.891421],
+        "Oude Kerk": [52.374444, 4.898056],
         "Amsterdam City Center & Centraal": [52.378901, 4.900581],
         "Flagship Anne Frank Canal Tour": [52.375156, 4.884081],
         "NEMO Science Museum": [52.374115, 4.91232],
@@ -3029,6 +3034,8 @@
         "MAK": "attractions/vienna-mak.jpg?v=1",
         "Spanish Riding School": "attractions/vienna-spanish-riding-school.jpg?v=1",
         "Rijksmuseum": "attractions/amsterdam-rijksmuseum.jpg?v=1",
+        "Royal Palace Amsterdam": "attractions/amsterdam-royal-palace.jpg?v=1",
+        "Oude Kerk": "attractions/amsterdam-oude-kerk.jpg?v=1",
         "Moco Museum": "attractions/amsterdam-moco-museum.jpg?v=1",
         "Pesca": "attractions/amsterdam-pesca.jpg?v=1",
         "Bar Fisk": "attractions/amsterdam-bar-fisk.jpg?v=1",
@@ -3142,7 +3149,7 @@
           </section>
         `).join("");
       }
-      const ATTRACTION_FILTER_LABELS = { Museum: "Museums", Fish: "Fish", Food: "Food", Coffee: "Coffee", Canal: "Canals", Landmark: "Landmarks", Nightlife: "Nightlife", Outdoors: "Outdoors" };
+      const ATTRACTION_FILTER_LABELS = { Top10: "Top 10", Museum: "Museums", Fish: "Fish", Food: "Food", Coffee: "Coffee", Canal: "Canals", Landmark: "Landmarks", Nightlife: "Nightlife", Outdoors: "Outdoors" };
       const attractionFilterChoice = {};
       const attractionSortChoice = {};
       const attractionViewChoice = {};
@@ -3220,8 +3227,18 @@
           });
         }
         const filters = data.filters || [];
-        const activeFilter = filters.includes(attractionFilterChoice[city]) ? attractionFilterChoice[city] : "All";
-        const shown = activeFilter === "All" ? items : items.filter(item => item.category === activeFilter);
+        const defaultFilter = filters.includes(data.defaultFilter) ? data.defaultFilter : "All";
+        const activeFilter = filters.includes(attractionFilterChoice[city]) ? attractionFilterChoice[city] : defaultFilter;
+        let shown = activeFilter === "All"
+          ? items
+          : items.filter(item => item.category === activeFilter || (item.filters || []).includes(activeFilter));
+        if (activeFilter !== "All" && shown.some(item => item.filterRanks && item.filterRanks[activeFilter] != null)) {
+          shown = shown.slice().sort((a, b) =>
+            ((a.filterRanks && a.filterRanks[activeFilter]) ?? 999) - ((b.filterRanks && b.filterRanks[activeFilter]) ?? 999) ||
+            (b.rating || 0) - (a.rating || 0) ||
+            a._index - b._index
+          );
+        }
         const activeView = attractionViewChoice[city] === "map" ? "map" : "list";
         const filterChips = filters.length ? `
           <div class="attraction-filters" role="tablist" aria-label="Filter attractions">
@@ -3264,7 +3281,7 @@
                 const uberLink = uberDeepLink(title, destination);
                 const fallbackImage = attractionThumb(title, category);
                 const image = ATTRACTION_IMAGES[title] || attraction.image || fallbackImage;
-                const recommended = attraction.featured || attraction._featuredRank >= 0;
+                const recommended = attraction.featured || attraction._featuredRank >= 0 || (attraction.filters || []).includes("Top10");
                 return `<details class="attraction-card" id="${escapeHTML(cardId)}"${index === 0 ? " open" : ""}>
                   <summary>
                     <img class="attraction-thumb" src="${escapeHTML(image)}" data-fallback-src="${escapeHTML(fallbackImage)}" alt="${escapeHTML(title)}">
@@ -3708,7 +3725,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=60", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=61", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
