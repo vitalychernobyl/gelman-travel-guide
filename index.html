@@ -9,13 +9,13 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=55">
+  <link rel="manifest" href="manifest.webmanifest?v=56">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
   <style>
     :root {
-      --font: 15px;
+      --font: 16px;
       --pad: 8px;
       --gap: 6px;
       --bg: #f3f3f1;
@@ -178,8 +178,8 @@
       top: max(10px, env(safe-area-inset-top));
       right: 10px;
       z-index: 2;
-      max-width: 118px;
-      padding: 8px 10px;
+      width: min(128px, 32vw);
+      padding: 8px 9px;
       border: 1px solid rgba(255, 255, 255, .58);
       border-radius: 16px;
       background: rgba(37, 33, 28, .58);
@@ -190,25 +190,61 @@
     }
     .hero-status span {
       display: block;
+      overflow: hidden;
       color: #f7c99e;
-      font-size: .58rem;
+      font-size: .6rem;
       font-weight: 950;
       line-height: 1;
+      text-overflow: ellipsis;
       text-transform: uppercase;
+      white-space: nowrap;
     }
-    .hero-status strong {
-      display: block;
-      margin-top: 3px;
-      font-size: .82rem;
-      line-height: 1.05;
+    .weather-line {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 5px;
+      min-width: 0;
+      margin-top: 4px;
+      white-space: nowrap;
+    }
+    .weather-line strong {
+      min-width: 0;
+      overflow: hidden;
+      font-size: .84rem;
+      font-weight: 1000;
+      line-height: 1;
+      text-overflow: ellipsis;
+    }
+    .weather-icon {
+      flex: 0 0 auto;
+      display: inline-grid;
+      place-items: center;
+      width: 21px;
+      height: 21px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .22);
+      font-size: .98rem;
+      line-height: 1;
+      text-align: center;
+    }
+    .weather-icon.weather-rain,
+    .weather-icon.weather-storm {
+      background: #1677d2;
+      color: #ffffff;
+      font-size: 1rem;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, .72), 0 0 0 5px rgba(22, 119, 210, .26);
     }
     .hero-status small {
       display: block;
-      margin-top: 3px;
+      margin-top: 4px;
+      overflow: hidden;
       color: rgba(255, 254, 250, .82);
-      font-size: .6rem;
+      font-size: .68rem;
       font-weight: 850;
       line-height: 1.15;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .share-button {
       position: absolute;
@@ -1621,7 +1657,7 @@
       </button>
     </div>
     <section class="hero" aria-label="City hero">
-      <div class="hero-status" id="heroStatus" aria-live="polite"><span>AMS · Stay</span><strong>Jul 3-6</strong><small>66/57° · Sat: 72/62°</small></div>
+      <div class="hero-status" id="heroStatus" aria-live="polite"><span>AMS · Stay Jul 3-6</span><div class="weather-line"><span class="weather-icon weather-cloudy" aria-hidden="true">☁</span><strong>66/57° Cloudy</strong></div><small>Sat: 72/62°</small></div>
       <button class="share-button" id="shareButton" type="button" aria-label="Share current Gelman Travel page">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M12 16V3"/><path d="m7 8 5-5 5 5"/></svg>
         <span>Share</span>
@@ -2091,7 +2127,8 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "55";
+      const APP_VERSION = "56";
+      const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
       const UPDATE_RELOAD_AT_KEY = "gelmanLastForcedReloadAt";
@@ -2115,7 +2152,7 @@
       const shareButton = document.querySelector("#shareButton");
       const shareStatus = document.querySelector("#shareStatus");
       let deferredInstallPrompt = null;
-      let size = Number(localStorage.gelmanFont || 15);
+      let size = Number(localStorage.gelmanFont || DEFAULT_FONT_SIZE);
       let density = localStorage.gelmanDensity || "compact";
       const startParams = new URLSearchParams(location.search);
       let activeCity = "amsterdam";
@@ -2145,11 +2182,11 @@
       };
       const MAP_LINK_SELECTOR = 'a[href*="google."][href*="/maps"], a[href^="comgooglemaps:"], a[data-web-map-url], a.map-action';
       const CITY_WEATHER = {
-        vienna: { label: "Vienna", short: "VIE", latitude: 48.2082, longitude: 16.3738, fallback: { today: "72/58°", tomorrow: "74/60°" } },
-        amsterdam: { label: "Amsterdam", short: "AMS", latitude: 52.3676, longitude: 4.9041, fallback: { today: "66/57°", tomorrow: "72/62°" } },
-        london: { label: "London", short: "LDN", latitude: 51.5072, longitude: -0.1276, fallback: { today: "70/57°", tomorrow: "70/58°" } },
-        washington: { label: "DC", short: "DC", latitude: 38.9072, longitude: -77.0369, fallback: { today: "87/71°", tomorrow: "88/72°" } },
-        sarasota: { label: "Sarasota", short: "SRQ", latitude: 27.3364, longitude: -82.5307, fallback: { today: "90/78°", tomorrow: "90/78°" } }
+        vienna: { label: "Vienna", short: "VIE", latitude: 48.2082, longitude: 16.3738, fallback: { today: "72/58°", tomorrow: "74/60°", todayCondition: "Clear", tomorrowCondition: "Cloudy" } },
+        amsterdam: { label: "Amsterdam", short: "AMS", latitude: 52.3676, longitude: 4.9041, fallback: { today: "66/57°", tomorrow: "72/62°", todayCondition: "Cloudy", tomorrowCondition: "Drizzle" } },
+        london: { label: "London", short: "LDN", latitude: 51.5072, longitude: -0.1276, fallback: { today: "70/57°", tomorrow: "70/58°", todayCondition: "Cloudy", tomorrowCondition: "Rain" } },
+        washington: { label: "DC", short: "DC", latitude: 38.9072, longitude: -77.0369, fallback: { today: "87/71°", tomorrow: "88/72°", todayCondition: "Clear", tomorrowCondition: "Cloudy" } },
+        sarasota: { label: "Sarasota", short: "SRQ", latitude: 27.3364, longitude: -82.5307, fallback: { today: "90/78°", tomorrow: "90/78°", todayCondition: "Storm", tomorrowCondition: "Rain" } }
       };
       const DICTIONARIES = {
         vienna: [
@@ -3215,8 +3252,16 @@
           }
         }
         const cityLabel = weatherMeta.short || weatherMeta.label || activeCity;
-        const weatherLine = weather.today && weather.tomorrow ? `${weather.today} · ${weather.tomorrowLabel || "Next"}: ${weather.tomorrow}` : "";
-        heroStatus.innerHTML = `<span>${escapeHTML(cityLabel)} · ${escapeHTML(label)}</span><strong>${escapeHTML(value)}</strong>${weatherLine ? `<small>${escapeHTML(weatherLine)}</small>` : ""}`;
+        const condition = weather.todayCondition || "";
+        const icon = weatherIcon(condition);
+        const todayWeather = weather.today || "";
+        const todayWeatherLabel = todayWeather ? `${todayWeather}${condition ? ` ${condition}` : ""}` : "";
+        const nextWeather = weather.tomorrow ? `${weather.tomorrowLabel || "Next"}: ${weather.tomorrow}${weather.tomorrowCondition ? ` ${weather.tomorrowCondition}` : ""}` : "";
+        heroStatus.innerHTML = `
+          <span>${escapeHTML(cityLabel)} · ${escapeHTML(label)} ${escapeHTML(value || "")}</span>
+          ${todayWeather ? `<div class="weather-line" aria-label="${escapeHTML(todayWeatherLabel)}"><span class="weather-icon ${escapeHTML(icon.className)}" aria-hidden="true">${escapeHTML(icon.symbol)}</span><strong>${escapeHTML(todayWeather)}</strong></div>` : ""}
+          ${nextWeather ? `<small>${escapeHTML(nextWeather)}</small>` : ""}
+        `;
       }
       function shortTemps(max, min) {
         return `${Math.round(max)}/${Math.round(min)}°`;
@@ -3226,13 +3271,22 @@
         if (Number.isNaN(date.getTime())) return "Next";
         return date.toLocaleDateString("en-US", { weekday: "short" });
       }
-      function renderWeather(city, today, tomorrow, tomorrowLabel = "Next") {
-        weatherByCity[city] = { today, tomorrow, tomorrowLabel };
+      function weatherIcon(condition) {
+        const value = String(condition || "").toLowerCase();
+        if (value.includes("storm")) return { symbol: "⛈", className: "weather-storm" };
+        if (value.includes("rain") || value.includes("drizzle")) return { symbol: "☔", className: "weather-rain" };
+        if (value.includes("snow")) return { symbol: "❄", className: "weather-snow" };
+        if (value.includes("fog")) return { symbol: "🌫", className: "weather-fog" };
+        if (value.includes("cloud")) return { symbol: "☁", className: "weather-cloudy" };
+        return { symbol: "☀", className: "weather-clear" };
+      }
+      function renderWeather(city, today, tomorrow, tomorrowLabel = "Next", todayCondition = "", tomorrowCondition = "") {
+        weatherByCity[city] = { today, tomorrow, tomorrowLabel, todayCondition, tomorrowCondition };
         if (city === activeCity) updateHeroStatus();
       }
       function fallbackWeather(city) {
         const meta = CITY_WEATHER[city] || CITY_WEATHER.amsterdam;
-        renderWeather(city, meta.fallback.today, meta.fallback.tomorrow, meta.fallback.tomorrowLabel || nextDayLabel());
+        renderWeather(city, meta.fallback.today, meta.fallback.tomorrow, meta.fallback.tomorrowLabel || nextDayLabel(), meta.fallback.todayCondition || "Clear", meta.fallback.tomorrowCondition || "");
       }
       function weatherSummary(code) {
         if ([0, 1].includes(code)) return "Clear";
@@ -3259,7 +3313,7 @@
           if (hi.length < 2 || lo.length < 2) throw new Error("weather incomplete");
           const today = shortTemps(hi[0], lo[0]);
           const tomorrow = shortTemps(hi[1], lo[1]);
-          renderWeather(city, today, tomorrow, nextDayLabel(daily.time?.[1]));
+          renderWeather(city, today, tomorrow, nextDayLabel(daily.time?.[1]), weatherSummary(codes[0]), weatherSummary(codes[1]));
         } catch {
           fallbackWeather(city);
         }
@@ -3373,7 +3427,7 @@
       document.querySelector("#smaller").onclick = () => { size = Math.max(12, size - 1); localStorage.gelmanFont = size; applyPrefs(); };
       document.querySelector("#larger").onclick = () => { size = Math.min(22, size + 1); localStorage.gelmanFont = size; applyPrefs(); };
       document.querySelector("#density").onclick = () => { density = density === "compact" ? "comfortable" : "compact"; localStorage.gelmanDensity = density; applyPrefs(); };
-      document.querySelector("#reset").onclick = () => { size = 15; density = "compact"; localStorage.removeItem("gelmanFont"); localStorage.removeItem("gelmanDensity"); applyPrefs(); };
+      document.querySelector("#reset").onclick = () => { size = DEFAULT_FONT_SIZE; density = "compact"; localStorage.removeItem("gelmanFont"); localStorage.removeItem("gelmanDensity"); applyPrefs(); };
       controlsToggle.addEventListener("click", () => {
         const open = !floatControls.classList.contains("open");
         floatControls.classList.toggle("open", open);
@@ -3516,7 +3570,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=55", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=56", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
