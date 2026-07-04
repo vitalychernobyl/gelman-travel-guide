@@ -7,8 +7,8 @@ Last verified: 2026-07-04
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-Latest app commit at deploy: 52e9e5f Fade and move expired tickets
-Cache version: service-worker.js?v=60
+Latest app commit at deploy: a6af4a6 Add Amsterdam top museum landmarks
+Cache version: service-worker.js?v=61
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
-Deployment URL: https://723ac89b.gelman-travel-guide.pages.dev
+Deployment URL: https://0790ae0f.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
@@ -28,18 +28,18 @@ Wrangler: 4.107.0
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=60
+service-worker.js?v=61
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=60
+service-worker.js?v=61
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"60","publishedAt":"2026-07-04T07:42:00-04:00"}
+{"version":"61","publishedAt":"2026-07-04T11:35:00-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=60' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=61' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=60",
+  "start_url": "./?v=61",
   "display": "standalone",
 
 curl -sI 'https://wttr.in/Amsterdam?u' | sed -n '1,8p'
@@ -55,10 +55,32 @@ curl -sI 'https://antonreport.com/gelmantravel/attractions/amsterdam-loetje-cafe
 HTTP/2 200
 content-type: image/jpeg
 
+curl -sI 'https://antonreport.com/gelmantravel/attractions/amsterdam-royal-palace.jpg?v=1' | sed -n '1,4p'
+HTTP/2 200
+content-type: image/jpeg
+
+curl -sI 'https://antonreport.com/gelmantravel/attractions/amsterdam-oude-kerk.jpg?v=1' | sed -n '1,4p'
+HTTP/2 200
+content-type: image/jpeg
+
 curl -sI 'https://antonreport.com/gelmantravel/london-stay-house.webp' | sed -n '1,4p'
 HTTP/2 200
 content-type: image/webp
 ```
+
+## v61 Change
+
+- Added an Amsterdam `Top 10` attractions filter and made it the default Amsterdam
+  attractions landing state.
+- Top 10 order: Rijksmuseum, Van Gogh Museum, Anne Frank House, Royal Palace Amsterdam,
+  Stedelijk Museum, Rembrandt House Museum, NEMO Science Museum, National Maritime
+  Museum, Oude Kerk, and Moco Museum.
+- Added Royal Palace Amsterdam and Oude Kerk cards with descriptions, prices, locations,
+  official links, map links, Uber support, and local JPEG images.
+- Top 10 cards are marked `Recommended` while retaining their real Museum/Landmark
+  categories for normal filtering.
+- Service worker, manifest, and app-version are bumped to v61 so installed Home Screen
+  apps refresh.
 
 ## v60 Change
 
@@ -120,6 +142,20 @@ content-type: image/webp
 ## Browser QA
 
 ```text
+v61 Amsterdam Top 10 QA:
+- Local mobile viewport: 396x695, in-app Browser.
+- Amsterdam attractions default filter is `Top 10`.
+- Card count is 10 and order is: Rijksmuseum, Van Gogh Museum, Anne Frank House,
+  Royal Palace Amsterdam, Stedelijk Museum, Rembrandt House Museum, NEMO Science Museum,
+  National Maritime Museum, Oude Kerk, Moco Museum.
+- All 10 attraction thumbnails have nonzero natural image dimensions.
+- Landmark filter interaction shows Amsterdam City Center & Centraal, Royal Palace
+  Amsterdam, and Oude Kerk; switching back to Top 10 restores the 10-card list.
+- Public antonreport.com mobile viewport: 396x695.
+- Live `https://antonreport.com/gelmantravel/?city=amsterdam&page=photos&appv=61`
+  serves `manifest.webmanifest?v=61`, shows Top 10 active, has no broken thumbnails,
+  no horizontal overflow, and no console warnings or errors.
+
 v60 expired-ticket QA:
 - Local mobile viewport: 396x695, in-app Browser.
 - Amsterdam current-date state: Van Gogh Museum is expired, opacity is 0.46, and it
@@ -199,7 +235,7 @@ URL: https://antonreport.com/gelmantravel/
 - The app is a static HTML/CSS/JS PWA with no build step.
 - The repo root is the Pages deploy directory.
 - The Cloudflare Pages project is not Git-connected, so future merges will not auto-deploy unless Git integration is configured.
-- The Worker that fronts `https://antonreport.com/gelmantravel*` was not changed for v60.
+- The Worker that fronts `https://antonreport.com/gelmantravel*` was not changed for v61.
 
 ## Handoff Prompt
 
@@ -208,11 +244,12 @@ You are working with repo vitalychernobyl/gelman-travel-guide.
 
 The app is a static no-build PWA deployed from the repo root to Cloudflare Pages project gelman-travel-guide.
 
-Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v60 is live:
-- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=60
-- https://antonreport.com/gelmantravel/ serves service-worker.js?v=60
-- https://antonreport.com/gelmantravel/app-version.json returns {"version":"60",...}
-- Expired plan tickets fade out, show `Past trip`, and move below the active plan cards.
+Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v61 is live:
+- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=61
+- https://antonreport.com/gelmantravel/ serves service-worker.js?v=61
+- https://antonreport.com/gelmantravel/app-version.json returns {"version":"61",...}
+- Amsterdam attractions default to a Top 10 museums/landmarks list with no broken
+  thumbnails, including new Royal Palace Amsterdam and Oude Kerk cards.
 
 Cloudflare Pages project gelman-travel-guide has Git Provider: No, so auto-deploy after GitHub merges is not configured. If asked to deploy future changes, use:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main

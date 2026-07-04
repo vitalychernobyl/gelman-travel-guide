@@ -9,8 +9,8 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v60 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v60 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+main:            v61 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v61 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
 
@@ -42,6 +42,19 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v61 changed (context for reviewers)
+
+- Added an Amsterdam `Top 10` attractions filter and made it the default Amsterdam
+  attractions landing state.
+- Top 10 order is Rijksmuseum, Van Gogh Museum, Anne Frank House, Royal Palace Amsterdam,
+  Stedelijk Museum, Rembrandt House Museum, NEMO Science Museum, National Maritime
+  Museum, Oude Kerk, and Moco Museum.
+- Added Royal Palace Amsterdam and Oude Kerk cards with local JPEG images, official
+  links, map links, Uber support, and coordinates.
+- Top 10 cards are marked `Recommended` while still preserving normal Museum/Landmark
+  categories for the other filters.
+- Bumped service worker, manifest, and app-version to v61.
 
 ## What v60 changed (context for reviewers)
 
