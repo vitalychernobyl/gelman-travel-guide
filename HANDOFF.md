@@ -9,8 +9,8 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v63 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v63 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+main:            v64 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v64 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
 
@@ -42,6 +42,16 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v64 changed (context for reviewers)
+
+- Fixed attraction map popups.
+- Popup location/title opens the matching attraction details card, switches back to list
+  view, opens the card, and updates the URL hash.
+- Popup `Directions` uses the same Google Maps app deep link plus web fallback pattern
+  as the rest of the app.
+- Popup `Uber` uses the same Uber destination deep link pattern as attraction cards.
+- Bumped service worker, manifest, and app-version to v64.
 
 ## What v63 changed (context for reviewers)
 

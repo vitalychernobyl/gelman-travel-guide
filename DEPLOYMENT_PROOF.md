@@ -7,8 +7,8 @@ Last verified: 2026-07-05
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-Latest app commit at deploy: 9a5daee Fix attractions All filter
-Cache version: service-worker.js?v=63
+Latest app commit at deploy: 121867e Fix attraction map popup actions
+Cache version: service-worker.js?v=64
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
-Deployment URL: https://4167ff7c.gelman-travel-guide.pages.dev
+Deployment URL: https://8f33e857.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
@@ -28,18 +28,18 @@ Wrangler: 4.107.0
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=63
+service-worker.js?v=64
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=63
+service-worker.js?v=64
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"63","publishedAt":"2026-07-05T04:28:44-04:00"}
+{"version":"64","publishedAt":"2026-07-05T04:47:17-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=63' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=64' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=63",
+  "start_url": "./?v=64",
   "display": "standalone",
 
 curl -sI 'https://wttr.in/Amsterdam?u' | sed -n '1,8p'
@@ -71,6 +71,19 @@ curl -sI 'https://antonreport.com/gelmantravel/london-stay-house.webp' | sed -n 
 HTTP/2 200
 content-type: image/webp
 ```
+
+## v64 Change
+
+- Fixed attraction map popups.
+- Popup location/title is now clickable and opens the matching attraction details card
+  in the app, switches back to list view, opens the card, and updates the URL hash.
+- Popup `Directions` now uses the same Google Maps app deep link path as the rest of
+  the app, with a web Maps fallback stored in `data-web-map-url`.
+- Popup `Uber` uses the same Uber destination deep link pattern as attraction cards.
+- Local and production browser QA: Amsterdam Fish Map showed 13 markers; clicking an
+  attraction marker opened a popup with direct `comgooglemaps://` and Uber links; clicking
+  the popup title opened the matching detail card with no broken images, no horizontal
+  overflow, and no console warnings or errors.
 
 ## v63 Change
 
