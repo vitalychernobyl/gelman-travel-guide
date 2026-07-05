@@ -9,9 +9,9 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v64 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+main:            v65 merged pending deploy; app deploy commit is in DEPLOYMENT_PROOF.md
 live:            v64 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
-pending action:  none
+pending action:  deploy v65 (see "Deploy task for the local agent")
 ```
 
 ## Standing facts
@@ -22,9 +22,17 @@ pending action:  none
 - A Cloudflare Worker proxies `antonreport.com/gelmantravel*` to the Pages origin.
   Do not touch the Worker (`wrangler.gelmantravel.jsonc`, `cloudflare/gelmantravel-worker.js`)
   unless explicitly asked.
-- Version discipline: each release bumps `APP_VERSION` (index.html + service-worker.js),
-  the `?v=` query strings (manifest link, SW registration, manifest start_url, SW FILES
-  list), and `app-version.json`. The service worker self-updates clients on relaunch.
+- Version discipline (simplified in v65): each release bumps `APP_VERSION` in **two**
+  places — `index.html` and `service-worker.js` (it drives the `CACHE` constant) — plus
+  `app-version.json` (the client version gate compares `info.version` against
+  `APP_VERSION`, so they must match). That is the whole checklist. The service worker
+  self-updates clients on relaunch.
+- Release-version `?v=` bumps are **no longer needed** and were removed in v65. The
+  Worker forwards query strings and the SW registers with `updateViaCache: "none"`, so
+  the manifest link, SW registration URL, manifest `start_url`, and the SW `FILES` list
+  are all unversioned now. (Asset-specific query strings like `app-logo.png?v=17` and
+  the image `?v=1` markers stay — they are tied to the asset, not the release, and only
+  change when that asset changes.)
 
 ## Deploy task for the local agent (future release)
 
@@ -42,6 +50,20 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v65 changed (context for reviewers)
+
+- Added a visible **Update app** button to the floating "Aa" control menu. It wires up
+  the previously-unexposed `window.forceAppUpdate()` (clears caches, unregisters the
+  service worker, reloads with a cache-busting URL) so wedged users have a one-tap
+  escape hatch instead of the kill-and-relaunch-twice dance. The button label shows the
+  current version (e.g. `Update app · v65`).
+- Simplified the release process: removed all release-version `?v=` query strings
+  (manifest link in `index.html`, SW registration URL, manifest `start_url`, and the
+  three release-versioned entries in the SW `FILES` precache list). Future releases only
+  bump `APP_VERSION` (index.html + service-worker.js) and `app-version.json`. See the
+  updated "Version discipline" note above.
+- Bumped service worker, manifest, and app-version to v65.
 
 ## What v64 changed (context for reviewers)
 
