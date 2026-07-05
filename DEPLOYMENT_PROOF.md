@@ -1,14 +1,14 @@
 # Gelman Travel Deployment Proof
 
-Last verified: 2026-07-04
+Last verified: 2026-07-05
 
 ## Repository State
 
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-Latest app commit at deploy: 9ad611a Add Frens Haringhandel recommendation
-Cache version: service-worker.js?v=62
+Latest app commit at deploy: 9a5daee Fix attractions All filter
+Cache version: service-worker.js?v=63
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
-Deployment URL: https://c853285b.gelman-travel-guide.pages.dev
+Deployment URL: https://4167ff7c.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
@@ -28,18 +28,18 @@ Wrangler: 4.107.0
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=62
+service-worker.js?v=63
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=62
+service-worker.js?v=63
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"62","publishedAt":"2026-07-04T13:22:00-04:00"}
+{"version":"63","publishedAt":"2026-07-05T04:28:44-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=62' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=63' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=62",
+  "start_url": "./?v=63",
   "display": "standalone",
 
 curl -sI 'https://wttr.in/Amsterdam?u' | sed -n '1,8p'
@@ -71,6 +71,19 @@ curl -sI 'https://antonreport.com/gelmantravel/london-stay-house.webp' | sed -n 
 HTTP/2 200
 content-type: image/webp
 ```
+
+## v63 Change
+
+- Fixed the attractions `All` filter.
+- Root cause: the UI rendered `All` as a chip, but active-filter validation only accepted
+  values from the city-specific `filters` list. For Amsterdam, clicking `All` was rejected
+  and replaced by the default `Top10` filter.
+- `All` is now treated as a valid filter value alongside the city filters.
+- Service worker, manifest, and app-version are bumped to v63 so installed Home Screen
+  apps refresh.
+- Local and production browser QA: Amsterdam Attractions starts at `Top10` with 10 cards;
+  clicking `All` selects the `All` chip and shows 59 cards, with no broken attraction
+  images, no horizontal overflow, and no console warnings or errors.
 
 ## v62 Change
 
@@ -270,12 +283,12 @@ You are working with repo vitalychernobyl/gelman-travel-guide.
 
 The app is a static no-build PWA deployed from the repo root to Cloudflare Pages project gelman-travel-guide.
 
-Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v62 is live:
-- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=62
-- https://antonreport.com/gelmantravel/ serves service-worker.js?v=62
-- https://antonreport.com/gelmantravel/app-version.json returns {"version":"62",...}
-- Amsterdam Fish recommendations now show Frens Haringhandel first with a local image,
-  official site link, Google Maps app directions, and Uber destination coordinates.
+Current deployment proof is in DEPLOYMENT_PROOF.md. It shows that v63 is live:
+- https://gelman-travel-guide.pages.dev/ serves service-worker.js?v=63
+- https://antonreport.com/gelmantravel/ serves service-worker.js?v=63
+- https://antonreport.com/gelmantravel/app-version.json returns {"version":"63",...}
+- Amsterdam Attractions `All` filter works: default `Top10` shows 10 cards, clicking
+  `All` selects the All chip and shows 59 cards.
 
 Cloudflare Pages project gelman-travel-guide has Git Provider: No, so auto-deploy after GitHub merges is not configured. If asked to deploy future changes, use:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
