@@ -9,8 +9,8 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v68 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v68 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+main:            v69 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v69 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
 
@@ -42,6 +42,16 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v69 changed (context for reviewers)
+
+- Attraction cards now render collapsed by default.
+- Removed the automatic first-card `open` behavior from `renderAttractions`.
+- Explicit opens still work for user taps, shared hash targets, and map popup detail
+  links.
+- Local mobile browser QA verified Amsterdam attractions load with zero open cards,
+  tapping Rijksmuseum opens only that card, and reload returns to zero open cards.
+- Bumped service worker, manifest, and app-version to v69.
 
 ## What v68 changed (context for reviewers)
 

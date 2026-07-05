@@ -7,8 +7,8 @@ Last verified: 2026-07-05
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-Latest app commit at deploy: e5a9031 Add attraction done and remove states
-Cache version: service-worker.js?v=68
+Latest app commit at deploy: b138f77 Collapse attraction cards by default
+Cache version: service-worker.js?v=69
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide
-Deployment URL: https://0d7a9b26.gelman-travel-guide.pages.dev
+Deployment URL: https://c726e067.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
@@ -28,13 +28,13 @@ Wrangler: 4.107.0
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=68
+service-worker.js?v=69
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=68
+service-worker.js?v=69
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"68","publishedAt":"2026-07-05T12:56:55-04:00"}
+{"version":"69","publishedAt":"2026-07-05T13:50:00-04:00"}
 
 curl -s 'https://antonreport.com/gelmantravel/' | rg -c 'gelmanAttractionStates|data-attraction-action|attraction-status-filter|ATTRACTION_STATUS_LABELS'
 14
@@ -45,23 +45,23 @@ content-type: text/html; charset=utf-8
 cache-control: public, max-age=0, must-revalidate
 x-robots-tag: noindex, nofollow, noarchive, noimageindex
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=68' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=69' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=68",
+  "start_url": "./?v=69",
   "display": "standalone",
 
-curl -sI 'https://antonreport.com/gelmantravel/service-worker.js?v=68' | sed -n '1,4p'
+curl -sI 'https://antonreport.com/gelmantravel/service-worker.js?v=69' | sed -n '1,4p'
 HTTP/2 200
 content-type: application/javascript
 
-curl -sI 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=68' | sed -n '1,4p'
+curl -sI 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=69' | sed -n '1,4p'
 HTTP/2 200
 content-type: application/manifest+json
 
-curl -s 'https://antonreport.com/gelmantravel/' | rg 'APP_VERSION = "68"|manifest.webmanifest\?v=68|service-worker.js\?v=68|gelmanAttractionStates|data-attraction-action|attraction-status-filter|ATTRACTION_STATUS_LABELS'
-  <link rel="manifest" href="manifest.webmanifest?v=68">
-      const APP_VERSION = "68";
+curl -s 'https://antonreport.com/gelmantravel/' | rg 'APP_VERSION = "69"|manifest.webmanifest\?v=69|service-worker.js\?v=69|gelmanAttractionStates|data-attraction-action|attraction-status-filter|ATTRACTION_STATUS_LABELS'
+  <link rel="manifest" href="manifest.webmanifest?v=69">
+      const APP_VERSION = "69";
       const ATTRACTION_STATUS_LABELS = { visible: "Visible", todo: "To do", done: "Done", removed: "Removed", all: "All" };
           const states = JSON.parse(localStorage.gelmanAttractionStates || "{}");
         localStorage.gelmanAttractionStates = JSON.stringify(states);
@@ -70,7 +70,7 @@ curl -s 'https://antonreport.com/gelmantravel/' | rg 'APP_VERSION = "68"|manifes
           <button class="remove-toggle" type="button" data-attraction-action="remove" data-attraction-city="${escapeHTML(city)}" data-attraction-title="${escapeHTML(title)}" aria-label="Remove ${escapeHTML(title)}">×</button>
             ${Object.entries(ATTRACTION_STATUS_LABELS).map(([key, label]) => `<button type="button" class="attraction-status-filter" data-status-filter="${key}" aria-pressed="${key === activeStatus}">${label}</button>`).join("")}
         const attractionButton = event.target.closest("[data-attraction-action]");
-        navigator.serviceWorker.register("service-worker.js?v=68", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=69", { updateViaCache: "none" }).then(registration => {
 
 Live link audit:
 {"liveUrl":"https://antonreport.com/gelmantravel/","attractionCards":87,"destinationProblems":0,"currentLocationOccurrences":0}
@@ -112,6 +112,18 @@ curl -sI 'https://antonreport.com/gelmantravel/priority-pass-sky-lounge.png?v=1'
 HTTP/2 200
 content-type: image/png
 ```
+
+## v69 Change
+
+- Attraction cards now render collapsed by default.
+- Removed the previous `index === 0 ? " open" : ""` behavior that opened the first
+  rendered attraction automatically.
+- Intentional opens still work: tapping a card opens it, hash links can open a specific
+  shared card, and map popup detail links still call the explicit open path.
+- Local mobile browser QA at 396x695 verified Amsterdam attractions load with 10 cards
+  and `openCount: 0`, tapping Rijksmuseum opens only that card, and reloading returns
+  to `openCount: 0`.
+- Bumped service worker, manifest, and app-version to v69.
 
 ## v68 Change
 
