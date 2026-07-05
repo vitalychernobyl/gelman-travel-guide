@@ -9,8 +9,8 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v67 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v67 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+main:            v68 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v68 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
 
@@ -42,6 +42,19 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v68 changed (context for reviewers)
+
+- Added per-device attraction state saved in `localStorage.gelmanAttractionStates`.
+- Every attraction card has quick `Seen` and `X` controls.
+- `Seen` marks the attraction done, fades it, shows a `Seen` tag, changes the control to
+  `Undo`, and sorts the card below active attractions.
+- `X` removes the attraction from the default visible list; the `Removed` filter shows
+  removed cards with a `Restore` control.
+- Added attraction status filters: `Visible`, `To do`, `Done`, `Removed`, and `All`.
+- Local mobile browser QA verified done sorting/fading, removed hiding/restoring, filter
+  behavior, no horizontal overflow, and no console errors.
+- Bumped service worker, manifest, and app-version to v68.
 
 ## What v67 changed (context for reviewers)
 

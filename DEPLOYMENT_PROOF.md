@@ -7,8 +7,8 @@ Last verified: 2026-07-05
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-Latest app commit at deploy: 2dbe316 Fix Google Maps current location links
-Cache version: service-worker.js?v=67
+Latest app commit at deploy: e5a9031 Add attraction done and remove states
+Cache version: service-worker.js?v=68
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide
-Deployment URL: https://716b3c1b.gelman-travel-guide.pages.dev
+Deployment URL: https://f911a3e0.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
@@ -28,34 +28,49 @@ Wrangler: 4.107.0
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=67
+service-worker.js?v=68
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=67
+service-worker.js?v=68
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"67","publishedAt":"2026-07-05T12:03:09-04:00"}
+{"version":"68","publishedAt":"2026-07-05T12:56:55-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=67' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/' | rg -c 'gelmanAttractionStates|data-attraction-action|attraction-status-filter|ATTRACTION_STATUS_LABELS'
+14
+
+curl -sI 'https://antonreport.com/gelmantravel/' | sed -n '1,12p'
+HTTP/2 200
+content-type: text/html; charset=utf-8
+cache-control: public, max-age=0, must-revalidate
+x-robots-tag: noindex, nofollow, noarchive, noimageindex
+
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=68' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=67",
+  "start_url": "./?v=68",
   "display": "standalone",
 
-curl -sI 'https://antonreport.com/gelmantravel/service-worker.js?v=67' | sed -n '1,4p'
+curl -sI 'https://antonreport.com/gelmantravel/service-worker.js?v=68' | sed -n '1,4p'
 HTTP/2 200
 content-type: application/javascript
 
-curl -sI 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=67' | sed -n '1,4p'
+curl -sI 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=68' | sed -n '1,4p'
 HTTP/2 200
 content-type: application/manifest+json
 
-curl -s 'https://antonreport.com/gelmantravel/' | rg 'APP_VERSION = "67"|manifest.webmanifest\?v=67|service-worker.js\?v=67|function googleMapsWebDirections|saddr: ""|Current Location|origin=Current%20Location'
-  <link rel="manifest" href="manifest.webmanifest?v=67">
-      const APP_VERSION = "67";
-      function googleMapsWebDirections(destination, mode = "driving") {
-          saddr: "",
-        navigator.serviceWorker.register("service-worker.js?v=67", { updateViaCache: "none" }).then(registration => {
+curl -s 'https://antonreport.com/gelmantravel/' | rg 'APP_VERSION = "68"|manifest.webmanifest\?v=68|service-worker.js\?v=68|gelmanAttractionStates|data-attraction-action|attraction-status-filter|ATTRACTION_STATUS_LABELS'
+  <link rel="manifest" href="manifest.webmanifest?v=68">
+      const APP_VERSION = "68";
+      const ATTRACTION_STATUS_LABELS = { visible: "Visible", todo: "To do", done: "Done", removed: "Removed", all: "All" };
+          const states = JSON.parse(localStorage.gelmanAttractionStates || "{}");
+        localStorage.gelmanAttractionStates = JSON.stringify(states);
+          return `<div class="attraction-state-actions"><button class="restore-toggle" type="button" data-attraction-action="restore" data-attraction-city="${escapeHTML(city)}" data-attraction-title="${escapeHTML(title)}" aria-label="Restore ${escapeHTML(title)}">Restore</button></div>`;
+          <button class="seen-toggle" type="button" data-attraction-action="done" data-attraction-city="${escapeHTML(city)}" data-attraction-title="${escapeHTML(title)}" aria-pressed="${seen}" aria-label="${seen ? "Mark" : "Mark"} ${escapeHTML(title)} ${seen ? "not seen" : "as seen"}">${seen ? "Undo" : "Seen"}</button>
+          <button class="remove-toggle" type="button" data-attraction-action="remove" data-attraction-city="${escapeHTML(city)}" data-attraction-title="${escapeHTML(title)}" aria-label="Remove ${escapeHTML(title)}">×</button>
+            ${Object.entries(ATTRACTION_STATUS_LABELS).map(([key, label]) => `<button type="button" class="attraction-status-filter" data-status-filter="${key}" aria-pressed="${key === activeStatus}">${label}</button>`).join("")}
+        const attractionButton = event.target.closest("[data-attraction-action]");
+        navigator.serviceWorker.register("service-worker.js?v=68", { updateViaCache: "none" }).then(registration => {
 
 Live link audit:
 {"liveUrl":"https://antonreport.com/gelmantravel/","attractionCards":87,"destinationProblems":0,"currentLocationOccurrences":0}
@@ -97,6 +112,23 @@ curl -sI 'https://antonreport.com/gelmantravel/priority-pass-sky-lounge.png?v=1'
 HTTP/2 200
 content-type: image/png
 ```
+
+## v68 Change
+
+- Added per-device attraction state saved in `localStorage.gelmanAttractionStates`.
+- Every attraction card now has `Seen` and `X` controls.
+- Marking an attraction seen fades it out, adds a `Seen` tag, changes the control to
+  `Undo`, and sorts the card below active attractions.
+- Removing an attraction hides it from the default visible list, adds a removed state,
+  and makes it available in the `Removed` filter with a `Restore` control.
+- Added attraction status filters: `Visible`, `To do`, `Done`, `Removed`, and `All`.
+- Browser QA at 396x695 verified Amsterdam attraction interactions: Rijksmuseum moved
+  to the bottom and faded after `Seen`, the `Done` filter showed only that card, Van
+  Gogh hid from `Visible` after `X`, the `Removed` filter showed it with `Restore`, and
+  `All` showed active plus done cards.
+- Browser console QA showed no errors or warnings. The browser runtime's accessibility
+  snapshot API failed internally, so verification used DOM evaluation plus screenshots.
+- Bumped service worker, manifest, and app-version to v68.
 
 ## v67 Change
 
