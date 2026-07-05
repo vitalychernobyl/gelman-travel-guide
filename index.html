@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=62">
+  <link rel="manifest" href="manifest.webmanifest?v=63">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -2218,7 +2218,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "62";
+      const APP_VERSION = "63";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -3230,8 +3230,9 @@
           });
         }
         const filters = data.filters || [];
-        const defaultFilter = filters.includes(data.defaultFilter) ? data.defaultFilter : "All";
-        const activeFilter = filters.includes(attractionFilterChoice[city]) ? attractionFilterChoice[city] : defaultFilter;
+        const validFilters = ["All", ...filters];
+        const defaultFilter = validFilters.includes(data.defaultFilter) ? data.defaultFilter : "All";
+        const activeFilter = validFilters.includes(attractionFilterChoice[city]) ? attractionFilterChoice[city] : defaultFilter;
         let shown = activeFilter === "All"
           ? items
           : items.filter(item => item.category === activeFilter || (item.filters || []).includes(activeFilter));
@@ -3728,7 +3729,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=62", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=63", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
