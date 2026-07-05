@@ -9,8 +9,8 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v69 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v69 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+main:            v70 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v70 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
 
@@ -42,6 +42,19 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v70 changed (context for reviewers)
+
+- Added a safe boarding-pass selector to the British Airways BA8454 flight details.
+- The selector lets users pick Alex, Anton, Ellaine, or Slava and shows the matching
+  seat/group summary inside the expanded flight card.
+- Because this app is public, the real boarding-pass PDF, QR codes, booking reference,
+  ticket numbers, and sequence numbers are **not** stored, linked, or deployed.
+- The card tells users to use the British Airways app or a private file link at the
+  airport for the actual scannable pass.
+- Local and live mobile browser QA verified the selector updates the preview panel and
+  the rendered page contains no public PDF/QR/ticket-number references.
+- Bumped service worker, manifest, and app-version to v70.
 
 ## What v69 changed (context for reviewers)
 

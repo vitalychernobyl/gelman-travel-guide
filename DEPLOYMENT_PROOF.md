@@ -7,8 +7,8 @@ Last verified: 2026-07-05
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-Latest app commit at deploy: b138f77 Collapse attraction cards by default
-Cache version: service-worker.js?v=69
+Latest app commit at deploy: f79f164 Add safe boarding pass selector
+Cache version: service-worker.js?v=70
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide
-Deployment URL: https://b3f2912f.gelman-travel-guide.pages.dev
+Deployment URL: https://c9632929.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
@@ -28,16 +28,29 @@ Wrangler: 4.107.0
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=69
+service-worker.js?v=70
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=69
+service-worker.js?v=70
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"69","publishedAt":"2026-07-05T13:50:00-04:00"}
+{"version":"70","publishedAt":"2026-07-05T14:55:00-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/' | rg -c 'gelmanAttractionStates|data-attraction-action|attraction-status-filter|ATTRACTION_STATUS_LABELS'
-14
+curl -s 'https://antonreport.com/gelmantravel/' | rg 'APP_VERSION = "70"|manifest.webmanifest\?v=70|service-worker.js\?v=70|boarding-pass-safe|data-boarding-pass|125223|ZFPKR5|boarding_pass|pass\.pdf'
+  <link rel="manifest" href="manifest.webmanifest?v=70">
+    .boarding-pass-safe {
+              <div class="boarding-pass-safe" data-boarding-pass-list>
+                  <button type="button" data-boarding-pass data-pass-name="Alex Gelman" data-pass-seat="13D" aria-pressed="true">Alex<span>Seat 13D</span></button>
+                  <button type="button" data-boarding-pass data-pass-name="Anton Gelman" data-pass-seat="13C" aria-pressed="false">Anton<span>Seat 13C</span></button>
+                  <button type="button" data-boarding-pass data-pass-name="Ellaine Gelman" data-pass-seat="13B" aria-pressed="false">Ellaine<span>Seat 13B</span></button>
+                  <button type="button" data-boarding-pass data-pass-name="Slava Khodakgelman" data-pass-seat="13A" aria-pressed="false">Slava<span>Seat 13A</span></button>
+                <div class="boarding-pass-preview" data-boarding-pass-panel aria-live="polite">
+      const APP_VERSION = "70";
+        const boardingPassButton = event.target.closest("[data-boarding-pass]");
+          const passList = boardingPassButton.closest("[data-boarding-pass-list]");
+          const panel = passList && passList.querySelector("[data-boarding-pass-panel]");
+          passList?.querySelectorAll("[data-boarding-pass]").forEach(button => {
+        navigator.serviceWorker.register("service-worker.js?v=70", { updateViaCache: "none" }).then(registration => {
 
 curl -sI 'https://antonreport.com/gelmantravel/' | sed -n '1,12p'
 HTTP/2 200
@@ -45,32 +58,27 @@ content-type: text/html; charset=utf-8
 cache-control: public, max-age=0, must-revalidate
 x-robots-tag: noindex, nofollow, noarchive, noimageindex
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=69' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=70' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=69",
+  "start_url": "./?v=70",
   "display": "standalone",
 
-curl -sI 'https://antonreport.com/gelmantravel/service-worker.js?v=69' | sed -n '1,4p'
+curl -sI 'https://antonreport.com/gelmantravel/service-worker.js?v=70' | sed -n '1,4p'
 HTTP/2 200
 content-type: application/javascript
 
-curl -sI 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=69' | sed -n '1,4p'
+curl -sI 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=70' | sed -n '1,4p'
 HTTP/2 200
 content-type: application/manifest+json
 
-curl -s 'https://antonreport.com/gelmantravel/' | rg 'APP_VERSION = "69"|manifest.webmanifest\?v=69|service-worker.js\?v=69|gelmanAttractionStates|data-attraction-action|attraction-status-filter|ATTRACTION_STATUS_LABELS'
-  <link rel="manifest" href="manifest.webmanifest?v=69">
-      const APP_VERSION = "69";
-      const ATTRACTION_STATUS_LABELS = { visible: "Visible", todo: "To do", done: "Done", removed: "Removed", all: "All" };
-          const states = JSON.parse(localStorage.gelmanAttractionStates || "{}");
-        localStorage.gelmanAttractionStates = JSON.stringify(states);
-          return `<div class="attraction-state-actions"><button class="restore-toggle" type="button" data-attraction-action="restore" data-attraction-city="${escapeHTML(city)}" data-attraction-title="${escapeHTML(title)}" aria-label="Restore ${escapeHTML(title)}">Restore</button></div>`;
-          <button class="seen-toggle" type="button" data-attraction-action="done" data-attraction-city="${escapeHTML(city)}" data-attraction-title="${escapeHTML(title)}" aria-pressed="${seen}" aria-label="${seen ? "Mark" : "Mark"} ${escapeHTML(title)} ${seen ? "not seen" : "as seen"}">${seen ? "Undo" : "Seen"}</button>
-          <button class="remove-toggle" type="button" data-attraction-action="remove" data-attraction-city="${escapeHTML(city)}" data-attraction-title="${escapeHTML(title)}" aria-label="Remove ${escapeHTML(title)}">×</button>
-            ${Object.entries(ATTRACTION_STATUS_LABELS).map(([key, label]) => `<button type="button" class="attraction-status-filter" data-status-filter="${key}" aria-pressed="${key === activeStatus}">${label}</button>`).join("")}
-        const attractionButton = event.target.closest("[data-attraction-action]");
-        navigator.serviceWorker.register("service-worker.js?v=69", { updateViaCache: "none" }).then(registration => {
+curl -sI 'https://antonreport.com/gelmantravel/boarding_pass.pdf' | sed -n '1,8p'
+HTTP/2 200
+content-type: text/html; charset=utf-8
+cache-control: public, max-age=0, must-revalidate
+
+Rendered mobile QA at https://antonreport.com/gelmantravel/?city=amsterdam&page=plans&appv=70&fresh=safe-boarding-v70f:
+{"appVersion70":true,"baOpen":true,"selected":[{"name":"Ellaine Gelman","seat":"13B"}],"panelText":"SELECTED PASS\nEllaine Gelman · Seat 13B · Group 5\n\nReal QR codes and PDF passes are not stored in this public app. Use the British Airways app or a private file link at the airport.","sensitiveRefs":[],"ticketNumberText":false,"viewport":{"width":396,"height":695},"consoleErrorsOrWarnings":[]}
 
 Live link audit:
 {"liveUrl":"https://antonreport.com/gelmantravel/","attractionCards":87,"destinationProblems":0,"currentLocationOccurrences":0}
@@ -112,6 +120,19 @@ curl -sI 'https://antonreport.com/gelmantravel/priority-pass-sky-lounge.png?v=1'
 HTTP/2 200
 content-type: image/png
 ```
+
+## v70 Change
+
+- Added a safe boarding-pass selector to the British Airways BA8454 Amsterdam to London
+  flight details.
+- Passenger selectors show Alex 13D, Anton 13C, Ellaine 13B, and Slava 13A with Group 5
+  in the expanded ticket card.
+- No scannable QR code, PDF boarding pass, booking reference, ticket number, or sequence
+  number is stored in the public app.
+- The preview panel explicitly tells users to use the British Airways app or a private
+  file link for the real boarding pass at the airport.
+- Live mobile browser QA verified the ticket opens, selecting Ellaine updates the pass
+  preview, no PDF/QR references are present, and no console errors or warnings appeared.
 
 ## v69 Change
 
