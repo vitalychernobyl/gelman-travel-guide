@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=64">
+  <link rel="manifest" href="manifest.webmanifest?v=65">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -1093,6 +1093,29 @@
     details.ticket-card.ticket-expired[open] summary::after {
       content: "Past trip  ·  details open";
     }
+    .hotel-key.plan-expired,
+    .lounge-pass.plan-expired {
+      order: 90;
+      opacity: .48;
+      filter: grayscale(.35) saturate(.6);
+    }
+    .hotel-key.plan-expired::after,
+    .lounge-pass.plan-expired::after {
+      content: "Past stay";
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 4;
+      padding: 5px 8px;
+      border: 1px solid rgba(216, 211, 202, .88);
+      border-radius: 999px;
+      background: rgba(255, 254, 250, .9);
+      color: #8a8177;
+      font-size: .62rem;
+      font-weight: 950;
+      text-transform: uppercase;
+      box-shadow: 0 6px 16px rgba(59, 52, 43, .12);
+    }
     .ticket-extra {
       margin-top: 0;
       padding: 10px 12px 12px;
@@ -1431,6 +1454,7 @@
       text-transform: uppercase;
     }
     .lounge-pass {
+      position: relative;
       overflow: hidden;
       border: 1px solid #2f2a25;
       border-radius: 26px;
@@ -1790,7 +1814,7 @@
         <button class="city-tab" type="button" data-city-target="sarasota" aria-pressed="false">Sarasota</button>
       </div>
 
-      <section class="city-plan" data-city="vienna">
+      <section class="city-plan" data-city="vienna" data-city-expires-at="2026-07-03T16:50:00+02:00">
         <div class="city-title-row">
           <span class="city-mark">VIE</span>
           <div><h2>Vienna</h2><p>Thu, Jul 2 - Fri, Jul 3, 2026</p></div>
@@ -1867,7 +1891,7 @@
         </div>
       </section>
 
-      <section class="city-plan" data-city="amsterdam">
+      <section class="city-plan" data-city="amsterdam" data-city-expires-at="2026-07-06T14:25:00+01:00">
         <div class="city-title-row">
           <span class="city-mark">AMS</span>
           <div><h2>Amsterdam</h2><p>Fri, Jul 3 - Mon, Jul 6, 2026</p></div>
@@ -2027,7 +2051,7 @@
         </div>
       </section>
 
-      <section class="city-plan" data-city="london">
+      <section class="city-plan" data-city="london" data-city-expires-at="2026-07-11T20:00:00-04:00">
         <div class="city-title-row">
           <span class="city-mark">LDN</span>
           <div><h2>London</h2><p>Mon, Jul 6 - Sat, Jul 11, 2026</p></div>
@@ -2104,7 +2128,7 @@
         </div>
       </section>
 
-      <section class="city-plan" data-city="washington">
+      <section class="city-plan" data-city="washington" data-city-expires-at="2026-07-12T10:53:00-04:00">
         <div class="city-title-row">
           <span class="city-mark">DC</span>
           <div><h2>Washington, DC</h2><p>Sat, Jul 11 - Sun, Jul 12, 2026</p></div>
@@ -2258,7 +2282,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "64";
+      const APP_VERSION = "65";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -3575,8 +3599,8 @@
         if (hours) return `${hours}h ${mins}m`;
         return `${mins}m`;
       }
-      function ticketExpiry(card) {
-        const expiresAt = card.dataset.expiresAt;
+      function planCardExpiry(card) {
+        const expiresAt = card.dataset.expiresAt || card.dataset.planExpiresAt || card.closest(".city-plan")?.dataset.cityExpiresAt;
         if (!expiresAt) return null;
         const expiry = new Date(expiresAt);
         return Number.isNaN(expiry.getTime()) ? null : expiry;
@@ -3584,22 +3608,31 @@
       function ticketTitle(card) {
         return card.querySelector(".airline-logo")?.textContent.trim() || card.querySelector(".route")?.textContent.trim() || "Ticket";
       }
+      function planCardTitle(card) {
+        if (card.classList.contains("ticket-card")) return ticketTitle(card);
+        return card.querySelector("h3")?.textContent.trim() || "Plan card";
+      }
       function updateExpiredTickets() {
         const now = currentNow();
         document.querySelectorAll(".plan-grid").forEach(grid => {
-          const expired = [];
-          grid.querySelectorAll(":scope > .ticket-card").forEach(card => {
-            const expiry = ticketExpiry(card);
+          const cards = [...grid.querySelectorAll(":scope > .ticket-card, :scope > .hotel-key, :scope > .lounge-pass")];
+          const ordered = cards.map((card, index) => {
+            const expiry = planCardExpiry(card);
             const isExpired = !!expiry && now.getTime() >= expiry.getTime();
-            card.classList.toggle("ticket-expired", isExpired);
+            const isTicket = card.classList.contains("ticket-card");
+            card.dataset.expired = String(isExpired);
+            card.classList.toggle("ticket-expired", isTicket && isExpired);
+            card.classList.toggle("plan-expired", !isTicket && isExpired);
             if (isExpired) {
-              card.setAttribute("aria-label", `${ticketTitle(card)} expired`);
-              expired.push(card);
+              card.setAttribute("aria-label", `${planCardTitle(card)} expired`);
             } else {
               card.removeAttribute("aria-label");
             }
+            return { card, index, isExpired };
           });
-          expired.forEach(card => grid.append(card));
+          ordered
+            .sort((a, b) => Number(a.isExpired) - Number(b.isExpired) || a.index - b.index)
+            .forEach(({ card }) => grid.append(card));
         });
       }
       function updateFlightCountdowns() {
@@ -3805,7 +3838,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=64", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=65", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
