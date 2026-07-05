@@ -7,8 +7,8 @@ Last verified: 2026-07-05
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-Latest app commit at deploy: a94f42b Add copyable attraction addresses
-Cache version: service-worker.js?v=66
+Latest app commit at deploy: 2dbe316 Fix Google Maps current location links
+Cache version: service-worker.js?v=67
 ```
 
 ## Cloudflare Pages
@@ -18,9 +18,8 @@ Project: gelman-travel-guide
 Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
-npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
-npx wrangler pages deploy . --project-name gelman-travel-guide --commit-dirty=true
-Deployment URLs: https://6f43b1c6.gelman-travel-guide.pages.dev, https://d086d663.gelman-travel-guide.pages.dev
+npx wrangler pages deploy . --project-name gelman-travel-guide
+Deployment URL: https://716b3c1b.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
@@ -29,35 +28,37 @@ Wrangler: 4.107.0
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=66
+service-worker.js?v=67
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=66
+service-worker.js?v=67
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"66","publishedAt":"2026-07-05T11:17:48-04:00"}
+{"version":"67","publishedAt":"2026-07-05T12:03:09-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=66' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=67' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=66",
+  "start_url": "./?v=67",
   "display": "standalone",
 
-curl -sI 'https://antonreport.com/gelmantravel/service-worker.js?v=66' | sed -n '1,4p'
+curl -sI 'https://antonreport.com/gelmantravel/service-worker.js?v=67' | sed -n '1,4p'
 HTTP/2 200
 content-type: application/javascript
 
-curl -sI 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=66' | sed -n '1,4p'
+curl -sI 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=67' | sed -n '1,4p'
 HTTP/2 200
 content-type: application/manifest+json
 
-curl -s 'https://antonreport.com/gelmantravel/' | rg 'APP_VERSION = "66"|manifest.webmanifest\?v=66|service-worker.js\?v=66|function attractionDestination|data-copy-address|origin=Current%20Location'
-  <link rel="manifest" href="manifest.webmanifest?v=66">
-      const APP_VERSION = "66";
-        return `https://www.google.com/maps/dir/?api=1&origin=Current%20Location&destination=${encodeURIComponent(destination)}&travelmode=${cleanMapsMode(mode)}&dir_action=navigate`;
-      function attractionDestination(item, data) {
-        return `<div class="info-row attraction-address"><span>Address</span><strong class="copy-address" data-copy-address="${escapeHTML(address)}" tabindex="0" role="button" aria-label="Copy address: ${escapeHTML(address)}" title="Tap to copy address">${escapeHTML(address)}</strong></div>`;
-        navigator.serviceWorker.register("service-worker.js?v=66", { updateViaCache: "none" }).then(registration => {
+curl -s 'https://antonreport.com/gelmantravel/' | rg 'APP_VERSION = "67"|manifest.webmanifest\?v=67|service-worker.js\?v=67|function googleMapsWebDirections|saddr: ""|Current Location|origin=Current%20Location'
+  <link rel="manifest" href="manifest.webmanifest?v=67">
+      const APP_VERSION = "67";
+      function googleMapsWebDirections(destination, mode = "driving") {
+          saddr: "",
+        navigator.serviceWorker.register("service-worker.js?v=67", { updateViaCache: "none" }).then(registration => {
+
+Live link audit:
+{"liveUrl":"https://antonreport.com/gelmantravel/","attractionCards":87,"destinationProblems":0,"currentLocationOccurrences":0}
 
 curl -sI 'https://wttr.in/Amsterdam?u' | sed -n '1,8p'
 HTTP/2 200
@@ -96,6 +97,23 @@ curl -sI 'https://antonreport.com/gelmantravel/priority-pass-sky-lounge.png?v=1'
 HTTP/2 200
 content-type: image/png
 ```
+
+## v67 Change
+
+- Fixed Google Maps directions origin handling.
+- Root cause: v66 passed literal `Current Location` as `origin`/`saddr`, which Google Maps
+  can geocode as a place instead of using the device's current GPS location.
+- Google Maps web fallback URLs now omit the `origin` parameter, following Google's
+  guidance for directions from the user's current location.
+- Google Maps iOS app URLs now use blank `saddr=` instead of `saddr=Current Location`,
+  following Google's iOS URL scheme guidance that a blank starting address uses the
+  user's current location.
+- Local rendered QA at 396x695 verified 23 plan-page Google Maps buttons: all app links
+  had `saddr=""`, all web fallbacks had no `origin`, and all destinations still matched.
+- Local interaction QA opened the Amsterdam hotel card and verified its displayed
+  Directions link uses blank `saddr` and no web `origin`.
+- Live audit checked 87 attraction cards with zero destination mismatches and zero
+  remaining `Current Location` string occurrences.
 
 ## v66 Change
 

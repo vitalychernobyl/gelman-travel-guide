@@ -9,8 +9,8 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v66 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v66 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+main:            v67 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v67 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
 
@@ -42,6 +42,18 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v67 changed (context for reviewers)
+
+- Fixed Google Maps current-location directions.
+- v66 used literal `Current Location` in Google Maps `origin`/`saddr`, which can be
+  geocoded as a place instead of using the device's GPS location.
+- Web fallback links now omit the `origin` parameter.
+- iOS `comgooglemaps://` app links now leave `saddr` blank: `saddr=&daddr=...`.
+- Local rendered QA at 396x695 verified 23 plan-page map buttons and an opened
+  Amsterdam hotel card. Live audit verified 87 attraction cards, zero destination
+  mismatches, and zero remaining `Current Location` string occurrences.
+- Bumped service worker, manifest, and app-version to v67.
 
 ## What v66 changed (context for reviewers)
 
