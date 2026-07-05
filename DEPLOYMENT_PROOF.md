@@ -7,8 +7,8 @@ Last verified: 2026-07-05
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-Latest app commit at deploy: 121867e Fix attraction map popup actions
-Cache version: service-worker.js?v=64
+Latest app commit at deploy: c40308d Fade expired hotel and lounge passes
+Cache version: service-worker.js?v=65
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
-Deployment URL: https://8f33e857.gelman-travel-guide.pages.dev
+Deployment URL: https://cae72b79.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
@@ -28,18 +28,18 @@ Wrangler: 4.107.0
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=64
+service-worker.js?v=65
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=64
+service-worker.js?v=65
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"64","publishedAt":"2026-07-05T04:47:17-04:00"}
+{"version":"65","publishedAt":"2026-07-05T10:20:49-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=64' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=65' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=64",
+  "start_url": "./?v=65",
   "display": "standalone",
 
 curl -sI 'https://wttr.in/Amsterdam?u' | sed -n '1,8p'
@@ -70,7 +70,28 @@ content-type: image/jpeg
 curl -sI 'https://antonreport.com/gelmantravel/london-stay-house.webp' | sed -n '1,4p'
 HTTP/2 200
 content-type: image/webp
+
+curl -sI 'https://antonreport.com/gelmantravel/nh-danube-hotel.png?v=1' | sed -n '1,4p'
+HTTP/2 200
+content-type: image/png
+
+curl -sI 'https://antonreport.com/gelmantravel/priority-pass-sky-lounge.png?v=1' | sed -n '1,4p'
+HTTP/2 200
+content-type: image/png
 ```
+
+## v65 Change
+
+- Added city-level plan expiry timestamps.
+- Expired hotel cards and lounge passes now receive the same past-plan treatment as
+  expired tickets: they fade, get a `Past stay` badge, and sort below active plan cards.
+- Vienna's NH Danube City hotel pass and Priority Pass SKY Lounge pass now expire after
+  the Vienna stay/city leg ends on Jul 3, 2026.
+- Amsterdam hotel and lounge cards remain active on Jul 5 while older Amsterdam activity
+  tickets stay faded and sorted behind active plans.
+- Local browser QA at 396x695 verified Vienna hotel/lounge cards have `plan-expired`,
+  `data-expired="true"`, opacity `.48`, and no console warnings/errors; clicking Amsterdam
+  confirmed current hotel/lounge cards remain active.
 
 ## v64 Change
 

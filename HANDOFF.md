@@ -9,8 +9,8 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v64 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v64 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+main:            v65 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v65 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
 
@@ -42,6 +42,18 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v65 changed (context for reviewers)
+
+- Added city-level plan expiry timestamps so hotel and lounge passes can age out when a
+  city stay ends.
+- Expired hotel cards and lounge passes now fade, show a `Past stay` badge, and sort
+  below active plan cards.
+- Vienna's NH Danube City hotel pass and Priority Pass SKY Lounge pass now appear as
+  expired after the Jul 3 Vienna city leg.
+- Amsterdam hotel and lounge cards remain active on Jul 5; older Amsterdam activity
+  tickets remain expired and sorted behind active plans.
+- Bumped service worker, manifest, and app-version to v65.
 
 ## What v64 changed (context for reviewers)
 
