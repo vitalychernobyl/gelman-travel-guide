@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=69">
+  <link rel="manifest" href="manifest.webmanifest?v=70">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -1252,6 +1252,86 @@
       font-size: .98rem;
       line-height: 1.05;
     }
+    .boarding-pass-safe {
+      display: grid;
+      gap: 8px;
+      margin: 10px 0 2px;
+      padding: 10px;
+      border: 1px solid #d8d3ca;
+      border-radius: 16px;
+      background: #f8f6f1;
+    }
+    .boarding-pass-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .boarding-pass-head strong {
+      font-size: .92rem;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+    .boarding-pass-head span {
+      color: var(--muted);
+      font-size: .7rem;
+      font-weight: 850;
+    }
+    .boarding-pass-tabs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px;
+    }
+    .boarding-pass-tabs button {
+      min-height: 42px;
+      border: 1px solid #ded8cf;
+      border-radius: 13px;
+      background: #fffefa;
+      color: var(--ink);
+      font: inherit;
+      font-size: .78rem;
+      font-weight: 950;
+      text-align: left;
+      box-shadow: 0 5px 13px rgba(59, 52, 43, .06);
+    }
+    .boarding-pass-tabs button span {
+      display: block;
+      margin-top: 2px;
+      color: var(--accent-deep);
+      font-size: .68rem;
+    }
+    .boarding-pass-tabs button[aria-pressed="true"] {
+      border-color: var(--ba-blue);
+      background: #eaf2ff;
+      color: var(--ba-blue);
+    }
+    .boarding-pass-preview {
+      display: grid;
+      gap: 5px;
+      padding: 10px;
+      border-radius: 14px;
+      background: #25211c;
+      color: #fffefa;
+    }
+    .boarding-pass-preview span {
+      color: #f7c99e;
+      font-size: .62rem;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+    .boarding-pass-preview strong {
+      display: block;
+      margin-top: 2px;
+      font-size: .9rem;
+      line-height: 1.15;
+    }
+    .boarding-pass-preview p {
+      margin: 0;
+      color: #efe7dd;
+      font-size: .76rem;
+      font-weight: 750;
+      line-height: 1.25;
+    }
     .ticket::before,
     .ticket::after {
       content: "";
@@ -2090,6 +2170,19 @@
               <div class="info-row"><span>Arrive AMS</span><strong>11:20 AM, 3 hours before departure</strong></div>
               <div class="info-row"><span>From</span><strong>Amsterdam, Amsterdam (AMS)</strong></div>
               <div class="info-row"><span>To</span><strong>City Airport, London (LCY)</strong></div>
+              <div class="boarding-pass-safe" data-boarding-pass-list>
+                <div class="boarding-pass-head"><strong>Boarding passes</strong><span>Safe public view</span></div>
+                <div class="boarding-pass-tabs" role="tablist" aria-label="Select BA8454 boarding pass">
+                  <button type="button" data-boarding-pass data-pass-name="Alex Gelman" data-pass-seat="13D" aria-pressed="true">Alex<span>Seat 13D</span></button>
+                  <button type="button" data-boarding-pass data-pass-name="Anton Gelman" data-pass-seat="13C" aria-pressed="false">Anton<span>Seat 13C</span></button>
+                  <button type="button" data-boarding-pass data-pass-name="Ellaine Gelman" data-pass-seat="13B" aria-pressed="false">Ellaine<span>Seat 13B</span></button>
+                  <button type="button" data-boarding-pass data-pass-name="Slava Khodakgelman" data-pass-seat="13A" aria-pressed="false">Slava<span>Seat 13A</span></button>
+                </div>
+                <div class="boarding-pass-preview" data-boarding-pass-panel aria-live="polite">
+                  <div><span>Selected pass</span><strong>Alex Gelman · Seat 13D · Group 5</strong></div>
+                  <p>Real QR codes and PDF passes are not stored in this public app. Use the British Airways app or a private file link at the airport.</p>
+                </div>
+              </div>
               <div class="ticket-actions">
                 <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=Amsterdam%20Airport%20Schiphol%2C%20Amsterdam%2C%20Netherlands" target="_blank" rel="noopener">Airport Directions</a>
                 <a class="directions-button app-button" href="https://apps.apple.com/us/app/british-airways/id284793089" target="_blank" rel="noopener">BA App</a>
@@ -2361,7 +2454,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "69";
+      const APP_VERSION = "70";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -3882,6 +3975,23 @@
           renderAttractions(city);
           return;
         }
+        const boardingPassButton = event.target.closest("[data-boarding-pass]");
+        if (boardingPassButton) {
+          event.preventDefault();
+          event.stopPropagation();
+          const passList = boardingPassButton.closest("[data-boarding-pass-list]");
+          const panel = passList && passList.querySelector("[data-boarding-pass-panel]");
+          const name = boardingPassButton.dataset.passName || "Passenger";
+          const seat = boardingPassButton.dataset.passSeat || "Seat";
+          passList?.querySelectorAll("[data-boarding-pass]").forEach(button => {
+            button.setAttribute("aria-pressed", button === boardingPassButton ? "true" : "false");
+          });
+          if (panel) {
+            panel.innerHTML = `<div><span>Selected pass</span><strong>${escapeHTML(name)} · Seat ${escapeHTML(seat)} · Group 5</strong></div><p>Real QR codes and PDF passes are not stored in this public app. Use the British Airways app or a private file link at the airport.</p>`;
+          }
+          showShareStatus(`${name.split(" ")[0]} pass selected`);
+          return;
+        }
         const mapDetail = event.target.closest("[data-map-detail]");
         if (mapDetail) {
           event.preventDefault();
@@ -4009,7 +4119,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=69", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=70", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
