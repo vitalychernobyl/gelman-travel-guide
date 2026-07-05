@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide
-Deployment URL: https://f911a3e0.gelman-travel-guide.pages.dev
+Deployment URL: https://0d7a9b26.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
