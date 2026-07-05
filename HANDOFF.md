@@ -6,13 +6,15 @@ Cloudflare from the owner's machine). Update the "Current state" section wheneve
 side finishes a step. `DEPLOYMENT_PROOF.md` remains the source of truth for the *last
 verified deploy*; this file tracks *what needs to happen next*.
 
-## Current state (update me)
+## 📍 Where we are right now (update me)
 
-```text
-main:            v65 merged pending deploy; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v64 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
-pending action:  deploy v65 (see "Deploy task for the local agent")
-```
+| | Status |
+|---|---|
+| 🟢 **On GitHub (`main`)** | ✅ v65 is merged and ready |
+| 🌐 **Live on the web** | ⚠️ still v64 — **v65 is NOT live yet** |
+| 👉 **Next action** | 🚀 Deploy v65 (see the "Deploy v65" steps below) |
+
+> The deploy commit for the *last* live release is recorded in `DEPLOYMENT_PROOF.md`.
 
 ## Standing facts
 
@@ -34,22 +36,53 @@ pending action:  deploy v65 (see "Deploy task for the local agent")
   the image `?v=1` markers stay — they are tied to the asset, not the release, and only
   change when that asset changes.)
 
-## Deploy task for the local agent (future release)
+## 🚀 Deploy v65 — step-by-step (for the local Cloudflare agent)
 
-```text
-You are working with repo vitalychernobyl/gelman-travel-guide on the owner's machine
-(Cloudflare-authenticated). Use this only after a future code change has been merged.
+> **━━━━━━━━━━ START HERE ━━━━━━━━━━**
+>
+> 🧭 **What this does:** pushes the code that's already on `main` out to the live
+> website. Nothing is live until you finish these steps.
+> ⏱️ **Time:** about 2–3 minutes.
+> 🖥️ **You need:** the owner's machine (already logged into Cloudflare) + a terminal
+> open in the repo folder.
+>
+> Do the steps **in order**. Each has a ✔️ check so you know it worked.
 
-1. git checkout main && git pull origin main
-   Confirm: grep -o 'service-worker.js?v=[0-9]*' index.html prints the new release version.
-2. npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
-3. Verify (may take a minute):
-   curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*'
-   curl -s https://antonreport.com/gelmantravel/  | grep -o 'service-worker.js?v=[0-9]*'
-4. Update DEPLOYMENT_PROOF.md (repository state, deployment URL, live verification
-   output) and the "Current state" block in HANDOFF.md, then commit and push both
-   to main with the release version in the commit message.
+### 1️⃣ Get the latest code
+```sh
+git checkout main && git pull origin main
 ```
+✔️ **Check** — this should print `65`:
+```sh
+grep -o 'APP_VERSION = "[0-9]*"' index.html
+```
+
+### 2️⃣ Push it live to Cloudflare
+```sh
+npx wrangler pages deploy . --project-name gelman-travel-guide --branch main
+```
+
+### 3️⃣ Confirm it's really live
+Wait about 1 minute, then run **both**:
+```sh
+curl -s https://gelman-travel-guide.pages.dev/app-version.json
+curl -s https://antonreport.com/gelmantravel/app-version.json
+```
+✔️ **Check** — both must show `"version": "65"`.
+
+### 4️⃣ Write down that it's done
+- 📝 Update `DEPLOYMENT_PROOF.md` (what you deployed + the verify output above).
+- 🔁 In this file, change the "Where we are" table: flip **Live on the web** to ✅ v65.
+- 💾 Commit + push both files to `main` with the version in the message.
+
+> **━━━━━━━━━━ ✅ DONE WHEN ━━━━━━━━━━**
+> Both URLs in step 3 show **v65** and `DEPLOYMENT_PROOF.md` is updated.
+
+---
+
+> 🔮 **For any future release:** the steps above are the same every time — just swap
+> the version number. Replace `65` in the step 1 check with the new version, and
+> `"version": "65"` in step 3 with the new version.
 
 ## What v65 changed (context for reviewers)
 
