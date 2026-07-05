@@ -9,8 +9,8 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v65 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v65 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+main:            v66 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v66 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
 
@@ -42,6 +42,24 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v66 changed (context for reviewers)
+
+- Added a visible, copyable `Address` row inside every attraction detail card.
+- Attraction cards and attraction map popups now share one destination helper, so the
+  visible address, Google Maps app link, Google web fallback, and Uber link remain in
+  sync.
+- Google Maps app links use `saddr=Current Location`; web fallbacks include
+  `origin=Current Location`; Uber links use `pickup=my_location` and the same visible
+  destination as `dropoff[formatted_address]`.
+- Local source audit checked 87 attraction cards across all five cities with zero
+  origin/destination mismatches.
+- Local mobile browser QA verified visible copyable address rows, matching Google/Uber
+  destinations, and a working `Copied` toast.
+- Cafe Luce remains a formatted Amsterdam destination search because no reliable
+  Amsterdam coordinate/listing was found; it is intentionally not pinned to an unrelated
+  coordinate.
+- Bumped service worker, manifest, and app-version to v66.
 
 ## What v65 changed (context for reviewers)
 
