@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=68">
+  <link rel="manifest" href="manifest.webmanifest?v=69">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -2361,7 +2361,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "68";
+      const APP_VERSION = "69";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -3526,7 +3526,7 @@
                 const recommended = attraction.featured || attraction._featuredRank >= 0 || (attraction.filters || []).includes("Top10");
                 const state = attraction._state || "active";
                 const stateTag = state === "done" ? `<span class="status-tag">Seen</span>` : state === "removed" ? `<span class="status-tag">Removed</span>` : "";
-                return `<details class="attraction-card is-${escapeHTML(state)}" id="${escapeHTML(cardId)}"${index === 0 ? " open" : ""} data-attraction-state="${escapeHTML(state)}">
+                return `<details class="attraction-card is-${escapeHTML(state)}" id="${escapeHTML(cardId)}" data-attraction-state="${escapeHTML(state)}">
                   <summary>
                     <img class="attraction-thumb" src="${escapeHTML(image)}" data-fallback-src="${escapeHTML(fallbackImage)}" alt="${escapeHTML(title)}">
                     ${attractionStateButtons(city, title, state)}
@@ -4009,7 +4009,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=68", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=69", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
