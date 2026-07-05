@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=63">
+  <link rel="manifest" href="manifest.webmanifest?v=64">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -595,9 +595,49 @@
       font-size: .85rem;
       line-height: 1.35;
     }
+    #attractionMap .leaflet-popup-content button,
     #attractionMap .leaflet-popup-content a {
+      font: inherit;
+    }
+    .map-popup-title {
+      display: block;
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
       color: var(--accent-deep, #a84f15);
+      font-weight: 950;
+      text-align: left;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .map-popup-meta {
+      margin-top: 2px;
+      color: var(--muted);
       font-weight: 800;
+    }
+    .map-popup-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    #attractionMap .map-popup-actions a {
+      display: grid;
+      place-items: center;
+      min-height: 32px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 800;
+    }
+    #attractionMap .map-popup-actions .map-action {
+      background: #1a73e8;
+      color: #fff;
+    }
+    #attractionMap .map-popup-actions .uber-button {
+      flex: 1 1 auto;
+      background: #090909;
+      color: #fffefa;
     }
     .recommended-tag {
       background: #25211c !important;
@@ -2218,7 +2258,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "63";
+      const APP_VERSION = "64";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -3172,6 +3212,23 @@
       function destroyAttractionMap() {
         if (attractionMap) { attractionMap.remove(); attractionMap = null; }
       }
+      function openAttractionDetailsFromMap(city, title) {
+        const cardId = `attraction-${city}-${slugify(title)}`;
+        attractionViewChoice[city] = "list";
+        renderAttractions(city);
+        requestAnimationFrame(() => {
+          const card = document.getElementById(cardId);
+          if (!card) return;
+          attractionContent.querySelectorAll(".attraction-card[open]").forEach(item => {
+            if (item !== card) item.open = false;
+          });
+          card.open = true;
+          history.replaceState(null, "", buildShareUrl("photos", city, cardId));
+          card.scrollIntoView({ block: "start", behavior: "smooth" });
+          card.classList.add("shared-target");
+          setTimeout(() => card.classList.remove("shared-target"), 1800);
+        });
+      }
       function initAttractionMap(city, items, cityLabel) {
         const el = document.querySelector("#attractionMap");
         if (!el || typeof L === "undefined") return;
@@ -3195,7 +3252,19 @@
           if (!coords) return;
           const marker = L.circleMarker(coords, { radius: 8, weight: 2, color: "#fffefa", fillColor: "#d97823", fillOpacity: .92 }).addTo(attractionMap);
           const rating = item.rating ? `★ ${item.rating.toFixed(1)} · ` : "";
-          marker.bindPopup(`<strong>${escapeHTML(item.title)}</strong><br>${rating}${escapeHTML(item.category)}<br><a href="${escapeHTML(googleMapsWebDirections(destination))}" target="_blank" rel="noopener">Directions</a> · <a href="${escapeHTML(uberDeepLink(item.title, destination))}" target="_blank" rel="noopener">Uber</a>`);
+          const mapWebLink = item.map ? normalizeGoogleMapsWebHref(item.map, destination) : googleMapsWebDirections(destination);
+          const mapLink = item.map ? normalizeGoogleMapsHref(item.map, destination) : googleMapsDirections(destination);
+          const uberLink = uberDeepLink(item.title, destination);
+          marker.bindPopup(`
+            <div class="map-popup">
+              <button type="button" class="map-popup-title" data-map-detail="${escapeHTML(item.title)}" data-map-city="${escapeHTML(city)}">${escapeHTML(item.title)}</button>
+              <div class="map-popup-meta">${rating}${escapeHTML(item.category)}</div>
+              <div class="map-popup-actions">
+                <a class="map-action" href="${escapeHTML(mapLink)}" data-maps-app-href="${escapeHTML(mapLink)}" data-web-map-url="${escapeHTML(mapWebLink)}" data-maps-destination="${escapeHTML(destination)}" aria-label="Open Google Maps app directions to ${escapeHTML(item.title)}" title="Open Google Maps app directions to ${escapeHTML(item.title)}">Directions</a>
+                <a class="uber-button" href="${escapeHTML(uberLink)}" target="_blank" rel="noopener" aria-label="Open Uber to ${escapeHTML(item.title)}" title="Open Uber to ${escapeHTML(item.title)}">Uber</a>
+              </div>
+            </div>
+          `);
           bounds.push(coords);
         });
         if (bounds.length) attractionMap.fitBounds(bounds, { padding: [30, 30], maxZoom: 15 });
@@ -3609,6 +3678,13 @@
       });
       shareButton?.addEventListener("click", shareCurrentPage);
       document.addEventListener("click", event => {
+        const mapDetail = event.target.closest("[data-map-detail]");
+        if (mapDetail) {
+          event.preventDefault();
+          event.stopPropagation();
+          openAttractionDetailsFromMap(mapDetail.dataset.mapCity || activeCity, mapDetail.dataset.mapDetail);
+          return;
+        }
         const mapLink = event.target.closest(".map-action[data-maps-app-href], a[href^='comgooglemaps:']");
         if (mapLink) {
           event.preventDefault();
@@ -3729,7 +3805,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=63", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=64", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
