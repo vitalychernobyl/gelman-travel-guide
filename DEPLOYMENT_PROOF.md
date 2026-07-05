@@ -36,7 +36,7 @@ service-worker.js?v=70
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
 {"version":"70","publishedAt":"2026-07-05T14:55:00-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/' | rg 'APP_VERSION = "70"|manifest.webmanifest\?v=70|service-worker.js\?v=70|boarding-pass-safe|data-boarding-pass|125223|ZFPKR5|boarding_pass|pass\.pdf'
+curl -s 'https://antonreport.com/gelmantravel/' | rg 'APP_VERSION = "70"|manifest.webmanifest\?v=70|service-worker.js\?v=70|boarding-pass-safe|data-boarding-pass|boarding_pass|pass\.pdf'
   <link rel="manifest" href="manifest.webmanifest?v=70">
     .boarding-pass-safe {
               <div class="boarding-pass-safe" data-boarding-pass-list>
@@ -79,6 +79,9 @@ cache-control: public, max-age=0, must-revalidate
 
 Rendered mobile QA at https://antonreport.com/gelmantravel/?city=amsterdam&page=plans&appv=70&fresh=safe-boarding-v70f:
 {"appVersion70":true,"baOpen":true,"selected":[{"name":"Ellaine Gelman","seat":"13B"}],"panelText":"SELECTED PASS\nEllaine Gelman · Seat 13B · Group 5\n\nReal QR codes and PDF passes are not stored in this public app. Use the British Airways app or a private file link at the airport.","sensitiveRefs":[],"ticketNumberText":false,"viewport":{"width":396,"height":695},"consoleErrorsOrWarnings":[]}
+
+Sensitive boarding-pass token search was run locally against the app files and rendered
+page; exact private tokens are intentionally omitted from this public proof file.
 
 Live link audit:
 {"liveUrl":"https://antonreport.com/gelmantravel/","attractionCards":87,"destinationProblems":0,"currentLocationOccurrences":0}
