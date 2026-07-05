@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=67">
+  <link rel="manifest" href="manifest.webmanifest?v=68">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -546,6 +546,12 @@
       gap: 6px;
       padding: 2px 1px 8px;
     }
+    .attraction-status-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 1px 8px;
+    }
     .attraction-filter {
       flex: 0 1 auto;
       min-height: 33px;
@@ -553,10 +559,22 @@
       font-size: .8rem;
       font-weight: 850;
     }
+    .attraction-status-filter {
+      flex: 0 1 auto;
+      min-height: 31px;
+      padding: 5px 10px;
+      font-size: .74rem;
+      font-weight: 900;
+    }
     .attraction-filter[aria-pressed="true"] {
       background: var(--accent);
       border-color: var(--accent);
       color: var(--accent-ink);
+    }
+    .attraction-status-filter[aria-pressed="true"] {
+      background: #25211c;
+      border-color: #25211c;
+      color: #fffefa;
     }
     .rating-tag {
       background: var(--accent) !important;
@@ -758,6 +776,15 @@
       background: var(--panel);
       box-shadow: 0 3px 12px rgba(59, 52, 43, .05);
     }
+    .attraction-card.is-done {
+      opacity: .52;
+      filter: grayscale(.18);
+    }
+    .attraction-card.is-removed {
+      opacity: .38;
+      filter: grayscale(.55);
+      border-style: dashed;
+    }
     .shared-target {
       outline: 3px solid rgba(217, 120, 35, .55);
       outline-offset: 3px;
@@ -829,6 +856,51 @@
       color: var(--ink);
       font-size: .64rem;
       font-weight: 850;
+    }
+    .status-tag {
+      background: #25211c !important;
+      color: #fffefa !important;
+      font-weight: 950 !important;
+    }
+    .attraction-state-actions {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      z-index: 4;
+      display: flex;
+      gap: 6px;
+      max-width: calc(100% - 56px);
+    }
+    .attraction-state-actions button {
+      display: grid;
+      place-items: center;
+      min-height: 30px;
+      padding: 5px 9px;
+      border: 1px solid rgba(255, 255, 255, .72);
+      border-radius: 999px;
+      background: rgba(255, 254, 250, .92);
+      color: #4e4942;
+      font: inherit;
+      font-size: .68rem;
+      font-weight: 950;
+      box-shadow: 0 8px 18px rgba(37, 33, 28, .14);
+      backdrop-filter: blur(12px);
+    }
+    .attraction-state-actions .seen-toggle[aria-pressed="true"] {
+      background: #25211c;
+      color: #fffefa;
+      border-color: rgba(37, 33, 28, .88);
+    }
+    .attraction-state-actions .remove-toggle {
+      width: 30px;
+      padding: 0;
+      font-size: 1rem;
+      line-height: 1;
+    }
+    .attraction-state-actions .restore-toggle {
+      background: #fff6ea;
+      color: var(--accent-deep);
+      border-color: rgba(217, 120, 35, .36);
     }
     .attraction-extra {
       display: grid;
@@ -2289,7 +2361,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "67";
+      const APP_VERSION = "68";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -3224,7 +3296,9 @@
         `).join("");
       }
       const ATTRACTION_FILTER_LABELS = { Top10: "Top 10", Museum: "Museums", Fish: "Fish", Food: "Food", Coffee: "Coffee", Canal: "Canals", Landmark: "Landmarks", Nightlife: "Nightlife", Outdoors: "Outdoors" };
+      const ATTRACTION_STATUS_LABELS = { visible: "Visible", todo: "To do", done: "Done", removed: "Removed", all: "All" };
       const attractionFilterChoice = {};
+      const attractionStatusChoice = {};
       const attractionSortChoice = {};
       const attractionViewChoice = {};
       const ATTRACTION_SORTS = { rating: "Top rated", distance: "Nearest", name: "A-Z" };
@@ -3243,6 +3317,50 @@
         const fallback = item.address || `${item.title}, ${item.location}, ${data.city}`;
         const mapDestination = item.map ? googleMapsDestinationFromHref(item.map) : "";
         return item.address || mapDestination || fallback;
+      }
+      function loadAttractionStates() {
+        try {
+          const states = JSON.parse(localStorage.gelmanAttractionStates || "{}");
+          return states && typeof states === "object" ? states : {};
+        } catch (error) {
+          return {};
+        }
+      }
+      function saveAttractionStates(states) {
+        localStorage.gelmanAttractionStates = JSON.stringify(states);
+      }
+      function attractionStateId(title) {
+        return slugify(title);
+      }
+      function attractionState(city, title) {
+        const state = loadAttractionStates()[city]?.[attractionStateId(title)];
+        return state === "done" || state === "removed" ? state : "active";
+      }
+      function setAttractionState(city, title, state) {
+        const states = loadAttractionStates();
+        const id = attractionStateId(title);
+        states[city] = states[city] || {};
+        if (!state || state === "active") delete states[city][id];
+        else states[city][id] = state;
+        if (!Object.keys(states[city]).length) delete states[city];
+        saveAttractionStates(states);
+      }
+      function statusFilterAllows(filter, state) {
+        if (filter === "todo") return state === "active";
+        if (filter === "done") return state === "done";
+        if (filter === "removed") return state === "removed";
+        if (filter === "all") return true;
+        return state !== "removed";
+      }
+      function attractionStateButtons(city, title, state) {
+        if (state === "removed") {
+          return `<div class="attraction-state-actions"><button class="restore-toggle" type="button" data-attraction-action="restore" data-attraction-city="${escapeHTML(city)}" data-attraction-title="${escapeHTML(title)}" aria-label="Restore ${escapeHTML(title)}">Restore</button></div>`;
+        }
+        const seen = state === "done";
+        return `<div class="attraction-state-actions">
+          <button class="seen-toggle" type="button" data-attraction-action="done" data-attraction-city="${escapeHTML(city)}" data-attraction-title="${escapeHTML(title)}" aria-pressed="${seen}" aria-label="${seen ? "Mark" : "Mark"} ${escapeHTML(title)} ${seen ? "not seen" : "as seen"}">${seen ? "Undo" : "Seen"}</button>
+          <button class="remove-toggle" type="button" data-attraction-action="remove" data-attraction-city="${escapeHTML(city)}" data-attraction-title="${escapeHTML(title)}" aria-label="Remove ${escapeHTML(title)}">×</button>
+        </div>`;
       }
       function copyableAddressHTML(address) {
         return `<div class="info-row attraction-address"><span>Address</span><strong class="copy-address" data-copy-address="${escapeHTML(address)}" tabindex="0" role="button" aria-label="Copy address: ${escapeHTML(address)}" title="Tap to copy address">${escapeHTML(address)}</strong></div>`;
@@ -3319,7 +3437,8 @@
         let items = data.items.map(normalizeAttraction).map((item, index) => ({
           ...item,
           _index: index,
-          _featuredRank: featuredTitles.indexOf(item.title)
+          _featuredRank: featuredTitles.indexOf(item.title),
+          _state: attractionState(city, item.title)
         }));
         const activeSort = ATTRACTION_SORTS[attractionSortChoice[city]] ? attractionSortChoice[city] : "rating";
         if (activeSort === "distance") {
@@ -3341,9 +3460,11 @@
         const validFilters = ["All", ...filters];
         const defaultFilter = validFilters.includes(data.defaultFilter) ? data.defaultFilter : "All";
         const activeFilter = validFilters.includes(attractionFilterChoice[city]) ? attractionFilterChoice[city] : defaultFilter;
+        const activeStatus = ATTRACTION_STATUS_LABELS[attractionStatusChoice[city]] ? attractionStatusChoice[city] : "visible";
         let shown = activeFilter === "All"
           ? items
           : items.filter(item => item.category === activeFilter || (item.filters || []).includes(activeFilter));
+        shown = shown.filter(item => statusFilterAllows(activeStatus, item._state));
         if (activeFilter !== "All" && shown.some(item => item.filterRanks && item.filterRanks[activeFilter] != null)) {
           shown = shown.slice().sort((a, b) =>
             ((a.filterRanks && a.filterRanks[activeFilter]) ?? 999) - ((b.filterRanks && b.filterRanks[activeFilter]) ?? 999) ||
@@ -3351,11 +3472,19 @@
             a._index - b._index
           );
         }
+        shown = shown.slice().sort((a, b) => {
+          const rank = { active: 0, done: 1, removed: 2 };
+          return (rank[a._state] ?? 0) - (rank[b._state] ?? 0);
+        });
         const activeView = attractionViewChoice[city] === "map" ? "map" : "list";
         const filterChips = filters.length ? `
           <div class="attraction-filters" role="tablist" aria-label="Filter attractions">
             ${["All", ...filters].map(filter => `<button type="button" class="attraction-filter" data-filter="${escapeHTML(filter)}" aria-pressed="${filter === activeFilter}">${escapeHTML(filter === "All" ? "All" : ATTRACTION_FILTER_LABELS[filter] || filter)}</button>`).join("")}
           </div>` : "";
+        const statusChips = `
+          <div class="attraction-status-filters" role="tablist" aria-label="Filter attraction status">
+            ${Object.entries(ATTRACTION_STATUS_LABELS).map(([key, label]) => `<button type="button" class="attraction-status-filter" data-status-filter="${key}" aria-pressed="${key === activeStatus}">${label}</button>`).join("")}
+          </div>`;
         const toolbar = `
           <div class="attraction-toolbar">
             <div class="attraction-sorts" role="group" aria-label="Sort attractions">
@@ -3370,6 +3499,7 @@
           <section class="card wide attraction-city" data-attraction-city="${escapeHTML(city)}">
             <h2><span class="city-mark">${escapeHTML(data.code)}</span> ${escapeHTML(data.city)} <span class="meta">${shown.length} picks near ${escapeHTML(data.hotel)}</span></h2>
             ${filterChips}
+            ${statusChips}
             ${toolbar}
             ${activeView === "map" ? '<div id="attractionMap" aria-label="Map of attractions"></div>' : ""}
             <div class="attraction-stack"${activeView === "map" ? " hidden" : ""}>
@@ -3394,14 +3524,18 @@
                 const fallbackImage = attractionThumb(title, category);
                 const image = ATTRACTION_IMAGES[title] || attraction.image || fallbackImage;
                 const recommended = attraction.featured || attraction._featuredRank >= 0 || (attraction.filters || []).includes("Top10");
-                return `<details class="attraction-card" id="${escapeHTML(cardId)}"${index === 0 ? " open" : ""}>
+                const state = attraction._state || "active";
+                const stateTag = state === "done" ? `<span class="status-tag">Seen</span>` : state === "removed" ? `<span class="status-tag">Removed</span>` : "";
+                return `<details class="attraction-card is-${escapeHTML(state)}" id="${escapeHTML(cardId)}"${index === 0 ? " open" : ""} data-attraction-state="${escapeHTML(state)}">
                   <summary>
                     <img class="attraction-thumb" src="${escapeHTML(image)}" data-fallback-src="${escapeHTML(fallbackImage)}" alt="${escapeHTML(title)}">
+                    ${attractionStateButtons(city, title, state)}
                     ${shareTargetButton(cardId, "photos", city, title)}
                     <div class="attraction-main">
                       <h3>${escapeHTML(title)}</h3>
                       <p>${escapeHTML(description)}</p>
                       <div class="attraction-tags">
+                        ${stateTag}
                         ${recommended ? `<span class="recommended-tag">Recommended</span>` : ""}
                         ${attraction.rating ? `<span class="rating-tag">★ ${attraction.rating.toFixed(1)}</span>` : ""}
                         <span>${escapeHTML(category)}</span>
@@ -3428,6 +3562,11 @@
         `;
         attractionContent.querySelectorAll(".attraction-filter").forEach(chip => chip.addEventListener("click", () => {
           attractionFilterChoice[city] = chip.dataset.filter;
+          renderAttractions(city);
+          attractionContent.scrollIntoView({ block: "start", behavior: "smooth" });
+        }));
+        attractionContent.querySelectorAll(".attraction-status-filter").forEach(chip => chip.addEventListener("click", () => {
+          attractionStatusChoice[city] = chip.dataset.statusFilter;
           renderAttractions(city);
           attractionContent.scrollIntoView({ block: "start", behavior: "smooth" });
         }));
@@ -3727,6 +3866,22 @@
       });
       shareButton?.addEventListener("click", shareCurrentPage);
       document.addEventListener("click", event => {
+        const attractionButton = event.target.closest("[data-attraction-action]");
+        if (attractionButton) {
+          event.preventDefault();
+          event.stopPropagation();
+          const city = attractionButton.dataset.attractionCity || activeCity;
+          const title = attractionButton.dataset.attractionTitle || "";
+          const current = attractionState(city, title);
+          let next = "active";
+          if (attractionButton.dataset.attractionAction === "done") next = current === "done" ? "active" : "done";
+          if (attractionButton.dataset.attractionAction === "remove") next = "removed";
+          if (attractionButton.dataset.attractionAction === "restore") next = "active";
+          setAttractionState(city, title, next);
+          showShareStatus(next === "done" ? "Marked seen" : next === "removed" ? "Removed" : "Restored");
+          renderAttractions(city);
+          return;
+        }
         const mapDetail = event.target.closest("[data-map-detail]");
         if (mapDetail) {
           event.preventDefault();
@@ -3854,7 +4009,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=67", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=68", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
