@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=70">
+  <link rel="manifest" href="manifest.webmanifest?v=71">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -891,6 +891,10 @@
       color: #fffefa;
       border-color: rgba(37, 33, 28, .88);
     }
+    .attraction-state-actions button:disabled {
+      cursor: default;
+      opacity: .72;
+    }
     .attraction-state-actions .remove-toggle {
       width: 30px;
       padding: 0;
@@ -1171,6 +1175,11 @@
     }
     details.ticket-card.ticket-expired[open] summary::after {
       content: "Past trip  ·  details open";
+    }
+    .city-plan[data-city-completed="true"] .city-title-row,
+    .attraction-city[data-city-completed="true"] > h2 {
+      opacity: .56;
+      filter: grayscale(.25) saturate(.65);
     }
     .hotel-key.plan-expired,
     .lounge-pass.plan-expired {
@@ -2050,7 +2059,7 @@
         </div>
       </section>
 
-      <section class="city-plan" data-city="amsterdam" data-city-expires-at="2026-07-06T14:25:00+01:00">
+      <section class="city-plan" data-city="amsterdam" data-city-expires-at="2026-07-06T00:00:00+02:00" data-city-completed="true">
         <div class="city-title-row">
           <span class="city-mark">AMS</span>
           <div><h2>Amsterdam</h2><p>Fri, Jul 3 - Mon, Jul 6, 2026</p></div>
@@ -2138,7 +2147,7 @@
               </div>
             </div>
           </details>
-          <details class="ticket-card airline-ba" data-flight-date="2026-07-06" data-leave-at="2026-07-06T11:05:00" data-expires-at="2026-07-06T14:25:00+01:00">
+          <details class="ticket-card airline-ba" data-flight-date="2026-07-06" data-leave-at="2026-07-06T11:05:00" data-expires-at="2026-07-06T00:00:00+02:00">
             <summary>
               <article class="ticket">
                 <div class="ticket-main">
@@ -2454,7 +2463,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "70";
+      const APP_VERSION = "71";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -2495,7 +2504,7 @@
       };
       const CITY_META = {
         vienna: { stayLabel: "Jul 2-3", statusLabel: "Stay", flightDate: "2026-07-03", leaveAt: "2026-07-03T11:15:00" },
-        amsterdam: { stayLabel: "Jul 3-6", statusLabel: "Stay", flightDate: "2026-07-06", leaveAt: "2026-07-06T11:05:00" },
+        amsterdam: { stayLabel: "Jul 3-6", statusLabel: "Done", flightDate: "2026-07-06", leaveAt: "2026-07-06T11:05:00" },
         london: { stayLabel: "Jul 6-11", statusLabel: "Stay", flightDate: "2026-07-11", leaveAt: "2026-07-11T12:20:00" },
         washington: { stayLabel: "Jul 11-12", statusLabel: "Stay", flightDate: "2026-07-12", leaveAt: "2026-07-12T04:55:00" },
         sarasota: { stayLabel: "Arrive Jul 12", statusLabel: "Next" }
@@ -3390,6 +3399,7 @@
       }
       const ATTRACTION_FILTER_LABELS = { Top10: "Top 10", Museum: "Museums", Fish: "Fish", Food: "Food", Coffee: "Coffee", Canal: "Canals", Landmark: "Landmarks", Nightlife: "Nightlife", Outdoors: "Outdoors" };
       const ATTRACTION_STATUS_LABELS = { visible: "Visible", todo: "To do", done: "Done", removed: "Removed", all: "All" };
+      const COMPLETED_CITIES = new Set(["amsterdam"]);
       const attractionFilterChoice = {};
       const attractionStatusChoice = {};
       const attractionSortChoice = {};
@@ -3427,6 +3437,7 @@
       }
       function attractionState(city, title) {
         const state = loadAttractionStates()[city]?.[attractionStateId(title)];
+        if (COMPLETED_CITIES.has(city) && state !== "removed") return "done";
         return state === "done" || state === "removed" ? state : "active";
       }
       function setAttractionState(city, title, state) {
@@ -3450,8 +3461,9 @@
           return `<div class="attraction-state-actions"><button class="restore-toggle" type="button" data-attraction-action="restore" data-attraction-city="${escapeHTML(city)}" data-attraction-title="${escapeHTML(title)}" aria-label="Restore ${escapeHTML(title)}">Restore</button></div>`;
         }
         const seen = state === "done";
+        const forcedDone = seen && COMPLETED_CITIES.has(city);
         return `<div class="attraction-state-actions">
-          <button class="seen-toggle" type="button" data-attraction-action="done" data-attraction-city="${escapeHTML(city)}" data-attraction-title="${escapeHTML(title)}" aria-pressed="${seen}" aria-label="${seen ? "Mark" : "Mark"} ${escapeHTML(title)} ${seen ? "not seen" : "as seen"}">${seen ? "Undo" : "Seen"}</button>
+          <button class="seen-toggle" type="button" data-attraction-action="done" data-attraction-city="${escapeHTML(city)}" data-attraction-title="${escapeHTML(title)}" aria-pressed="${seen}" aria-label="${forcedDone ? `${escapeHTML(title)} is done because this city is complete` : `${seen ? "Mark" : "Mark"} ${escapeHTML(title)} ${seen ? "not seen" : "as seen"}`}"${forcedDone ? " disabled" : ""}>${forcedDone ? "Done" : seen ? "Undo" : "Seen"}</button>
           <button class="remove-toggle" type="button" data-attraction-action="remove" data-attraction-city="${escapeHTML(city)}" data-attraction-title="${escapeHTML(title)}" aria-label="Remove ${escapeHTML(title)}">×</button>
         </div>`;
       }
@@ -3589,7 +3601,7 @@
             </div>
           </div>`;
         attractionContent.innerHTML = `
-          <section class="card wide attraction-city" data-attraction-city="${escapeHTML(city)}">
+          <section class="card wide attraction-city" data-attraction-city="${escapeHTML(city)}" data-city-completed="${COMPLETED_CITIES.has(city)}">
             <h2><span class="city-mark">${escapeHTML(data.code)}</span> ${escapeHTML(data.city)} <span class="meta">${shown.length} picks near ${escapeHTML(data.hotel)}</span></h2>
             ${filterChips}
             ${statusChips}
@@ -3704,7 +3716,7 @@
         const now = currentNow();
         let label = meta.statusLabel || "Stay";
         let value = meta.stayLabel;
-        if (meta.leaveAt) {
+        if (meta.leaveAt && !COMPLETED_CITIES.has(activeCity)) {
           const leaveAt = new Date(meta.leaveAt);
           const delta = leaveAt.getTime() - now.getTime();
           if (delta <= 86400000 && delta > -3600000) {
@@ -4119,7 +4131,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=70", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=71", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
