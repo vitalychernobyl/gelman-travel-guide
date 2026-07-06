@@ -7,8 +7,8 @@ Last verified: 2026-07-05
 ```text
 Repository: vitalychernobyl/gelman-travel-guide
 Branch: main
-Latest app commit at deploy: f79f164 Add safe boarding pass selector
-Cache version: service-worker.js?v=70
+Latest app commit at deploy: d5b1df8 Fade completed Amsterdam trip
+Cache version: service-worker.js?v=71
 ```
 
 ## Cloudflare Pages
@@ -19,7 +19,7 @@ Production origin: https://gelman-travel-guide.pages.dev/
 Git Provider: No
 Manual deploy command used:
 npx wrangler pages deploy . --project-name gelman-travel-guide
-Deployment URL: https://c9632929.gelman-travel-guide.pages.dev
+Deployment URL: https://6cec37c6.gelman-travel-guide.pages.dev
 Public URL: https://antonreport.com/gelmantravel/
 Wrangler: 4.107.0
 ```
@@ -28,29 +28,21 @@ Wrangler: 4.107.0
 
 ```text
 curl -s https://gelman-travel-guide.pages.dev/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=70
+service-worker.js?v=71
 
 curl -s https://antonreport.com/gelmantravel/ | grep -o 'service-worker.js?v=[0-9]*' | head -1
-service-worker.js?v=70
+service-worker.js?v=71
 
 curl -s 'https://antonreport.com/gelmantravel/app-version.json' | tr -d '\n '
-{"version":"70","publishedAt":"2026-07-05T14:55:00-04:00"}
+{"version":"71","publishedAt":"2026-07-06T10:26:45-04:00"}
 
-curl -s 'https://antonreport.com/gelmantravel/' | rg 'APP_VERSION = "70"|manifest.webmanifest\?v=70|service-worker.js\?v=70|boarding-pass-safe|data-boarding-pass|boarding_pass|pass\.pdf'
-  <link rel="manifest" href="manifest.webmanifest?v=70">
-    .boarding-pass-safe {
-              <div class="boarding-pass-safe" data-boarding-pass-list>
-                  <button type="button" data-boarding-pass data-pass-name="Alex Gelman" data-pass-seat="13D" aria-pressed="true">Alex<span>Seat 13D</span></button>
-                  <button type="button" data-boarding-pass data-pass-name="Anton Gelman" data-pass-seat="13C" aria-pressed="false">Anton<span>Seat 13C</span></button>
-                  <button type="button" data-boarding-pass data-pass-name="Ellaine Gelman" data-pass-seat="13B" aria-pressed="false">Ellaine<span>Seat 13B</span></button>
-                  <button type="button" data-boarding-pass data-pass-name="Slava Khodakgelman" data-pass-seat="13A" aria-pressed="false">Slava<span>Seat 13A</span></button>
-                <div class="boarding-pass-preview" data-boarding-pass-panel aria-live="polite">
-      const APP_VERSION = "70";
-        const boardingPassButton = event.target.closest("[data-boarding-pass]");
-          const passList = boardingPassButton.closest("[data-boarding-pass-list]");
-          const panel = passList && passList.querySelector("[data-boarding-pass-panel]");
-          passList?.querySelectorAll("[data-boarding-pass]").forEach(button => {
-        navigator.serviceWorker.register("service-worker.js?v=70", { updateViaCache: "none" }).then(registration => {
+curl -s 'https://antonreport.com/gelmantravel/?city=amsterdam&page=plans&today=2026-07-06&qa=v71-live' | rg 'APP_VERSION = "71"|manifest.webmanifest\?v=71|service-worker.js\?v=71|data-city="amsterdam" data-city-expires-at="2026-07-06T00:00:00\+02:00" data-city-completed="true"|COMPLETED_CITIES = new Set\(\["amsterdam"\]\)|statusLabel: "Done"'
+  <link rel="manifest" href="manifest.webmanifest?v=71">
+      <section class="city-plan" data-city="amsterdam" data-city-expires-at="2026-07-06T00:00:00+02:00" data-city-completed="true">
+      const APP_VERSION = "71";
+        amsterdam: { stayLabel: "Jul 3-6", statusLabel: "Done", flightDate: "2026-07-06", leaveAt: "2026-07-06T11:05:00" },
+      const COMPLETED_CITIES = new Set(["amsterdam"]);
+        navigator.serviceWorker.register("service-worker.js?v=71", { updateViaCache: "none" }).then(registration => {
 
 curl -sI 'https://antonreport.com/gelmantravel/' | sed -n '1,12p'
 HTTP/2 200
@@ -58,30 +50,26 @@ content-type: text/html; charset=utf-8
 cache-control: public, max-age=0, must-revalidate
 x-robots-tag: noindex, nofollow, noarchive, noimageindex
 
-curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=70' | rg 'start_url|name|display'
+curl -s 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=71' | rg 'start_url|name|display'
   "name": "Gelman Travel Guide",
   "short_name": "Gelman Guide",
-  "start_url": "./?v=70",
+  "start_url": "./?v=71",
   "display": "standalone",
 
-curl -sI 'https://antonreport.com/gelmantravel/service-worker.js?v=70' | sed -n '1,4p'
+curl -sI 'https://antonreport.com/gelmantravel/service-worker.js?v=71' | sed -n '1,4p'
 HTTP/2 200
 content-type: application/javascript
 
-curl -sI 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=70' | sed -n '1,4p'
+curl -sI 'https://antonreport.com/gelmantravel/manifest.webmanifest?v=71' | sed -n '1,4p'
 HTTP/2 200
 content-type: application/manifest+json
 
-curl -sI 'https://antonreport.com/gelmantravel/boarding_pass.pdf' | sed -n '1,8p'
-HTTP/2 200
-content-type: text/html; charset=utf-8
-cache-control: public, max-age=0, must-revalidate
-
-Rendered mobile QA at https://antonreport.com/gelmantravel/?city=amsterdam&page=plans&appv=70&fresh=safe-boarding-v70f:
-{"appVersion70":true,"baOpen":true,"selected":[{"name":"Ellaine Gelman","seat":"13B"}],"panelText":"SELECTED PASS\nEllaine Gelman · Seat 13B · Group 5\n\nReal QR codes and PDF passes are not stored in this public app. Use the British Airways app or a private file link at the airport.","sensitiveRefs":[],"ticketNumberText":false,"viewport":{"width":396,"height":695},"consoleErrorsOrWarnings":[]}
-
-Sensitive boarding-pass token search was run locally against the app files and rendered
-page; exact private tokens are intentionally omitted from this public proof file.
+Local rendered fallback QA:
+npx playwright screenshot --viewport-size=396,695 'http://127.0.0.1:4173/?city=amsterdam&page=plans&today=2026-07-06&qa=v71b' /tmp/gelman-amsterdam-plans-v71b.png
+npx playwright screenshot --viewport-size=396,695 'http://127.0.0.1:4173/?city=amsterdam&page=photos&today=2026-07-06&qa=v71b' /tmp/gelman-amsterdam-attractions-v71b.png
+Fallback Playwright assertions: 2 passed.
+Plans assertion: 3 Amsterdam tickets expired, 1 hotel expired, 1 lounge expired.
+Attractions assertion: 10 visible Amsterdam attraction cards, all `is-done`, all done buttons disabled.
 
 Live link audit:
 {"liveUrl":"https://antonreport.com/gelmantravel/","attractionCards":87,"destinationProblems":0,"currentLocationOccurrences":0}
@@ -123,6 +111,18 @@ curl -sI 'https://antonreport.com/gelmantravel/priority-pass-sky-lounge.png?v=1'
 HTTP/2 200
 content-type: image/png
 ```
+
+## v71 Change
+
+- Marked Amsterdam as completed.
+- Amsterdam plan cards expire immediately and render faded with past-trip/past-stay
+  styling.
+- Amsterdam attractions default to `Done`, render faded, and show disabled `Done`
+  buttons unless a user has explicitly removed a card locally.
+- Amsterdam hero status reads `AMS · Done Jul 3-6`.
+- Local mobile screenshot checks verified plans and attractions at 396×695.
+- Fallback Playwright assertions verified 3 expired Amsterdam tickets, 1 expired hotel,
+  1 expired lounge, and 10 visible Amsterdam attraction cards all in the done state.
 
 ## v70 Change
 

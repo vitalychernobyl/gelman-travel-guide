@@ -9,8 +9,8 @@ verified deploy*; this file tracks *what needs to happen next*.
 ## Current state (update me)
 
 ```text
-main:            v70 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
-live:            v70 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
+main:            v71 deployed; app deploy commit is in DEPLOYMENT_PROOF.md
+live:            v71 (antonreport.com/gelmantravel + gelman-travel-guide.pages.dev)
 pending action:  none
 ```
 
@@ -42,6 +42,18 @@ You are working with repo vitalychernobyl/gelman-travel-guide on the owner's mac
    output) and the "Current state" block in HANDOFF.md, then commit and push both
    to main with the release version in the commit message.
 ```
+
+## What v71 changed (context for reviewers)
+
+- Marked Amsterdam as completed.
+- Amsterdam plan cards now expire immediately and render faded with past-trip/past-stay
+  styling.
+- Amsterdam attractions default to `Done`, render faded, and show disabled `Done`
+  buttons unless a user has explicitly removed a card locally.
+- Amsterdam hero status now reads `AMS · Done Jul 3-6` instead of showing a leave
+  countdown.
+- Bumped service worker, manifest, and app-version to v71 so installed Home Screen apps
+  force-refresh.
 
 ## What v70 changed (context for reviewers)
 
