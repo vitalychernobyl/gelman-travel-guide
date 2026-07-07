@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=73">
+  <link rel="manifest" href="manifest.webmanifest?v=74">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -2234,6 +2234,44 @@
           <div><h2>London</h2><p>Mon, Jul 6 - Sat, Jul 11, 2026</p></div>
         </div>
         <div class="plan-grid">
+          <details class="ticket-card museum-ticket" id="plan-london-courtauld-gallery" data-expires-at="2026-07-08T15:00:00+01:00">
+            <summary>
+              <article class="ticket">
+                <div class="ticket-main">
+                  <div class="airline"><span class="airline-logo">The Courtauld Gallery</span><span>Booked</span></div>
+                  <div class="route">
+                    <div class="city"><strong>Permanent Collection</strong><span>Somerset House</span></div>
+                    <div class="plane-line">→</div>
+                    <div class="city"><strong>12:45 PM</strong><span>Adult entry</span></div>
+                  </div>
+                  <div class="ticket-meta">
+                    <div><span>Date</span><strong>Jul 8</strong></div>
+                    <div><span>Entry</span><strong>12:45 PM</strong></div>
+                  </div>
+                  <div class="ticket-hints">
+                    <div class="ticket-hint"><span>Leave by</span><strong>11:55 AM</strong></div>
+                    <div class="ticket-hint"><span>Arrive by</span><strong>12:30 PM</strong></div>
+                  </div>
+                </div>
+                <div class="ticket-stub"><div><span class="wordmark">Court<br>auld</span><strong>CG</strong><span class="brand-sash"></span></div></div>
+              </article>
+            </summary>
+            <div class="ticket-extra info-list">
+              <div class="info-row"><span>Order</span><strong>1260161</strong></div>
+              <div class="info-row"><span>Ticket</span><strong>Use the Courtauld email for the scannable QR codes</strong></div>
+              <div class="info-row"><span>Type</span><strong>Permanent Collection • Adult entry</strong></div>
+              <div class="info-row"><span>Date</span><strong>Wednesday, July 8, 2026</strong></div>
+              <div class="info-row"><span>Entry time</span><strong>12:45 PM</strong></div>
+              <div class="info-row"><span>Address</span><strong>The Courtauld Gallery, Somerset House, Strand, London WC2R 0RN, United Kingdom</strong></div>
+              <div class="info-row"><span>Leave stay</span><strong>11:55 AM from Canary Wharf / Crews Street area</strong></div>
+              <div class="info-row"><span>Arrive gallery</span><strong>12:30 PM, about 15 minutes before entry</strong></div>
+              <div class="info-row"><span>Hours</span><strong>Open daily 10:00 AM - 6:00 PM; last entry 5:15 PM</strong></div>
+              <div class="ticket-actions">
+                <a class="directions-button" href="https://www.google.com/maps/dir/?api=1&amp;destination=The%20Courtauld%20Gallery%2C%20Somerset%20House%2C%20Strand%2C%20London%20WC2R%200RN%2C%20United%20Kingdom&amp;travelmode=transit&amp;dir_action=navigate" target="_blank" rel="noopener">Directions</a>
+                <a class="directions-button ticket-button" href="https://courtauld.ac.uk/gallery/plan-your-visit/" target="_blank" rel="noopener">Gallery Info</a>
+              </div>
+            </div>
+          </details>
           <details class="ticket-card airline-ua" data-flight-date="2026-07-11" data-leave-at="2026-07-11T12:20:00" data-expires-at="2026-07-11T20:00:00-04:00">
             <summary>
               <article class="ticket">
@@ -2459,7 +2497,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "73";
+      const APP_VERSION = "74";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -4192,7 +4230,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=73", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=74", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
