@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=75">
+  <link rel="manifest" href="manifest.webmanifest?v=76">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -1604,6 +1604,21 @@
       height: 17px;
       stroke-width: 2.6;
     }
+    #plans .has-card-share .card-share-button {
+      top: auto;
+      right: auto;
+      left: 10px;
+      bottom: 8px;
+    }
+    #plans details.ticket-card.has-card-share summary::after {
+      left: 56px;
+    }
+    #plans details.hotel-key.has-card-share summary::after {
+      left: 56px;
+    }
+    #plans .lounge-pass.has-card-share .lounge-pass-body {
+      padding-bottom: 54px;
+    }
     .copy-address {
       cursor: pointer;
       border-bottom: 1px dotted rgba(174, 78, 21, .5);
@@ -2497,7 +2512,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "75";
+      const APP_VERSION = "76";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -3327,7 +3342,9 @@
         return id;
       }
       function ensurePlanShareButton(card, index = 0) {
-        if (!card || card.querySelector("[data-share-target]")) return;
+        if (!card) return;
+        card.classList.add("has-card-share");
+        if (card.querySelector("[data-share-target]")) return;
         const city = card.closest(".city-plan")?.dataset.city || activeCity;
         const label = planCardTitle(card);
         const id = ensurePlanCardId(card, city, label, index);
@@ -4261,7 +4278,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=75", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=76", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
