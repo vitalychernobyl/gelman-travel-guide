@@ -1,13 +1,13 @@
-const APP_VERSION = "71";
+const APP_VERSION = "72";
 const CACHE = `gelman-travel-guide-v${APP_VERSION}`;
 const FILES = [
   "./",
   "./index.html",
-  "./?v=71",
+  "./?v=72",
   "./app-version.json",
-  "./app-version.json?v=71",
+  "./app-version.json?v=72",
   "./manifest.webmanifest",
-  "./manifest.webmanifest?v=71",
+  "./manifest.webmanifest?v=72",
   "./app-logo.png",
   "./app-logo.png?v=17",
   "./apple-touch-icon.png",
@@ -204,6 +204,12 @@ const FILES = [
   "./attractions/london-westminster-abbey.jpg?v=1",
   "./attractions/london-london-eye.jpg",
   "./attractions/london-london-eye.jpg?v=1",
+  "./attractions/london-coffee-view.svg",
+  "./attractions/london-coffee-view.svg?v=1",
+  "./attractions/london-church-coffee.svg",
+  "./attractions/london-church-coffee.svg?v=1",
+  "./attractions/london-canary-coffee.svg",
+  "./attractions/london-canary-coffee.svg?v=1",
   "./attractions/washington-smithsonian-museums.jpg",
   "./attractions/washington-smithsonian-museums.jpg?v=1",
   "./attractions/washington-lincoln-memorial.jpg",

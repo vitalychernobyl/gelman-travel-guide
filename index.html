@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=71">
+  <link rel="manifest" href="manifest.webmanifest?v=72">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -2463,7 +2463,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "71";
+      const APP_VERSION = "72";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -2751,7 +2751,41 @@
           code: "LDN",
           city: "London",
           hotel: "London stay",
+          filters: ["Coffee", "NearStay", "Top10", "View", "Museum", "History", "Church"],
+          defaultFilter: "Coffee",
+          featured: [
+            "WatchHouse Cabot Place",
+            "Caravan Canary Wharf",
+            "Feels Like June",
+            "The Yurt Cafe",
+            "Poplar Bakehouse",
+            "WatchHouse Millennium Bridge",
+            "The Wren Coffee",
+            "Host Cafe",
+            "Special Guests Coffee",
+            "Rosslyn Coffee Queen Victoria",
+            "Nagare Coffee",
+            "Formative Coffee",
+            "Nostos Coffee",
+            "Monmouth Coffee Company",
+            "Prufrock Coffee"
+          ],
           items: [
+            { title: "WatchHouse Cabot Place", category: "Coffee", filters: ["NearStay"], rating: 4.8, location: "Canary Wharf", price: "Coffee + pastry", distance: "8-12 min from stay", address: "RS320, Cabot Square, London E14 4QJ, United Kingdom", description: "Polished Canary Wharf specialty cafe with careful espresso, good pastries, and a clean design room that feels useful rather than office-dead.", why: "This is the easiest serious espresso run from the London stay. It is close, reliable, and visually nicer than most mall-adjacent coffee stops.", details: "Best first local pick. The Cabot Place setting is practical if the weather is bad, and the square is close enough for a quick reset before plans.", link: "https://watchhouse.com/blogs/locations/cabot-place", map: "https://www.google.com/maps/search/?api=1&query=WatchHouse%20Cabot%20Place%2C%20RS320%20Cabot%20Square%2C%20London%20E14%204QJ" },
+            { title: "Caravan Canary Wharf", category: "Coffee", filters: ["NearStay"], rating: 4.6, location: "Reuters Plaza", price: "Coffee + brunch", distance: "10-15 min from stay", address: "Reuters Plaza, Canary Wharf Estate, London E14 5AJ, United Kingdom", description: "All-day restaurant from the Caravan coffee people: good espresso, actual breakfast, and enough space that the group will not have to hover over one tiny table.", why: "Best local option when coffee needs food attached. It is more restaurant than espresso bar, but the coffee program is real and the terrace/wharf setting is useful.", details: "Go for breakfast or brunch rather than a quick standing espresso. Good fallback if everyone needs food, bathrooms, and a table.", link: "https://caravanrestaurants.co.uk/canary-wharf", map: "https://www.google.com/maps/search/?api=1&query=Caravan%20Canary%20Wharf%2C%20Reuters%20Plaza%2C%20London%20E14%205AJ" },
+            { title: "Feels Like June", category: "Coffee", filters: ["NearStay"], rating: 4.6, location: "Wood Wharf / TRIBE", price: "Coffee + breakfast", distance: "8-12 min from stay", address: "15 Water Street, London E14 9QG, United Kingdom", description: "Sunny California-style room in Wood Wharf with breakfast, coffee, pastries, and an easy hotel-lobby level of convenience.", why: "Good when nobody wants to think too hard. It is close to the stay, bright, and better for sitting than most quick Canary Wharf coffee counters.", details: "Use it for a casual breakfast coffee or an easy regroup spot before heading out from Canary Wharf.", link: "https://feelslikejune.com/", map: "https://www.google.com/maps/search/?api=1&query=Feels%20Like%20June%2C%2015%20Water%20Street%2C%20London%20E14%209QG" },
+            { title: "The Yurt Cafe", category: "Coffee", filters: ["NearStay"], rating: 4.6, location: "Limehouse", price: "Coffee + breakfast", distance: "8-12 min from stay", address: "St Katharine's Precinct, 2 Butcher Row, London E14 8DS, United Kingdom", description: "A garden-yurt cafe near Limehouse with craft coffee, outdoor tables, and a calmer feeling than the Canary Wharf glass canyon.", why: "This is the local decompression pick. It gives you coffee plus a courtyard/garden setting without needing to cross central London.", details: "Best if the weather is decent. It is also a good short walk from the stay when you want something that feels less corporate.", link: "https://rfsk.org.uk/community/yurtcafe/", map: "https://www.google.com/maps/search/?api=1&query=The%20Yurt%20Cafe%2C%202%20Butcher%20Row%2C%20London%20E14%208DS" },
+            { title: "Poplar Bakehouse", category: "Coffee", filters: ["NearStay"], rating: 4.6, location: "Poplar Union", price: "Coffee + bakery", distance: "12-18 min from stay", address: "8A Cotall Street, London E14 6TL, United Kingdom", description: "Neighborhood bakery-cafe from the e5 Bakehouse orbit: sourdough, pastries, and coffee inside the Poplar Union community arts space.", why: "Best nearby bakery stop. It is less glossy than Canary Wharf and more neighborhood, which is exactly the point.", details: "Go earlier for better pastry choice. Works well as a low-pressure morning walk from the stay.", link: "https://www.poplarunion.com/visit-us/food-drink/", map: "https://www.google.com/maps/search/?api=1&query=Poplar%20Bakehouse%2C%208A%20Cotall%20Street%2C%20London%20E14%206TL" },
+            { title: "WatchHouse Millennium Bridge", category: "Coffee", filters: ["Top10", "View"], rating: 4.7, location: "St Paul's / Millennium Bridge", price: "Coffee + pastry", distance: "25-35 min from stay", address: "Unit 1B, One Millennium Bridge, London EC4V 4GG, United Kingdom", description: "Design-forward WatchHouse right by Millennium Bridge, positioned between St Paul's, Tate Modern, and the Thames foot traffic.", why: "Best combination of serious modern coffee and a London view walk. Grab espresso, then step straight into St Paul's, river, bridge, and Tate views.", details: "Use this as the coffee stop before or after crossing Millennium Bridge. The actual view payoff is the immediate outside walk.", link: "https://watchhouse.com/blogs/locations/millennium-bridge", map: "https://www.google.com/maps/search/?api=1&query=WatchHouse%20Millennium%20Bridge%2C%20One%20Millennium%20Bridge%2C%20London%20EC4V%204GG" },
+            { title: "The Wren Coffee", category: "Coffee", filters: ["Top10", "View"], rating: 4.7, location: "Queen Victoria Street", price: "Coffee + bakery", distance: "25-35 min from stay", address: "114 Queen Victoria Street, London EC4V 4BJ, United Kingdom", description: "Specialty coffee inside St Nicholas Cole Abbey, with high arches, warm church light, and a much more memorable room than a standard cafe.", why: "Best indoor view on the list. You get good espresso and a historic Wren church interior in one efficient stop.", details: "Good for a seated pause near St Paul's, Cannon Street, and Millennium Bridge. It is especially useful on a rainy London day.", link: "https://www.thewren.coffee/", map: "https://www.google.com/maps/search/?api=1&query=The%20Wren%20Coffee%2C%20114%20Queen%20Victoria%20Street%2C%20London%20EC4V%204BJ" },
+            { title: "Host Cafe", category: "Coffee", filters: ["Top10", "View"], rating: 4.6, location: "St Mary Aldermary", price: "Coffee + cakes", distance: "25-35 min from stay", address: "St Mary Aldermary Church, Watling Street, London EC4M 9BW, United Kingdom", description: "Cafe inside a Gothic church, serving Mission Coffee Works with quiet seating, stained glass, and a properly cinematic London interior.", why: "Good espresso plus one of the most atmospheric cafe rooms in the City. This is a better travel-memory coffee than another generic flat white counter.", details: "Strong rainy-day option. If anyone needs to work or sit quietly, this is one of the calmer central coffee stops.", link: "https://www.hostcafelondon.com/", map: "https://www.google.com/maps/search/?api=1&query=Host%20Cafe%2C%20St%20Mary%20Aldermary%20Church%2C%20Watling%20Street%2C%20London%20EC4M%209BW" },
+            { title: "Special Guests Coffee", category: "Coffee", filters: ["Top10"], rating: 4.8, location: "Marylebone", price: "Coffee prices", distance: "40-50 min from stay", address: "8 Aybrook Street, London W1U 4AW, United Kingdom", description: "Tiny Marylebone specialty shop built around rare guest roasters, carefully pulled espresso, and the kind of coffee menu that rewards paying attention.", why: "Best pure coffee-nerd stop. If the mission is espresso quality rather than seating or views, this belongs near the top.", details: "Small room, limited seating. Treat it as a destination espresso stop while wandering Marylebone.", link: "https://specialguestscoffee.com/pages/location", map: "https://www.google.com/maps/search/?api=1&query=Special%20Guests%20Coffee%2C%208%20Aybrook%20Street%2C%20London%20W1U%204AW" },
+            { title: "Rosslyn Coffee Queen Victoria", category: "Coffee", filters: ["Top10"], rating: 4.8, location: "City of London", price: "Coffee prices", distance: "25-35 min from stay", address: "78 Queen Victoria Street, London EC4N 4SJ, United Kingdom", description: "Fast, precise City espresso bar with excellent milk drinks, clean shots, and a reputation as one of London's sharpest coffee operations.", why: "Best no-nonsense espresso in the City. It is not a loungey sit-down place; it is for getting a very good coffee and moving.", details: "Pair it with St Paul's, Bank, Leadenhall Market, or a City architecture walk.", link: "https://rosslyncoffee.com/", map: "https://www.google.com/maps/search/?api=1&query=Rosslyn%20Coffee%2C%2078%20Queen%20Victoria%20Street%2C%20London%20EC4N%204SJ" },
+            { title: "Nagare Coffee", category: "Coffee", filters: ["Top10"], rating: 4.7, location: "Spitalfields", price: "Coffee + pastry", distance: "25-35 min from stay", address: "Ground Floor, 40 Brushfield Street, London E1 6AG, United Kingdom", description: "Japanese-leaning specialty cafe by Old Spitalfields Market, known for precise espresso, batch brew, matcha, and a calm little room.", why: "Best East/Central specialty stop if the day points toward Spitalfields, Brick Lane, or Liverpool Street.", details: "Small but polished. Good for an espresso before market wandering or a quick pastry-and-matcha detour.", link: "https://nagare.co.uk/", map: "https://www.google.com/maps/search/?api=1&query=Nagare%20Coffee%2C%2040%20Brushfield%20Street%2C%20London%20E1%206AG" },
+            { title: "Formative Coffee", category: "Coffee", filters: ["Top10"], rating: 4.7, location: "Westminster", price: "Coffee prices", distance: "35-45 min from stay", address: "Butler Place, London SW1H 0RH, United Kingdom", description: "Minimal Westminster coffee lab with espresso, batch brew, and a serious focus on brewing technique rather than cafe decoration.", why: "Best if you are near Westminster or St James's Park and want a technically excellent coffee stop instead of tourist coffee.", details: "Hidden between Westminster and Victoria, so check the map before walking past it. Good with Westminster Abbey or St James's Park.", link: "https://formative.coffee/pages/coffeeshop", map: "https://www.google.com/maps/search/?api=1&query=Formative%20Coffee%2C%20Butler%20Place%2C%20London%20SW1H%200RH" },
+            { title: "Nostos Coffee", category: "Coffee", filters: ["Top10"], rating: 4.8, location: "Clapham Common", price: "Coffee + banana bread", distance: "45-60 min from stay", address: "16 Clapham Common South Side, London SW4 7AB, United Kingdom", description: "Beloved specialty cafe with careful flat whites, pour-overs, banana bread, and a small garden seating situation near Clapham Common.", why: "Best south-west detour if the group wants excellent coffee with a park-side breather rather than a central tourist stop.", details: "Not the closest pick, but it makes sense with Clapham, Battersea, or a south-west London wandering day.", link: "https://nostoscoffee.co.uk/pages/nostos-coffee-locations", map: "https://www.google.com/maps/search/?api=1&query=Nostos%20Coffee%2C%2016%20Clapham%20Common%20South%20Side%2C%20London%20SW4%207AB" },
+            { title: "Monmouth Coffee Company", category: "Coffee", filters: ["Top10", "View"], rating: 4.6, location: "Borough Market", price: "Coffee prices", distance: "25-35 min from stay", address: "2 Park Street, London SE1 9AB, United Kingdom", description: "Classic London coffee institution at Borough Market, with beans, espresso, queues, and prime people-watching among the food stalls.", why: "Best market-energy coffee. It is less about a quiet room and more about standing in the middle of Borough Market with a good espresso.", details: "Go early if you hate queues. Pair with Borough Market, Southwark Cathedral, London Bridge, or the Thames walk.", link: "https://www.monmouthcoffee.co.uk/our-shops/", map: "https://www.google.com/maps/search/?api=1&query=Monmouth%20Coffee%20Company%2C%202%20Park%20Street%2C%20London%20SE1%209AB" },
+            { title: "Prufrock Coffee", category: "Coffee", filters: ["Top10"], rating: 4.6, location: "Leather Lane", price: "Coffee + brunch", distance: "35-45 min from stay", address: "23-25 Leather Lane, London EC1N 7TE, United Kingdom", description: "Leather Lane specialty institution with Square Mile roasts, espresso flights, training pedigree, and a proper sit-down coffee menu.", why: "Best education-level coffee stop. It is one of London's benchmark cafes if someone wants more than a quick caffeine hit.", details: "Good with Farringdon, Holborn, or Hatton Garden. It has more seating than many tiny espresso bars.", link: "https://prufrockcoffee.com/", map: "https://www.google.com/maps/search/?api=1&query=Prufrock%20Coffee%2C%2023-25%20Leather%20Lane%2C%20London%20EC1N%207TE" },
             ["British Museum", "Museum", "Bloomsbury", "Free", "35-45 min from stay", "Huge global collection with major galleries.", "Good because free entry lets you do a short greatest-hits visit.", "Book a free timed entry if available.", "https://www.britishmuseum.org/"],
             ["Tower of London", "History", "Tower Hill", "About £35", "20-30 min from stay", "Historic fortress and Crown Jewels.", "Good for a full London history hit near the river.", "Go early if Crown Jewels matter.", "https://www.hrp.org.uk/tower-of-london/"],
             ["Westminster Abbey", "Church", "Westminster", "About £30", "35-45 min from stay", "Royal church with coronations, poets, and monuments.", "Good if you want one deeply historic interior.", "Pair with Parliament and the Thames.", "https://www.westminster-abbey.org/"],
@@ -2985,6 +3019,21 @@
         "Tower of London": [51.508217, -0.076188],
         "Westminster Abbey": [51.499399, -0.127391],
         "London Eye": [51.504637, -0.116681],
+        "WatchHouse Cabot Place": [51.504952, -0.020265],
+        "Caravan Canary Wharf": [51.505427, -0.019304],
+        "Feels Like June": [51.505048, -0.016378],
+        "The Yurt Cafe": [51.512834, -0.040382],
+        "Poplar Bakehouse": [51.512781, -0.014432],
+        "WatchHouse Millennium Bridge": [51.511332, -0.098502],
+        "The Wren Coffee": [51.512045, -0.094664],
+        "Host Cafe": [51.51274, -0.093178],
+        "Special Guests Coffee": [51.518251, -0.150827],
+        "Rosslyn Coffee Queen Victoria": [51.511722, -0.093331],
+        "Nagare Coffee": [51.519167, -0.075493],
+        "Formative Coffee": [51.499367, -0.134396],
+        "Nostos Coffee": [51.461745, -0.138829],
+        "Monmouth Coffee Company": [51.505452, -0.091777],
+        "Prufrock Coffee": [51.520164, -0.109153],
         "Smithsonian Museums": [38.897866, -77.02359],
         "Lincoln Memorial": [38.889212, -77.050172],
         "Siesta Key Beach": [27.272132, -82.557224],
@@ -3343,6 +3392,21 @@
         "Tower of London": "attractions/london-tower-of-london.jpg?v=1",
         "Westminster Abbey": "attractions/london-westminster-abbey.jpg?v=1",
         "London Eye": "attractions/london-london-eye.jpg?v=1",
+        "WatchHouse Cabot Place": "attractions/london-canary-coffee.svg?v=1",
+        "Caravan Canary Wharf": "attractions/london-canary-coffee.svg?v=1",
+        "Feels Like June": "attractions/london-canary-coffee.svg?v=1",
+        "The Yurt Cafe": "attractions/london-canary-coffee.svg?v=1",
+        "Poplar Bakehouse": "attractions/london-canary-coffee.svg?v=1",
+        "WatchHouse Millennium Bridge": "attractions/london-coffee-view.svg?v=1",
+        "The Wren Coffee": "attractions/london-church-coffee.svg?v=1",
+        "Host Cafe": "attractions/london-church-coffee.svg?v=1",
+        "Special Guests Coffee": "attractions/london-coffee-view.svg?v=1",
+        "Rosslyn Coffee Queen Victoria": "attractions/london-coffee-view.svg?v=1",
+        "Nagare Coffee": "attractions/london-coffee-view.svg?v=1",
+        "Formative Coffee": "attractions/london-coffee-view.svg?v=1",
+        "Nostos Coffee": "attractions/london-coffee-view.svg?v=1",
+        "Monmouth Coffee Company": "attractions/london-coffee-view.svg?v=1",
+        "Prufrock Coffee": "attractions/london-coffee-view.svg?v=1",
         "Smithsonian Museums": "attractions/washington-smithsonian-museums.jpg?v=1",
         "Lincoln Memorial": "attractions/washington-lincoln-memorial.jpg?v=1",
         "Siesta Key Beach": "attractions/sarasota-siesta-key-beach.jpg?v=1",
@@ -3397,7 +3461,7 @@
           </section>
         `).join("");
       }
-      const ATTRACTION_FILTER_LABELS = { Top10: "Top 10", Museum: "Museums", Fish: "Fish", Food: "Food", Coffee: "Coffee", Canal: "Canals", Landmark: "Landmarks", Nightlife: "Nightlife", Outdoors: "Outdoors" };
+      const ATTRACTION_FILTER_LABELS = { Top10: "Top 10", NearStay: "Near stay", Museum: "Museums", Fish: "Fish", Food: "Food", Coffee: "Coffee", Canal: "Canals", Landmark: "Landmarks", Nightlife: "Nightlife", Outdoors: "Outdoors", View: "Views", History: "History", Church: "Church" };
       const ATTRACTION_STATUS_LABELS = { visible: "Visible", todo: "To do", done: "Done", removed: "Removed", all: "All" };
       const COMPLETED_CITIES = new Set(["amsterdam"]);
       const attractionFilterChoice = {};
@@ -4131,7 +4195,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=71", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=72", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;

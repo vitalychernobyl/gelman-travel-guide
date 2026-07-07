@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-label="Coffee inside a historic London church">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#efe4d4"/>
+      <stop offset="1" stop-color="#d0d7d4"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" x2="0" y1="0" y2="1">
+      <stop stop-color="#ffe7a7"/>
+      <stop offset=".55" stop-color="#d97823"/>
+      <stop offset="1" stop-color="#76523b"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="420" rx="34" fill="url(#bg)"/>
+  <path d="M92 364V146l91-72 91 72v218zM446 364V146l91-72 91 72v218z" fill="#6f6458"/>
+  <path d="M150 364V202c0-38 66-38 66 0v162zM504 364V202c0-38 66-38 66 0v162z" fill="url(#glass)"/>
+  <rect x="288" y="104" width="144" height="260" rx="18" fill="#756657"/>
+  <path d="M324 364V201c0-46 72-46 72 0v163z" fill="url(#glass)"/>
+  <path d="M280 104h160l-80-62z" fill="#4e453d"/>
+  <path d="M0 336h720v84H0z" fill="#2f2924"/>
+  <g transform="translate(244 244)">
+    <ellipse cx="116" cy="110" rx="162" ry="30" fill="#1e1a17" opacity=".26"/>
+    <path d="M20 20h220v72c0 70-49 122-110 122S20 162 20 92z" fill="#fff8ee"/>
+    <ellipse cx="130" cy="52" rx="88" ry="24" fill="#4d2d20"/>
+    <path d="M240 54h42c31 0 52 22 52 52s-21 52-52 52h-42v-30h34c16 0 27-8 27-22s-11-22-27-22h-34z" fill="#fff8ee"/>
+  </g>
+  <text x="34" y="64" font-family="Arial, sans-serif" font-size="34" font-weight="900" fill="#2f2923">coffee in a church</text>
+  <text x="34" y="102" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#76523b">arched ceilings and serious espresso</text>
+</svg>

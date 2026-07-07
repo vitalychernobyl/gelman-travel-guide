@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-label="Canary Wharf coffee and dock view">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#eef5f6"/>
+      <stop offset="1" stop-color="#dfc9b4"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" x2="1">
+      <stop stop-color="#839faa"/>
+      <stop offset="1" stop-color="#556c77"/>
+    </linearGradient>
+  </defs>
+  <rect width="720" height="420" rx="34" fill="url(#sky)"/>
+  <path d="M0 280h720v140H0z" fill="url(#water)"/>
+  <path d="M42 301c95 22 180 22 255 0 94-27 184-24 381 8" fill="none" stroke="#cbdde0" stroke-width="10" opacity=".7"/>
+  <g fill="#53656d">
+    <rect x="90" y="122" width="58" height="158" rx="6"/>
+    <rect x="170" y="76" width="48" height="204" rx="6"/>
+    <rect x="242" y="38" width="72" height="242" rx="6"/>
+    <rect x="338" y="108" width="86" height="172" rx="6"/>
+    <rect x="450" y="64" width="52" height="216" rx="6"/>
+    <rect x="532" y="128" width="74" height="152" rx="6"/>
+  </g>
+  <g fill="#f6efe6" opacity=".8">
+    <rect x="104" y="150" width="12" height="12"/><rect x="124" y="150" width="12" height="12"/><rect x="184" y="108" width="12" height="12"/><rect x="204" y="108" width="12" height="12"/>
+    <rect x="262" y="72" width="12" height="12"/><rect x="286" y="72" width="12" height="12"/><rect x="356" y="142" width="12" height="12"/><rect x="388" y="142" width="12" height="12"/>
+    <rect x="464" y="96" width="12" height="12"/><rect x="484" y="96" width="12" height="12"/><rect x="552" y="160" width="12" height="12"/><rect x="584" y="160" width="12" height="12"/>
+  </g>
+  <g transform="translate(70 230)">
+    <ellipse cx="120" cy="122" rx="152" ry="30" fill="#1e1a17" opacity=".22"/>
+    <path d="M20 18h220v72c0 70-49 122-110 122S20 160 20 90z" fill="#fff8ee"/>
+    <ellipse cx="130" cy="52" rx="86" ry="24" fill="#5a321f"/>
+    <path d="M240 52h43c32 0 52 22 52 52s-20 52-52 52h-43v-30h34c16 0 27-8 27-22s-11-22-27-22h-34z" fill="#fff8ee"/>
+  </g>
+  <text x="34" y="64" font-family="Arial, sans-serif" font-size="34" font-weight="900" fill="#2f2923">Canary Wharf coffee</text>
+  <text x="34" y="102" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#59666b">espresso near the docks</text>
+</svg>
