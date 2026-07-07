@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=74">
+  <link rel="manifest" href="manifest.webmanifest?v=75">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -2497,7 +2497,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "74";
+      const APP_VERSION = "75";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -3314,6 +3314,36 @@
         }
         return PLAN_FALLBACK_DESTINATIONS[city] || heading;
       }
+      function ensurePlanCardId(card, city, label, index = 0) {
+        if (card.id) return card.id;
+        const base = `plan-${city}-${slugify(label || "card")}`;
+        let id = base;
+        let counter = index + 1;
+        while (document.getElementById(id)) {
+          counter += 1;
+          id = `${base}-${counter}`;
+        }
+        card.id = id;
+        return id;
+      }
+      function ensurePlanShareButton(card, index = 0) {
+        if (!card || card.querySelector("[data-share-target]")) return;
+        const city = card.closest(".city-plan")?.dataset.city || activeCity;
+        const label = planCardTitle(card);
+        const id = ensurePlanCardId(card, city, label, index);
+        const target = card.querySelector(":scope > summary") || card;
+        target.insertAdjacentHTML("beforeend", shareTargetButton(id, "plans", city, label));
+      }
+      function enhancePlanShareButtons() {
+        document.querySelectorAll(".city-plan").forEach(plan => {
+          const city = plan.dataset.city || activeCity;
+          plan.querySelectorAll(":scope .plan-grid > .ticket-card, :scope .plan-grid > .hotel-key, :scope .plan-grid > .lounge-pass").forEach((card, index) => {
+            const label = planCardTitle(card);
+            ensurePlanCardId(card, city, label, index);
+            ensurePlanShareButton(card, index);
+          });
+        });
+      }
       function enhanceTicketActions() {
         document.querySelectorAll(".ticket-card").forEach(card => {
           const actions = card.querySelector(".ticket-actions");
@@ -3338,6 +3368,7 @@
       function enhancePlanActions() {
         enhanceTicketActions();
         enhanceLoungeActions();
+        enhancePlanShareButtons();
       }
       function escapeHTML(value) {
         return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
@@ -4230,7 +4261,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=74", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=75", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
