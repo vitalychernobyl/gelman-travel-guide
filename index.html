@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=76">
+  <link rel="manifest" href="manifest.webmanifest?v=77">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -2512,7 +2512,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "76";
+      const APP_VERSION = "77";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -2918,9 +2918,176 @@
       function slugify(value) {
         return String(value).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/&/g, " and ").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
       }
-      async function shareUrl(url, title, text) {
+      function roundedRectPath(ctx, x, y, width, height, radius) {
+        const r = Math.min(radius, width / 2, height / 2);
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + width, y, x + width, y + height, r);
+        ctx.arcTo(x + width, y + height, x, y + height, r);
+        ctx.arcTo(x, y + height, x, y, r);
+        ctx.arcTo(x, y, x + width, y, r);
+        ctx.closePath();
+      }
+      function canvasToPngFile(canvas, name) {
+        return new Promise(resolve => {
+          canvas.toBlob(blob => {
+            resolve(blob ? new File([blob], `${slugify(name || "gelman-plan") || "gelman-plan"}.png`, { type: "image/png" }) : null);
+          }, "image/png", .92);
+        });
+      }
+      function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 3) {
+        const words = String(text || "").replace(/\s+/g, " ").trim().split(" ").filter(Boolean);
+        const lines = [];
+        let line = "";
+        words.forEach(word => {
+          const test = line ? `${line} ${word}` : word;
+          if (ctx.measureText(test).width > maxWidth && line) {
+            lines.push(line);
+            line = word;
+          } else {
+            line = test;
+          }
+        });
+        if (line) lines.push(line);
+        lines.slice(0, maxLines).forEach((lineText, index) => {
+          const suffix = index === maxLines - 1 && lines.length > maxLines ? "..." : "";
+          ctx.fillText(`${lineText}${suffix}`, x, y + index * lineHeight);
+        });
+        return y + Math.min(lines.length, maxLines) * lineHeight;
+      }
+      function loadCanvasImage(src) {
+        return new Promise((resolve, reject) => {
+          if (!src) {
+            reject(new Error("Missing image source"));
+            return;
+          }
+          const image = new Image();
+          image.crossOrigin = "anonymous";
+          image.onload = () => resolve(image);
+          image.onerror = reject;
+          image.src = src;
+        });
+      }
+      function drawImageCover(ctx, image, x, y, width, height) {
+        const ratio = Math.max(width / image.naturalWidth, height / image.naturalHeight);
+        const drawWidth = image.naturalWidth * ratio;
+        const drawHeight = image.naturalHeight * ratio;
+        ctx.drawImage(image, x + (width - drawWidth) / 2, y + (height - drawHeight) / 2, drawWidth, drawHeight);
+      }
+      function planTheme(card) {
+        if (card.classList.contains("airline-ba")) return { accent: "#08275b", deep: "#021732", light: "#edf4ff" };
+        if (card.classList.contains("airline-ua")) return { accent: "#064b91", deep: "#061d48", light: "#eef5ff" };
+        if (card.classList.contains("airline-aa")) return { accent: "#1f5fae", deep: "#7b113a", light: "#eef4ff" };
+        if (card.classList.contains("airline-os")) return { accent: "#d0021b", deep: "#8d0013", light: "#fff0f0" };
+        if (card.classList.contains("viator-ticket")) return { accent: "#14846b", deep: "#0b4c3f", light: "#edf8f4" };
+        if (card.classList.contains("museum-ticket")) return { accent: "#1f6b4e", deep: "#0f3e2e", light: "#edf8f1" };
+        if (card.classList.contains("lounge-pass")) return { accent: "#2f2418", deep: "#0f0c09", light: "#fff4e4" };
+        return { accent: "#d97823", deep: "#7d3d11", light: "#fff3e8" };
+      }
+      async function imagePlanThumbnailFile(card, label, city, imageElement) {
+        const image = await loadCanvasImage(imageElement.currentSrc || imageElement.src);
+        const canvas = document.createElement("canvas");
+        canvas.width = 1200;
+        canvas.height = 630;
+        const ctx = canvas.getContext("2d");
+        drawImageCover(ctx, image, 0, 0, canvas.width, canvas.height);
+        const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+        gradient.addColorStop(0, "rgba(0,0,0,.08)");
+        gradient.addColorStop(.42, "rgba(0,0,0,.18)");
+        gradient.addColorStop(1, "rgba(0,0,0,.72)");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#fffefa";
+        ctx.font = "900 74px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+        wrapCanvasText(ctx, label, 72, 452, 880, 78, 2);
+        ctx.font = "800 34px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+        ctx.fillStyle = "rgba(255,254,250,.86)";
+        ctx.fillText(`${shareCityLabel(city)} plan`, 74, 544);
+        return canvasToPngFile(canvas, `gelman-${city}-${label}`);
+      }
+      async function ticketPlanThumbnailFile(card, label, city) {
+        const canvas = document.createElement("canvas");
+        canvas.width = 1200;
+        canvas.height = 630;
+        const ctx = canvas.getContext("2d");
+        const theme = planTheme(card);
+        ctx.fillStyle = "#f4f2ee";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = theme.light;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        roundedRectPath(ctx, 64, 68, 1072, 494, 46);
+        ctx.fillStyle = "#fffefa";
+        ctx.fill();
+        ctx.shadowColor = "rgba(37,33,28,.18)";
+        ctx.shadowBlur = 26;
+        ctx.shadowOffsetY = 12;
+        ctx.fill();
+        ctx.shadowColor = "transparent";
+        roundedRectPath(ctx, 880, 68, 256, 494, 46);
+        const stubGradient = ctx.createLinearGradient(880, 68, 1136, 562);
+        stubGradient.addColorStop(0, theme.accent);
+        stubGradient.addColorStop(1, theme.deep);
+        ctx.fillStyle = stubGradient;
+        ctx.fill();
+        ctx.fillStyle = theme.accent;
+        roundedRectPath(ctx, 104, 124, 56, 18, 9);
+        ctx.fill();
+        ctx.fillStyle = theme.deep;
+        ctx.font = "900 28px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+        ctx.fillText((card.querySelector(".airline-logo")?.textContent || label || "Plan").toUpperCase(), 176, 145);
+        const route = (card.querySelector(".route")?.innerText || "").replace(/\n+/g, " → ").replace(/\s+/g, " ").trim();
+        const meta = [...card.querySelectorAll(".ticket-meta div, .ticket-hint")].map(row => row.innerText.replace(/\n+/g, " ").trim()).slice(0, 4);
+        ctx.fillStyle = "#241f1a";
+        ctx.font = "950 58px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+        wrapCanvasText(ctx, label, 104, 230, 700, 64, 2);
+        ctx.fillStyle = "rgba(36,31,26,.72)";
+        ctx.font = "850 34px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+        wrapCanvasText(ctx, route, 104, 366, 710, 42, 2);
+        ctx.fillStyle = theme.deep;
+        ctx.font = "900 32px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+        meta.forEach((line, index) => ctx.fillText(line, 104 + (index % 2) * 336, 474 + Math.floor(index / 2) * 46));
+        ctx.fillStyle = "#fffefa";
+        ctx.font = "950 54px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+        wrapCanvasText(ctx, (card.querySelector(".ticket-stub strong")?.textContent || "PLAN").toUpperCase(), 932, 282, 150, 58, 2);
+        ctx.font = "900 24px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+        ctx.fillStyle = "rgba(255,254,250,.86)";
+        ctx.fillText("Gelman Travel", 932, 404);
+        return canvasToPngFile(canvas, `gelman-${city}-${label}`);
+      }
+      async function planShareThumbnailFile(id, label, city) {
+        const card = document.getElementById(id);
+        if (!card || !card.closest("#plans")) return null;
+        try {
+          const image = card.querySelector("img");
+          return image ? await imagePlanThumbnailFile(card, label, city, image) : await ticketPlanThumbnailFile(card, label, city);
+        } catch (error) {
+          try {
+            return await ticketPlanThumbnailFile(card, label, city);
+          } catch {
+            return null;
+          }
+        }
+      }
+      if (startParams.has("qa")) {
+        setTimeout(async () => {
+          const samples = await Promise.all(["plan-london-courtauld-gallery", "hotel-london-london-stay"].map(async id => {
+            const card = document.getElementById(id);
+            const city = card?.closest(".city-plan")?.dataset.city || activeCity;
+            const label = card ? planCardTitle(card) : "Plan";
+            const file = await planShareThumbnailFile(id, label, city);
+            return { id, file: file ? { name: file.name, type: file.type, size: file.size } : null };
+          }));
+          document.documentElement.dataset.qaPlanShareThumbs = JSON.stringify(samples);
+        }, 0);
+      }
+      async function shareUrl(url, title, text, files = []) {
         try {
           if (navigator.share) {
+            const shareFiles = files.filter(Boolean);
+            if (shareFiles.length && navigator.canShare && navigator.canShare({ files: shareFiles })) {
+              await navigator.share({ title, text, url, files: shareFiles });
+              return;
+            }
             await navigator.share({ title, text, url });
             return;
           }
@@ -2928,6 +3095,14 @@
           showShareStatus("Link copied");
         } catch (error) {
           if (error && error.name === "AbortError") return;
+          if (files.length && navigator.share) {
+            try {
+              await navigator.share({ title, text, url });
+              return;
+            } catch (fallbackError) {
+              if (fallbackError && fallbackError.name === "AbortError") return;
+            }
+          }
           try {
             await navigator.clipboard.writeText(url);
             showShareStatus("Link copied");
@@ -4117,7 +4292,7 @@
         if (event.target === logoLightbox) logoLightbox.hidden = true;
       });
       shareButton?.addEventListener("click", shareCurrentPage);
-      document.addEventListener("click", event => {
+      document.addEventListener("click", async event => {
         const attractionButton = event.target.closest("[data-attraction-action]");
         if (attractionButton) {
           event.preventDefault();
@@ -4183,7 +4358,8 @@
           const label = shareTarget.dataset.shareLabel || "Gelman Travel";
           const cityLabel = shareCityLabel(city);
           const pageLabel = sharePageLabel(page);
-          shareUrl(buildShareUrl(page, city, id, true), `Gelman Travel - ${label}`, `${label} in ${cityLabel} ${pageLabel}`);
+          const files = page === "plans" ? [await planShareThumbnailFile(id, label, city)].filter(Boolean) : [];
+          shareUrl(buildShareUrl(page, city, id, true), `Gelman Travel - ${label}`, `${label} in ${cityLabel} ${pageLabel}`, files);
           return;
         }
         const address = event.target.closest("[data-copy-address]");
@@ -4278,7 +4454,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=76", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=77", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
