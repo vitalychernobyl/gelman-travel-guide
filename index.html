@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=82">
+  <link rel="manifest" href="manifest.webmanifest?v=83">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -2097,7 +2097,7 @@
               </div>
               <div class="mini-actions">
                 <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=NH%20Danube%20City%2C%20Wagramer%20Strasse%2021%2C%201220%20Vienna%2C%20Austria" target="_blank" rel="noopener">Hotel Map</a>
-                <a class="directions-button" href="https://www.google.com/maps/dir/?api=1&amp;origin=NH%20Danube%20City%2C%20Wagramer%20Strasse%2021%2C%201220%20Vienna%2C%20Austria&amp;destination=Vienna%20International%20Airport%20Terminal%203%2C%20Vienna%2C%20Austria" target="_blank" rel="noopener">To Airport</a>
+                <a class="directions-button" href="https://www.google.com/maps/dir/?api=1&amp;destination=Vienna%20International%20Airport%20Terminal%203%2C%20Vienna%2C%20Austria&amp;travelmode=driving&amp;dir_action=navigate" target="_blank" rel="noopener">To Airport</a>
               </div>
             </div>
           </article>
@@ -2497,7 +2497,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "82";
+      const APP_VERSION = "83";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -4597,7 +4597,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=82", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=83", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
