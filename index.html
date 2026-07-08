@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=81">
+  <link rel="manifest" href="manifest.webmanifest?v=82">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -585,6 +585,42 @@
     @media (max-width: 360px) {
       .attraction-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .attraction-map-toggle { width: 100%; }
+    }
+    .map-location-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: 34px;
+      margin: -2px 1px 7px;
+      padding: 6px 9px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 254, 250, .92);
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 900;
+    }
+    .map-location-status {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .map-locate-button {
+      flex: 0 0 auto;
+      min-height: 24px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fffefa;
+      padding: 4px 9px;
+      font: inherit;
+      font-size: .68rem;
+      font-weight: 950;
+    }
+    .map-locate-button:disabled {
+      opacity: .55;
     }
     .rating-tag {
       background: var(--accent) !important;
@@ -2461,7 +2497,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "81";
+      const APP_VERSION = "82";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -3104,7 +3140,6 @@
       }
       function googleMapsDirections(destination, mode = "driving") {
         const params = new URLSearchParams({
-          saddr: "",
           daddr: destination,
           directionsmode: cleanMapsMode(mode)
         });
@@ -3828,6 +3863,7 @@
       let attractionMap = null;
       function destroyAttractionMap() {
         if (attractionMap) { attractionMap.remove(); attractionMap = null; }
+        attractionUserLocationLayer = null;
       }
       function openAttractionDetailsFromMap(city, title) {
         const cardId = `attraction-${city}-${slugify(title)}`;
@@ -3844,6 +3880,64 @@
           card.scrollIntoView({ block: "start", behavior: "smooth" });
           card.classList.add("shared-target");
           setTimeout(() => card.classList.remove("shared-target"), 1800);
+        });
+      }
+      let attractionLocationRequestId = 0;
+      let attractionUserLocationLayer = null;
+      function updateMapLocationStatus(message, busy = false) {
+        const status = document.querySelector("#attractionLocationStatus");
+        const button = document.querySelector("[data-map-locate]");
+        if (status) status.textContent = message;
+        if (button) {
+          button.disabled = busy;
+          button.textContent = busy ? "Finding" : "Update";
+        }
+      }
+      function locateAttractionUser(map, bounds) {
+        const requestId = ++attractionLocationRequestId;
+        const button = document.querySelector("[data-map-locate]");
+        if (!map || !("geolocation" in navigator)) {
+          updateMapLocationStatus("Location unavailable");
+          return;
+        }
+        updateMapLocationStatus("Finding your location...", true);
+        const applyPosition = position => {
+          if (requestId !== attractionLocationRequestId || !attractionMap || attractionMap !== map) return;
+          const current = [position.coords.latitude, position.coords.longitude];
+          const accuracy = Math.max(25, Math.min(position.coords.accuracy || 0, 2000));
+          if (attractionUserLocationLayer) attractionUserLocationLayer.remove();
+          attractionUserLocationLayer = L.layerGroup([
+            L.circle(current, {
+              radius: accuracy,
+              color: "#1f78ff",
+              weight: 1,
+              fillColor: "#1f78ff",
+              fillOpacity: .08
+            }),
+            L.circleMarker(current, {
+              radius: 9,
+              weight: 3,
+              color: "#fffefa",
+              fillColor: "#1f78ff",
+              fillOpacity: 1
+            }).bindPopup(`<strong>You are here</strong><br>Accuracy about ${Math.round(accuracy)}m`)
+          ]).addTo(map);
+          map.fitBounds([...bounds, current], { padding: [30, 30], maxZoom: 15 });
+          updateMapLocationStatus(`Using your location • ±${Math.round(accuracy)}m`);
+        };
+        const handleError = error => {
+          if (requestId !== attractionLocationRequestId) return;
+          const blocked = error && error.code === 1;
+          updateMapLocationStatus(blocked ? "Location blocked - tap Update" : "Location not found - tap Update");
+        };
+        if (button && !button.dataset.locationBound) {
+          button.dataset.locationBound = "true";
+          button.addEventListener("click", () => locateAttractionUser(map, bounds));
+        }
+        navigator.geolocation.getCurrentPosition(applyPosition, handleError, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 60000
         });
       }
       function initAttractionMap(city, items, cityLabel) {
@@ -3885,6 +3979,7 @@
           bounds.push(coords);
         });
         if (bounds.length) attractionMap.fitBounds(bounds, { padding: [30, 30], maxZoom: 15 });
+        locateAttractionUser(attractionMap, bounds);
       }
       function renderAttractions(city) {
         const data = ATTRACTIONS[city] || ATTRACTIONS.vienna;
@@ -3960,7 +4055,7 @@
           <section class="card wide attraction-city" data-attraction-city="${escapeHTML(city)}" data-city-completed="${COMPLETED_CITIES.has(city)}">
             <h2><span class="city-mark">${escapeHTML(data.code)}</span> ${escapeHTML(data.city)} <span class="meta">${shown.length} picks near ${escapeHTML(data.hotel)}</span></h2>
             ${controls}
-            ${activeView === "map" ? '<div id="attractionMap" aria-label="Map of attractions"></div>' : ""}
+            ${activeView === "map" ? '<div class="map-location-bar"><span class="map-location-status" id="attractionLocationStatus">Finding your location...</span><button class="map-locate-button" type="button" data-map-locate>Update</button></div><div id="attractionMap" aria-label="Map of attractions"></div>' : ""}
             <div class="attraction-stack"${activeView === "map" ? " hidden" : ""}>
               ${shown.map((item, index) => {
                 const attraction = item;
@@ -4502,7 +4597,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=81", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=82", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
