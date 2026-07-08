@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=79">
+  <link rel="manifest" href="manifest.webmanifest?v=80">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -536,66 +536,48 @@
       border-color: var(--accent);
       color: var(--accent-ink);
     }
-    .attraction-filters {
-      display: flex;
-      flex-wrap: wrap;
+    .attraction-controls {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 6px;
       padding: 2px 1px 8px;
     }
-    .attraction-status-filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      padding: 0 1px 8px;
+    .attraction-control {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
     }
-    .attraction-filter {
-      flex: 0 1 auto;
-      min-height: 33px;
-      padding: 6px 12px;
-      font-size: .8rem;
-      font-weight: 850;
+    .attraction-control span {
+      color: var(--muted);
+      font-size: .58rem;
+      font-weight: 950;
+      letter-spacing: .02em;
+      text-transform: uppercase;
     }
-    .attraction-status-filter {
-      flex: 0 1 auto;
-      min-height: 31px;
-      padding: 5px 10px;
-      font-size: .74rem;
+    .attraction-select {
+      width: 100%;
+      min-height: 35px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fffefa;
+      color: var(--ink);
+      padding: 7px 26px 7px 10px;
+      font: inherit;
+      font-size: .78rem;
       font-weight: 900;
+      appearance: none;
+      background-image: linear-gradient(45deg, transparent 50%, #8a8178 50%), linear-gradient(135deg, #8a8178 50%, transparent 50%);
+      background-position: calc(100% - 15px) 50%, calc(100% - 10px) 50%;
+      background-size: 5px 5px;
+      background-repeat: no-repeat;
     }
-    .attraction-filter[aria-pressed="true"] {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: var(--accent-ink);
-    }
-    .attraction-status-filter[aria-pressed="true"] {
-      background: #25211c;
-      border-color: #25211c;
-      color: #fffefa;
+    @media (max-width: 360px) {
+      .attraction-controls { grid-template-columns: 1fr; }
     }
     .rating-tag {
       background: var(--accent) !important;
       color: var(--accent-ink) !important;
       font-weight: 900;
-    }
-    .attraction-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      flex-wrap: wrap;
-      padding: 0 1px 8px;
-    }
-    .attraction-sorts,
-    .attraction-views {
-      display: flex;
-      gap: 5px;
-    }
-    .attraction-sort,
-    .attraction-view {
-      min-height: 31px;
-      padding: 5px 11px;
-      font-size: .76rem;
-      font-weight: 850;
     }
     #attractionMap {
       height: min(62vh, 520px);
@@ -2046,9 +2028,13 @@
               <div class="info-row"><span>Bag drop</span><strong>Area 3, Counter no. 361-368</strong></div>
               <div class="info-row"><span>Deadline</span><strong>2:05 PM</strong></div>
               <div class="info-row"><span>Seats</span><strong>7F, 7E, 7D, 7C</strong></div>
+              <div class="info-row"><span>Priority Pass</span><strong>SKY Lounge, Terminal 3, Level 2 after security</strong></div>
+              <div class="info-row"><span>Lounge hours</span><strong>Daily 4:30 AM - 11:00 PM</strong></div>
+              <div class="info-row"><span>Lounge note</span><strong>Use inside VIE before OS315; no Uber needed</strong></div>
               <div class="ticket-actions">
                 <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=Vienna%20International%20Airport%20Terminal%203%2C%20Vienna%2C%20Austria" target="_blank" rel="noopener">Airport Directions</a>
                 <a class="directions-button app-button" href="https://apps.apple.com/us/app/austrian/id400224803" target="_blank" rel="noopener">Austrian App</a>
+                <a class="directions-button ticket-button" href="https://www.prioritypass.com/lounges/austria/vienna-schwechat/vie2-sky-lounge" target="_blank" rel="noopener">SKY Lounge</a>
               </div>
             </div>
           </details>
@@ -2064,21 +2050,6 @@
               <div class="mini-actions">
                 <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=NH%20Danube%20City%2C%20Wagramer%20Strasse%2021%2C%201220%20Vienna%2C%20Austria" target="_blank" rel="noopener">Hotel Map</a>
                 <a class="directions-button" href="https://www.google.com/maps/dir/?api=1&amp;origin=NH%20Danube%20City%2C%20Wagramer%20Strasse%2021%2C%201220%20Vienna%2C%20Austria&amp;destination=Vienna%20International%20Airport%20Terminal%203%2C%20Vienna%2C%20Austria" target="_blank" rel="noopener">To Airport</a>
-              </div>
-            </div>
-          </article>
-          <article class="lounge-pass">
-            <img src="priority-pass-sky-lounge.png?v=1" alt="Priority Pass SKY Lounge pass">
-            <div class="lounge-pass-body">
-              <h3>Priority Pass: SKY Lounge</h3>
-              <div class="info-list">
-                <div class="info-row"><span>Where</span><strong>Vienna Airport, Terminal 3, Level 2</strong></div>
-                <div class="info-row"><span>Hours</span><strong>Daily 4:30 AM - 11:00 PM</strong></div>
-                <div class="info-row"><span>Use</span><strong>After security, before OS315 to Amsterdam</strong></div>
-              </div>
-              <div class="mini-actions">
-                <a class="directions-button" href="https://www.prioritypass.com/lounges/austria/vienna-schwechat/vie2-sky-lounge" target="_blank" rel="noopener">Priority Pass</a>
-                <a class="directions-button" href="https://www.viennaairport.com/en/passengers/airport/lounge" target="_blank" rel="noopener">Airport Lounges</a>
               </div>
             </div>
           </article>
@@ -2205,6 +2176,9 @@
               <div class="info-row"><span>Arrive AMS</span><strong>11:20 AM, 3 hours before departure</strong></div>
               <div class="info-row"><span>From</span><strong>Amsterdam, Amsterdam (AMS)</strong></div>
               <div class="info-row"><span>To</span><strong>City Airport, London (LCY)</strong></div>
+              <div class="info-row"><span>Priority Pass</span><strong>Aspire Lounge 41, non-Schengen after passport control</strong></div>
+              <div class="info-row"><span>Lounge location</span><strong>Follow Lounge 41 / Airline lounges 40-41 to Panorama Deck, Level 3</strong></div>
+              <div class="info-row"><span>Lounge timing</span><strong>Access is usually limited to 3 hours before departure; use after passport control unless the gate is M</strong></div>
               <div class="boarding-pass-safe" data-boarding-pass-list>
                 <div class="boarding-pass-head"><strong>Boarding passes</strong><span>Safe public view</span></div>
                 <div class="boarding-pass-tabs" role="tablist" aria-label="Select BA8454 boarding pass">
@@ -2221,6 +2195,7 @@
               <div class="ticket-actions">
                 <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=Amsterdam%20Airport%20Schiphol%2C%20Amsterdam%2C%20Netherlands" target="_blank" rel="noopener">Airport Directions</a>
                 <a class="directions-button app-button" href="https://apps.apple.com/us/app/british-airways/id284793089" target="_blank" rel="noopener">BA App</a>
+                <a class="directions-button ticket-button" href="https://www.prioritypass.com/en-GB/lounges/netherlands/amsterdam-schiphol/ams-aspire-lounge-no-41" target="_blank" rel="noopener">Lounge 41</a>
               </div>
             </div>
           </details>
@@ -2236,22 +2211,6 @@
               <div class="mini-actions">
                 <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=Avani%20Museum%20Quarter%20Amsterdam%20Hotel%2C%20Hobbemakade%2050%2C%201071%20XL%20Amsterdam%2C%20Netherlands" target="_blank" rel="noopener">Directions</a>
                 <a class="directions-button site-button" href="https://www.avanihotels.com/en/museum-quarter-amsterdam" target="_blank" rel="noopener">Hotel Site</a>
-              </div>
-            </div>
-          </article>
-          <article class="lounge-pass">
-            <img src="priority-pass-sky-lounge.png?v=1" alt="Priority Pass lounge pass">
-            <div class="lounge-pass-body">
-              <h3>Priority Pass Lounges</h3>
-              <div class="info-list">
-                <div class="info-row"><span>Best option</span><strong>Aspire Lounge 41, non-Schengen after passport control</strong></div>
-                <div class="info-row"><span>Location</span><strong>Follow Lounge 41 / Airline lounges 40-41 to Panorama Deck, Level 3</strong></div>
-                <div class="info-row"><span>For BA8454</span><strong>Use this after passport control unless the gate is M, where Lounge 41 is not accessible</strong></div>
-                <div class="info-row"><span>Timing</span><strong>Priority Pass access is usually limited to 3 hours before departure</strong></div>
-              </div>
-              <div class="mini-actions">
-                <a class="directions-button" href="https://www.prioritypass.com/en-GB/lounges/netherlands/amsterdam-schiphol/ams-aspire-lounge-no-41" target="_blank" rel="noopener">Priority Pass</a>
-                <a class="directions-button" href="https://www.aspirelounges.com/airport-lounges/amsterdam-schiphol-airport-aspire-lounge-41-non-schengen/" target="_blank" rel="noopener">Lounge Site</a>
               </div>
             </div>
           </article>
@@ -2334,9 +2293,13 @@
               <div class="info-row"><span>Slava</span><strong>Seat 44C, Travel Options Bundle</strong></div>
               <div class="info-row"><span>Alex</span><strong>Seat 44B, Travel Options Bundle</strong></div>
               <div class="info-row"><span>Arrive LHR</span><strong>1:40 PM, 3 hours before departure</strong></div>
+              <div class="info-row"><span>Priority Pass</span><strong>No1 Lounge Heathrow T2 near Gate A18; Plaza Premium T2 as backup</strong></div>
+              <div class="info-row"><span>Lounge note</span><strong>United often uses Terminal 2B gates, so leave time for the long walk from T2A lounges</strong></div>
+              <div class="info-row"><span>Lounge hours</span><strong>No1: 5:00 AM - 9:00 PM; Plaza Premium: about 5:00 AM - 9:30 PM</strong></div>
               <div class="ticket-actions">
                 <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=London%20Heathrow%20Airport%2C%20London%2C%20United%20Kingdom" target="_blank" rel="noopener">Airport Directions</a>
                 <a class="directions-button app-button" href="https://apps.apple.com/us/app/united-airlines/id449945214" target="_blank" rel="noopener">United App</a>
+                <a class="directions-button ticket-button" href="https://www.prioritypass.com/en-GB/lounges/united-kingdom/heathrow/lhr33-no-1-lounge-heathrow-t2" target="_blank" rel="noopener">No1 T2</a>
               </div>
             </div>
           </details>
@@ -2352,22 +2315,6 @@
                 <div class="info-row"><span>Dates</span><strong>Mon, Jul 6 - Sat, Jul 11</strong></div>
               </div>
                 <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=41%20Galaxy%20Building%205%20Crews%20Street%2C%20London%20E14%203SP%2C%20United%20Kingdom" target="_blank" rel="noopener">Open Directions</a>
-            </div>
-          </article>
-          <article class="lounge-pass">
-            <img src="priority-pass-sky-lounge.png?v=1" alt="Priority Pass lounge pass">
-            <div class="lounge-pass-body">
-              <h3>Priority Pass Lounges</h3>
-              <div class="info-list">
-                <div class="info-row"><span>Nearest named</span><strong>No1 Lounge Heathrow T2, near Gate A18 after security</strong></div>
-                <div class="info-row"><span>Backup</span><strong>Plaza Premium Lounge T2, Level 4 departures near terminal transfer area</strong></div>
-                <div class="info-row"><span>For UA925</span><strong>United usually uses Terminal 2B gates, so leave time for the long walk from T2A lounges</strong></div>
-                <div class="info-row"><span>Hours</span><strong>No1: 5:00 AM - 9:00 PM; Plaza Premium: about 5:00 AM - 9:30 PM</strong></div>
-              </div>
-              <div class="mini-actions">
-                <a class="directions-button" href="https://www.prioritypass.com/en-GB/lounges/united-kingdom/heathrow/lhr33-no-1-lounge-heathrow-t2" target="_blank" rel="noopener">No1 T2</a>
-                <a class="directions-button" href="https://www.prioritypass.com/en-GB/lounges/united-kingdom/heathrow/lhr11-plaza-premium-lounge" target="_blank" rel="noopener">Plaza T2</a>
-              </div>
             </div>
           </article>
         </div>
@@ -2411,9 +2358,12 @@
               <div class="info-row"><span>Arrive DCA</span><strong>5:20 AM, 3 hours before departure</strong></div>
               <div class="info-row"><span>From</span><strong>Ronald Reagan Washington National Airport (DCA)</strong></div>
               <div class="info-row"><span>To</span><strong>Sarasota Bradenton International Airport (SRQ)</strong></div>
+              <div class="info-row"><span>Priority Pass</span><strong>Check the Priority Pass app before leaving; DCA options may be limited</strong></div>
+              <div class="info-row"><span>Airport map</span><strong>Use the DCA terminal map for current gate and dining options</strong></div>
               <div class="ticket-actions">
                 <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=Ronald%20Reagan%20Washington%20National%20Airport%2C%20Arlington%2C%20VA" target="_blank" rel="noopener">Airport Directions</a>
                 <a class="directions-button app-button" href="https://apps.apple.com/us/app/american-airlines/id382698565" target="_blank" rel="noopener">American App</a>
+                <a class="directions-button ticket-button" href="https://www.flyreagan.com/travel-information/terminal-map" target="_blank" rel="noopener">DCA Map</a>
               </div>
             </div>
           </details>
@@ -2430,20 +2380,6 @@
                 <div class="info-row"><span>Code</span><strong>I3VRZG</strong></div>
               </div>
               <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=1111%20Arlington%20Blvd%2C%20Arlington%2C%20VA%2022209" target="_blank" rel="noopener">Open Directions</a>
-            </div>
-          </article>
-          <article class="lounge-pass">
-            <img src="priority-pass-sky-lounge.png?v=1" alt="Priority Pass lounge pass">
-            <div class="lounge-pass-body">
-              <h3>Priority Pass Lounges</h3>
-              <div class="info-list">
-                <div class="info-row"><span>DCA check</span><strong>Use the Priority Pass app before leaving; DCA options may be limited.</strong></div>
-                <div class="info-row"><span>Next flight</span><strong>AA2697 leaves DCA for SRQ at 8:20 AM.</strong></div>
-              </div>
-              <div class="mini-actions">
-                <a class="directions-button" href="https://www.google.com/search?q=Priority+Pass+DCA+Ronald+Reagan+National+Airport" target="_blank" rel="noopener">Priority Pass</a>
-                <a class="directions-button" href="https://www.flyreagan.com/travel-information/terminal-map" target="_blank" rel="noopener">DCA Map</a>
-              </div>
             </div>
           </article>
         </div>
@@ -2465,20 +2401,6 @@
                 <div class="info-row"><span>From</span><strong>DCA at 8:20 AM, seats 13B and 13A</strong></div>
               </div>
               <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=8337%20Eagle%20Lake%20Dr%2C%20Sarasota%2C%20FL%2034241" target="_blank" rel="noopener">Open Directions</a>
-            </div>
-          </article>
-          <article class="lounge-pass">
-            <img src="priority-pass-sky-lounge.png?v=1" alt="Priority Pass lounge pass">
-            <div class="lounge-pass-body">
-              <h3>Priority Pass Lounges</h3>
-              <div class="info-list">
-                <div class="info-row"><span>SRQ check</span><strong>Use Priority Pass app for live listings; SRQ usually has very limited lounge options.</strong></div>
-                <div class="info-row"><span>Arrival</span><strong>AA2697 lands at SRQ on Jul 12 at 10:53 AM.</strong></div>
-              </div>
-              <div class="mini-actions">
-                <a class="directions-button" href="https://www.google.com/search?q=Priority+Pass+SRQ+Sarasota+Bradenton+Airport" target="_blank" rel="noopener">Priority Pass</a>
-                <a class="directions-button" href="https://www.google.com/maps/search/?api=1&amp;query=Sarasota%20Bradenton%20International%20Airport%20SRQ" target="_blank" rel="noopener">SRQ Map</a>
-              </div>
             </div>
           </article>
         </div>
@@ -2527,7 +2449,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "79";
+      const APP_VERSION = "80";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -3723,47 +3645,47 @@
         "Tower of London": "attractions/london-tower-of-london.jpg?v=1",
         "Westminster Abbey": "attractions/london-westminster-abbey.jpg?v=1",
         "London Eye": "attractions/london-london-eye.jpg?v=1",
-        "WatchHouse Cabot Place": "attractions/london-canary-coffee.svg?v=1",
-        "Caravan Canary Wharf": "attractions/london-canary-coffee.svg?v=1",
-        "Feels Like June": "attractions/london-canary-coffee.svg?v=1",
-        "The Yurt Cafe": "attractions/london-canary-coffee.svg?v=1",
-        "Poplar Bakehouse": "attractions/london-canary-coffee.svg?v=1",
-        "Grind Canary Wharf": "attractions/london-canary-coffee.svg?v=1",
-        "Grind Cabot Place": "attractions/london-canary-coffee.svg?v=1",
-        "Notes Coffee Crossrail Place": "attractions/london-canary-coffee.svg?v=1",
-        "Blank Street Canary Wharf": "attractions/london-canary-coffee.svg?v=1",
-        "Black Sheep Coffee Canary Wharf": "attractions/london-canary-coffee.svg?v=1",
-        "Crossrail Place Roof Garden": "attractions/london-coffee-view.svg?v=1",
-        "London Museum Docklands": "attractions/london-british-museum.jpg?v=1",
-        "Island Gardens & Greenwich Foot Tunnel": "attractions/london-coffee-view.svg?v=1",
-        "Old Royal Naval College": "attractions/london-tower-of-london.jpg?v=1",
-        "Cutty Sark": "attractions/london-tower-of-london.jpg?v=1",
-        "Mudchute Park and Farm": "attractions/london-coffee-view.svg?v=1",
-        "Second Home Spitalfields": "attractions/london-coffee-view.svg?v=1",
-        "The Ministry": "attractions/london-coffee-view.svg?v=1",
-        "Fora Spitalfields": "attractions/london-coffee-view.svg?v=1",
+        "WatchHouse Cabot Place": "attractions/london-watchhouse-cabot-place.jpg?v=1",
+        "Caravan Canary Wharf": "attractions/london-caravan-canary-wharf.jpg?v=1",
+        "Feels Like June": "attractions/london-feels-like-june.jpg?v=1",
+        "The Yurt Cafe": "attractions/london-yurt-cafe.jpg?v=1",
+        "Poplar Bakehouse": "attractions/london-poplar-bakehouse.jpg?v=1",
+        "Grind Canary Wharf": "attractions/london-grind-canary-wharf.png?v=1",
+        "Grind Cabot Place": "attractions/london-grind-canary-wharf.png?v=1",
+        "Notes Coffee Crossrail Place": "attractions/london-notes-crossrail.jpg?v=1",
+        "Blank Street Canary Wharf": "attractions/london-blank-street-canary-wharf.jpg?v=1",
+        "Black Sheep Coffee Canary Wharf": "attractions/london-black-sheep-canary-wharf.jpg?v=1",
+        "Crossrail Place Roof Garden": "attractions/london-crossrail-roof-garden.jpg?v=1",
+        "London Museum Docklands": "attractions/london-museum-docklands.jpg?v=1",
+        "Island Gardens & Greenwich Foot Tunnel": "attractions/london-island-gardens-foot-tunnel.jpg?v=1",
+        "Old Royal Naval College": "attractions/london-old-royal-naval-college.jpg?v=1",
+        "Cutty Sark": "attractions/london-cutty-sark.webp?v=1",
+        "Mudchute Park and Farm": "attractions/london-mudchute-park-farm.jpg?v=1",
+        "Second Home Spitalfields": "attractions/london-second-home-spitalfields.jpg?v=1",
+        "The Ministry": "attractions/london-the-ministry.jpg?v=1",
+        "Fora Spitalfields": "attractions/london-fora-spitalfields.jpg?v=1",
         "British Library Study Spaces": "attractions/london-british-museum.jpg?v=1",
-        "Spaces Canary Wharf": "attractions/london-coffee-view.svg?v=1",
-        "Bokan 38/39": "attractions/london-coffee-view.svg?v=1",
-        "Pergola on the Wharf": "attractions/london-coffee-view.svg?v=1",
-        "The Gun Docklands": "attractions/london-coffee-view.svg?v=1",
-        "Sky Garden Bars": "attractions/london-london-eye.jpg?v=1",
+        "Spaces Canary Wharf": "attractions/london-spaces-canary-wharf.jpg?v=1",
+        "Bokan 38/39": "attractions/london-bokan-38-39.jpg?v=1",
+        "Pergola on the Wharf": "attractions/london-pergola-on-the-wharf.jpg?v=1",
+        "The Gun Docklands": "attractions/london-the-gun-docklands.jpg?v=1",
+        "Sky Garden Bars": "attractions/london-sky-garden.jpg?v=1",
         "Duck & Waffle": "attractions/london-london-eye.jpg?v=1",
         "IWM London": "attractions/london-tower-of-london.jpg?v=1",
         "HMS Belfast": "attractions/london-tower-of-london.jpg?v=1",
         "Churchill War Rooms": "attractions/london-westminster-abbey.jpg?v=1",
-        "National Army Museum": "attractions/london-british-museum.jpg?v=1",
-        "RAF Museum London": "attractions/london-british-museum.jpg?v=1",
-        "WatchHouse Millennium Bridge": "attractions/london-coffee-view.svg?v=1",
-        "The Wren Coffee": "attractions/london-church-coffee.svg?v=1",
-        "Host Cafe": "attractions/london-church-coffee.svg?v=1",
-        "Special Guests Coffee": "attractions/london-coffee-view.svg?v=1",
-        "Rosslyn Coffee Queen Victoria": "attractions/london-coffee-view.svg?v=1",
-        "Nagare Coffee": "attractions/london-coffee-view.svg?v=1",
-        "Formative Coffee": "attractions/london-coffee-view.svg?v=1",
-        "Nostos Coffee": "attractions/london-coffee-view.svg?v=1",
-        "Monmouth Coffee Company": "attractions/london-coffee-view.svg?v=1",
-        "Prufrock Coffee": "attractions/london-coffee-view.svg?v=1",
+        "National Army Museum": "attractions/london-national-army-museum.jpg?v=1",
+        "RAF Museum London": "attractions/london-raf-museum.jpg?v=1",
+        "WatchHouse Millennium Bridge": "attractions/london-watchhouse-millennium-bridge.png?v=1",
+        "The Wren Coffee": "attractions/london-the-wren-coffee.jpg?v=1",
+        "Host Cafe": "attractions/london-host-cafe.jpg?v=1",
+        "Special Guests Coffee": "attractions/london-special-guests-coffee.jpg?v=1",
+        "Rosslyn Coffee Queen Victoria": "attractions/london-rosslyn-queen-victoria.jpg?v=1",
+        "Nagare Coffee": "attractions/london-nagare-coffee.jpg?v=1",
+        "Formative Coffee": "attractions/london-formative-coffee.jpg?v=1",
+        "Nostos Coffee": "attractions/london-nostos-coffee.jpg?v=1",
+        "Monmouth Coffee Company": "attractions/london-monmouth-coffee.jpg?v=1",
+        "Prufrock Coffee": "attractions/london-prufrock-coffee.jpg?v=1",
         "Smithsonian Museums": "attractions/washington-smithsonian-museums.jpg?v=1",
         "Lincoln Memorial": "attractions/washington-lincoln-memorial.jpg?v=1",
         "Siesta Key Beach": "attractions/sarasota-siesta-key-beach.jpg?v=1",
@@ -4003,30 +3925,33 @@
           return (rank[a._state] ?? 0) - (rank[b._state] ?? 0);
         });
         const activeView = attractionViewChoice[city] === "map" ? "map" : "list";
-        const filterChips = filters.length ? `
-          <div class="attraction-filters" role="tablist" aria-label="Filter attractions">
-            ${["All", ...filters].map(filter => `<button type="button" class="attraction-filter" data-filter="${escapeHTML(filter)}" aria-pressed="${filter === activeFilter}">${escapeHTML(filter === "All" ? "All" : ATTRACTION_FILTER_LABELS[filter] || filter)}</button>`).join("")}
-          </div>` : "";
-        const statusChips = `
-          <div class="attraction-status-filters" role="tablist" aria-label="Filter attraction status">
-            ${Object.entries(ATTRACTION_STATUS_LABELS).map(([key, label]) => `<button type="button" class="attraction-status-filter" data-status-filter="${key}" aria-pressed="${key === activeStatus}">${label}</button>`).join("")}
-          </div>`;
-        const toolbar = `
-          <div class="attraction-toolbar">
-            <div class="attraction-sorts" role="group" aria-label="Sort attractions">
-              ${Object.entries(ATTRACTION_SORTS).map(([key, label]) => `<button type="button" class="attraction-sort" data-sort="${key}" aria-pressed="${key === activeSort}">${label}</button>`).join("")}
-            </div>
-            <div class="attraction-views" role="group" aria-label="View as list or map">
-              <button type="button" class="attraction-view" data-view="list" aria-pressed="${activeView === "list"}">List</button>
-              <button type="button" class="attraction-view" data-view="map" aria-pressed="${activeView === "map"}">Map</button>
-            </div>
+        const displayValue = activeView === "map" ? "map" : activeSort;
+        const controls = `
+          <div class="attraction-controls" aria-label="Attraction controls">
+            <label class="attraction-control">
+              <span>Type</span>
+              <select class="attraction-select" data-attraction-select="filter">
+                ${["All", ...filters].map(filter => `<option value="${escapeHTML(filter)}"${filter === activeFilter ? " selected" : ""}>${escapeHTML(filter === "All" ? "All" : ATTRACTION_FILTER_LABELS[filter] || filter)}</option>`).join("")}
+              </select>
+            </label>
+            <label class="attraction-control">
+              <span>Status</span>
+              <select class="attraction-select" data-attraction-select="status">
+                ${Object.entries(ATTRACTION_STATUS_LABELS).map(([key, label]) => `<option value="${key}"${key === activeStatus ? " selected" : ""}>${escapeHTML(label)}</option>`).join("")}
+              </select>
+            </label>
+            <label class="attraction-control">
+              <span>View</span>
+              <select class="attraction-select" data-attraction-select="display">
+                ${Object.entries(ATTRACTION_SORTS).map(([key, label]) => `<option value="${key}"${key === displayValue ? " selected" : ""}>${escapeHTML(label)}</option>`).join("")}
+                <option value="map"${displayValue === "map" ? " selected" : ""}>Map</option>
+              </select>
+            </label>
           </div>`;
         attractionContent.innerHTML = `
           <section class="card wide attraction-city" data-attraction-city="${escapeHTML(city)}" data-city-completed="${COMPLETED_CITIES.has(city)}">
             <h2><span class="city-mark">${escapeHTML(data.code)}</span> ${escapeHTML(data.city)} <span class="meta">${shown.length} picks near ${escapeHTML(data.hotel)}</span></h2>
-            ${filterChips}
-            ${statusChips}
-            ${toolbar}
+            ${controls}
             ${activeView === "map" ? '<div id="attractionMap" aria-label="Map of attractions"></div>' : ""}
             <div class="attraction-stack"${activeView === "map" ? " hidden" : ""}>
               ${shown.map((item, index) => {
@@ -4086,23 +4011,19 @@
             </div>
           </section>
         `;
-        attractionContent.querySelectorAll(".attraction-filter").forEach(chip => chip.addEventListener("click", () => {
-          attractionFilterChoice[city] = chip.dataset.filter;
+        attractionContent.querySelectorAll("[data-attraction-select]").forEach(select => select.addEventListener("change", () => {
+          if (select.dataset.attractionSelect === "filter") attractionFilterChoice[city] = select.value;
+          if (select.dataset.attractionSelect === "status") attractionStatusChoice[city] = select.value;
+          if (select.dataset.attractionSelect === "display") {
+            if (select.value === "map") {
+              attractionViewChoice[city] = "map";
+            } else {
+              attractionViewChoice[city] = "list";
+              attractionSortChoice[city] = select.value;
+            }
+          }
           renderAttractions(city);
           attractionContent.scrollIntoView({ block: "start", behavior: "smooth" });
-        }));
-        attractionContent.querySelectorAll(".attraction-status-filter").forEach(chip => chip.addEventListener("click", () => {
-          attractionStatusChoice[city] = chip.dataset.statusFilter;
-          renderAttractions(city);
-          attractionContent.scrollIntoView({ block: "start", behavior: "smooth" });
-        }));
-        attractionContent.querySelectorAll(".attraction-sort").forEach(button => button.addEventListener("click", () => {
-          attractionSortChoice[city] = button.dataset.sort;
-          renderAttractions(city);
-        }));
-        attractionContent.querySelectorAll(".attraction-view").forEach(button => button.addEventListener("click", () => {
-          attractionViewChoice[city] = button.dataset.view;
-          renderAttractions(city);
         }));
         if (activeView === "map") {
           requestAnimationFrame(() => initAttractionMap(city, shown, data.city));
@@ -4255,6 +4176,24 @@
         cityPlans.forEach(plan => { plan.hidden = plan.dataset.city !== city; });
         localStorage.gelmanCity = city;
       }
+      function syncAttractionPageState(city) {
+        if (!ATTRACTIONS[city]) city = activeCity;
+        activeCity = city;
+        activePage = "photos";
+        localStorage.gelmanTripCity = city;
+        localStorage.gelmanAttractionsCity = city;
+        localStorage.gelmanPage = activePage;
+        root.style.setProperty("--hero-image", `url("${HEROES[city] || HEROES.amsterdam}")`);
+        tripCityTabs.forEach(tab => tab.setAttribute("aria-pressed", tab.dataset.tripCity === city));
+        cityTabs.forEach(tab => tab.setAttribute("aria-pressed", tab.dataset.cityTarget === city));
+        tabs.forEach(tab => tab.setAttribute("aria-current", tab.dataset.target === activePage ? "page" : "false"));
+        pages.forEach(page => { page.hidden = page.dataset.page !== activePage; });
+        updateHeroStatus();
+        updateWeather(city);
+        showCity(city);
+        syncShareUrl();
+        return city;
+      }
       function scrollToHashTarget() {
         if (!location.hash) return;
         const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
@@ -4265,7 +4204,8 @@
         setTimeout(() => target.classList.remove("shared-target"), 1800);
       }
       function showAttractions(city) {
-        renderAttractions(ATTRACTIONS[city] ? city : "amsterdam");
+        city = syncAttractionPageState(ATTRACTIONS[city] ? city : "amsterdam");
+        renderAttractions(city);
         localStorage.gelmanAttractionsCity = city;
       }
       function todayKey(now) {
@@ -4397,7 +4337,7 @@
         if (attractionButton) {
           event.preventDefault();
           event.stopPropagation();
-          const city = attractionButton.dataset.attractionCity || activeCity;
+          const city = syncAttractionPageState(attractionButton.dataset.attractionCity || activeCity);
           const title = attractionButton.dataset.attractionTitle || "";
           const current = attractionState(city, title);
           let next = "active";
@@ -4407,6 +4347,7 @@
           setAttractionState(city, title, next);
           showShareStatus(next === "done" ? "Marked seen" : next === "removed" ? "Removed" : "Restored");
           renderAttractions(city);
+          syncShareUrl();
           return;
         }
         const boardingPassButton = event.target.closest("[data-boarding-pass]");
@@ -4554,7 +4495,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=79", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=80", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
