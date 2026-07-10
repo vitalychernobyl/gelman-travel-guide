@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=83">
+  <link rel="manifest" href="manifest.webmanifest?v=84">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -47,7 +47,7 @@
     .app {
       width: min(780px, 100%);
       margin: 0 auto;
-      padding: env(safe-area-inset-top) 10px calc(env(safe-area-inset-bottom) + 92px);
+      padding: env(safe-area-inset-top) 10px calc(env(safe-area-inset-bottom) + 132px);
     }
     .app-top {
       display: grid;
@@ -103,7 +103,7 @@
     .trip-city-tabs::-webkit-scrollbar { display: none; }
     .trip-city-tab {
       flex: 0 0 auto;
-      min-height: 34px;
+      min-height: 44px;
       padding: 7px 13px;
       scroll-snap-align: center;
       font-size: .82rem;
@@ -178,7 +178,8 @@
       top: max(10px, env(safe-area-inset-top));
       right: 10px;
       z-index: 2;
-      width: min(128px, 32vw);
+      width: clamp(124px, 38vw, 162px);
+      min-height: 44px;
       padding: 8px 9px;
       border: 1px solid rgba(255, 255, 255, .58);
       border-radius: 16px;
@@ -255,13 +256,13 @@
       grid-auto-flow: column;
       align-items: center;
       gap: 5px;
-      min-height: 36px;
+      min-height: 44px;
       padding: 0 11px;
       border: 1px solid rgba(255, 255, 255, .58);
       border-radius: 999px;
       background: rgba(37, 33, 28, .58);
       color: #fffefa;
-      font-size: .74rem;
+      font-size: .78rem;
       font-weight: 950;
       box-shadow: 0 10px 24px rgba(0, 0, 0, .2);
       backdrop-filter: blur(14px);
@@ -355,7 +356,7 @@
       font-size: .82rem;
     }
     input, button {
-      min-height: 38px;
+      min-height: 44px;
       border: 1px solid var(--line);
       border-radius: 999px;
       background: #ffffff;
@@ -526,7 +527,7 @@
     main > .city-tabs { display: none; }
     .city-tab {
       flex: 0 0 auto;
-      min-height: 35px;
+      min-height: 44px;
       padding: 7px 12px;
       font-size: .8rem;
       font-weight: 850;
@@ -538,7 +539,7 @@
     }
     .attraction-controls {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.15fr) auto;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 6px;
       padding: 2px 1px 8px;
       align-items: center;
@@ -549,7 +550,7 @@
     }
     .attraction-select {
       width: 100%;
-      min-height: 35px;
+      min-height: 44px;
       border: 1px solid var(--line);
       border-radius: 999px;
       background: #fffefa;
@@ -565,7 +566,7 @@
       background-repeat: no-repeat;
     }
     .attraction-map-toggle {
-      min-height: 35px;
+      min-height: 44px;
       min-width: 58px;
       border: 1px solid var(--line);
       border-radius: 999px;
@@ -582,10 +583,7 @@
       border-color: var(--accent);
       color: var(--accent-ink);
     }
-    @media (max-width: 360px) {
-      .attraction-controls { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .attraction-map-toggle { width: 100%; }
-    }
+    .attraction-map-toggle { width: 100%; }
     .map-location-bar {
       display: flex;
       align-items: center;
@@ -609,7 +607,8 @@
     }
     .map-locate-button {
       flex: 0 0 auto;
-      min-height: 24px;
+      min-height: 34px;
+      min-width: 68px;
       border: 0;
       border-radius: 999px;
       background: var(--ink);
@@ -668,7 +667,7 @@
     #attractionMap .map-popup-actions a {
       display: grid;
       place-items: center;
-      min-height: 32px;
+      min-height: 44px;
       padding: 5px 10px;
       border-radius: 999px;
       text-decoration: none;
@@ -833,7 +832,7 @@
       bottom: 10px;
       display: grid;
       place-items: center;
-      min-height: 30px;
+      min-height: 44px;
       border: 1px solid #d8d3ca;
       border-radius: 999px;
       background: rgba(236, 235, 231, .94);
@@ -900,7 +899,7 @@
     .attraction-state-actions button {
       display: grid;
       place-items: center;
-      min-height: 30px;
+      min-height: 44px;
       padding: 5px 9px;
       border: 1px solid rgba(255, 255, 255, .72);
       border-radius: 999px;
@@ -922,7 +921,7 @@
       opacity: .72;
     }
     .attraction-state-actions .remove-toggle {
-      width: 30px;
+      width: 44px;
       padding: 0;
       font-size: 1rem;
       line-height: 1;
@@ -958,7 +957,7 @@
     .directions-button {
       display: grid;
       place-items: center;
-      min-height: 38px;
+      min-height: 44px;
       padding: 6px 11px;
       border-radius: 999px;
       border: 1px solid #d8d3ca;
@@ -988,7 +987,7 @@
       flex: 0 0 auto;
       width: auto;
       min-width: 0;
-      min-height: 38px;
+      min-height: 44px;
       padding: 6px 11px;
       border: 0;
       background: #1a73e8;
@@ -1167,7 +1166,7 @@
       align-items: center;
       justify-content: center;
       gap: 4px;
-      min-height: 23px;
+      min-height: 34px;
       padding: 0 8px;
       border-radius: 999px;
       border: 1px solid #d8d3ca;
@@ -1318,7 +1317,7 @@
       gap: 7px;
     }
     .boarding-pass-tabs button {
-      min-height: 42px;
+      min-height: 44px;
       border: 1px solid #ded8cf;
       border-radius: 13px;
       background: #fffefa;
@@ -1495,7 +1494,7 @@
       bottom: 12px;
       display: grid;
       place-items: center;
-      min-height: 30px;
+      min-height: 44px;
       border: 1px solid #d8d3ca;
       border-radius: 999px;
       background: rgba(236, 235, 231, .95);
@@ -1573,7 +1572,7 @@
       gap: 7px;
     }
     .mini-actions .directions-button {
-      min-height: 38px;
+      min-height: 44px;
       font-size: .78rem;
     }
     .mini-actions .map-action {
@@ -1593,14 +1592,14 @@
     .ticket-actions .directions-button {
       flex: 0 1 auto;
       min-width: 0;
-      min-height: 38px;
+      min-height: 44px;
       font-size: .78rem;
     }
     .ticket-actions .map-action {
       flex: 0 0 auto;
       width: auto;
       min-width: 0;
-      min-height: 38px;
+      min-height: 44px;
     }
     .ticket-actions .app-button {
       background: #f2f1ee;
@@ -1618,9 +1617,9 @@
       z-index: 3;
       display: grid;
       place-items: center;
-      width: 34px;
-      height: 34px;
-      min-height: 34px;
+      width: 44px;
+      height: 44px;
+      min-height: 44px;
       padding: 0;
       border: 1px solid rgba(255, 255, 255, .72);
       border-radius: 999px;
@@ -1639,9 +1638,9 @@
       right: auto;
       left: 12px;
       bottom: 6px;
-      width: 38px;
-      height: 23px;
-      min-height: 23px;
+      width: 44px;
+      height: 34px;
+      min-height: 34px;
       border-color: #d8d3ca;
       background: rgba(236, 235, 231, .95);
       color: #5f5850;
@@ -1655,8 +1654,8 @@
     #plans .lounge-pass.has-card-share .card-share-button {
       left: 14px;
       bottom: 12px;
-      height: 30px;
-      min-height: 30px;
+      height: 44px;
+      min-height: 44px;
     }
     #plans details.hotel-key.has-card-share summary::after {
       left: 56px;
@@ -1769,7 +1768,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 36px;
+      min-height: 44px;
       margin-top: 9px;
       padding: 7px 11px;
       border-radius: 999px;
@@ -1831,7 +1830,7 @@
     .float-controls {
       position: fixed;
       right: max(12px, env(safe-area-inset-right));
-      bottom: calc(env(safe-area-inset-bottom) + 78px);
+      bottom: calc(env(safe-area-inset-bottom) + 94px);
       z-index: 4;
       display: grid;
       justify-items: end;
@@ -1850,7 +1849,7 @@
     }
     .float-controls.open .control-menu { display: grid; }
     .control-menu button {
-      min-height: 38px;
+      min-height: 44px;
       padding: 6px 10px;
       font-size: .82rem;
       font-weight: 850;
@@ -1943,7 +1942,7 @@
       grid-auto-flow: column;
       align-items: center;
       gap: 5px;
-      min-height: 34px;
+      min-height: 44px;
       padding: 0 10px;
       border: 0;
       border-radius: 999px;
@@ -2497,7 +2496,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "83";
+      const APP_VERSION = "84";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -2785,7 +2784,7 @@
           code: "LDN",
           city: "London",
           hotel: "London stay",
-          filters: ["Coffee", "NearStay", "Cowork", "View", "Bars", "Military", "Museum", "History", "Church", "Top10"],
+          filters: ["Coffee", "NearStay", "Cowork", "View", "Bars", "Military", "Museum", "History", "Church", "Outdoors", "Top10"],
           defaultFilter: "Coffee",
           featured: [
             "WatchHouse Cabot Place",
@@ -2912,10 +2911,9 @@
       }
       function buildShareUrl(page = activePage, city = activeCity, hash = "", canonical = false) {
         const url = new URL(canonical ? "https://antonreport.com/gelmantravel/" : location.href);
+        url.search = "";
         url.searchParams.set("city", city);
         url.searchParams.set("page", normalizePage(page));
-        url.searchParams.delete("qa");
-        url.searchParams.delete("today");
         url.hash = hash ? `#${hash.replace(/^#/, "")}` : "";
         return url.toString();
       }
@@ -3260,6 +3258,7 @@
         "Tower of London": [51.508217, -0.076188],
         "Westminster Abbey": [51.499399, -0.127391],
         "London Eye": [51.504637, -0.116681],
+        "The Courtauld Gallery": [51.511029, -0.117194],
         "WatchHouse Cabot Place": [51.504952, -0.020265],
         "Caravan Canary Wharf": [51.505427, -0.019304],
         "Feels Like June": [51.505048, -0.016378],
@@ -3889,8 +3888,8 @@
         const button = document.querySelector("[data-map-locate]");
         if (status) status.textContent = message;
         if (button) {
-          button.disabled = busy;
-          button.textContent = busy ? "Finding" : "Update";
+          button.disabled = false;
+          button.textContent = busy ? "Retry" : "Update";
         }
       }
       function locateAttractionUser(map, bounds) {
@@ -3901,8 +3900,12 @@
           return;
         }
         updateMapLocationStatus("Finding your location...", true);
+        const fallbackTimer = setTimeout(() => {
+          if (requestId === attractionLocationRequestId) updateMapLocationStatus("Still finding - tap Retry");
+        }, 12000);
         const applyPosition = position => {
           if (requestId !== attractionLocationRequestId || !attractionMap || attractionMap !== map) return;
+          clearTimeout(fallbackTimer);
           const current = [position.coords.latitude, position.coords.longitude];
           const accuracy = Math.max(25, Math.min(position.coords.accuracy || 0, 2000));
           if (attractionUserLocationLayer) attractionUserLocationLayer.remove();
@@ -3927,6 +3930,7 @@
         };
         const handleError = error => {
           if (requestId !== attractionLocationRequestId) return;
+          clearTimeout(fallbackTimer);
           const blocked = error && error.code === 1;
           updateMapLocationStatus(blocked ? "Location blocked - tap Update" : "Location not found - tap Update");
         };
@@ -4565,15 +4569,7 @@
         if (!shouldForceReload(version)) return;
         sessionStorage.setItem(UPDATE_RELOAD_KEY, version);
         sessionStorage.setItem(UPDATE_RELOAD_AT_KEY, Date.now().toString());
-        try {
-          await clearAppCaches();
-          const registrations = await navigator.serviceWorker.getRegistrations();
-          await Promise.all(registrations.map(registration => registration.unregister()));
-        } catch (error) {
-          console.warn("Forced app update cleanup failed", error);
-        } finally {
-          location.replace(cacheBustedUrl(version));
-        }
+        location.replace(cacheBustedUrl(version));
       }
 
       async function checkPublishedVersion() {
@@ -4592,12 +4588,13 @@
 
       if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
         let reloadingForUpdate = false;
+        const hadServiceWorkerController = !!navigator.serviceWorker.controller;
         const triggerServiceWorkerUpdate = registration => {
           registration.waiting?.postMessage({ type: "SKIP_WAITING" });
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=83", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=84", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
@@ -4624,6 +4621,7 @@
 
         navigator.serviceWorker.addEventListener("controllerchange", () => {
           if (reloadingForUpdate || !navigator.serviceWorker.controller) return;
+          if (!hadServiceWorkerController && pendingReloadVersion() === APP_VERSION) return;
           reloadingForUpdate = true;
           location.replace(cacheBustedUrl(pendingReloadVersion()));
         });
@@ -4636,7 +4634,10 @@
           try {
             await clearAppCaches();
             const registrations = await navigator.serviceWorker.getRegistrations();
-            await Promise.all(registrations.map(registration => registration.unregister()));
+            const appScope = new URL("./", location.href).href;
+            await Promise.all(registrations
+              .filter(registration => registration.scope === appScope)
+              .map(registration => registration.unregister()));
           } finally {
             location.replace(cacheBustedUrl(APP_VERSION));
           }

@@ -1,13 +1,13 @@
-const APP_VERSION = "83";
+const APP_VERSION = "84";
 const CACHE = `gelman-travel-guide-v${APP_VERSION}`;
 const FILES = [
   "./",
   "./index.html",
-  "./?v=83",
+  "./?v=84",
   "./app-version.json",
-  "./app-version.json?v=83",
+  "./app-version.json?v=84",
   "./manifest.webmanifest",
-  "./manifest.webmanifest?v=83",
+  "./manifest.webmanifest?v=84",
   "./app-logo.png",
   "./app-logo.png?v=17",
   "./apple-touch-icon.png",
@@ -293,7 +293,9 @@ const FILES = [
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE).then(cache =>
-      cache.addAll(FILES.map(file => new Request(file, { cache: "reload" })))
+      Promise.all(FILES.map(file =>
+        cache.add(new Request(file, { cache: "reload" })).catch(() => null)
+      ))
     )
   );
   self.skipWaiting();
@@ -303,14 +305,18 @@ self.addEventListener("message", event => {
   const type = typeof event.data === "string" ? event.data : event.data?.type;
   if (type === "SKIP_WAITING") self.skipWaiting();
   if (type === "CLEAR_CACHES") {
-    event.waitUntil(caches.keys().then(keys => Promise.all(keys.map(key => caches.delete(key)))));
+    event.waitUntil(caches.keys().then(keys =>
+      Promise.all(keys.filter(key => key.startsWith("gelman-travel-guide-")).map(key => caches.delete(key)))
+    ));
   }
 });
 
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key))))
+      .then(keys => Promise.all(keys
+        .filter(key => key.startsWith("gelman-travel-guide-") && key !== CACHE)
+        .map(key => caches.delete(key))))
       .then(() => self.clients.claim())
       .then(() => self.clients.matchAll({ type: "window", includeUncontrolled: true }))
       .then(clients => clients.forEach(client => client.postMessage({ type: "APP_UPDATED", version: APP_VERSION })))
@@ -320,6 +326,8 @@ self.addEventListener("activate", event => {
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
   const url = new URL(event.request.url);
+  const isSameOrigin = url.origin === self.location.origin;
+  const isNavigation = event.request.mode === "navigate" || event.request.destination === "document";
   if (url.pathname.endsWith("/app-version.json")) {
     event.respondWith(
       fetch(new Request(event.request, { cache: "no-store" })).catch(() => caches.match("./app-version.json"))
@@ -329,12 +337,16 @@ self.addEventListener("fetch", event => {
   event.respondWith(
     fetch(event.request)
       .then(response => {
-        if (response.ok) {
+        if (isSameOrigin && response.ok) {
           const copy = response.clone();
-          caches.open(CACHE).then(cache => cache.put(event.request, copy));
+          caches.open(CACHE).then(cache => cache.put(event.request, copy)).catch(() => {});
         }
         return response;
       })
-      .catch(() => caches.match(event.request).then(hit => hit || caches.match("./index.html")))
+      .catch(() => caches.match(event.request).then(hit => {
+        if (hit) return hit;
+        if (isNavigation) return caches.match("./index.html");
+        return Response.error();
+      }))
   );
 });
