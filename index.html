@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=86">
+  <link rel="manifest" href="manifest.webmanifest?v=87">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -1184,7 +1184,7 @@
       position: relative;
       list-style: none;
       cursor: pointer;
-      padding-bottom: 46px;
+      padding-bottom: 0;
     }
     details.ticket-card summary::-webkit-details-marker { display: none; }
     details.ticket-card summary::after {
@@ -1192,7 +1192,7 @@
       position: absolute;
       left: 12px;
       right: 86px;
-      bottom: 5px;
+      bottom: 12px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -1414,7 +1414,7 @@
     .ticket-main {
       display: grid;
       gap: 6px;
-      padding: 9px 11px 32px;
+      padding: 9px 11px 72px;
     }
     .airline {
       display: flex;
@@ -1554,7 +1554,7 @@
     .hotel-preview {
       display: grid;
       gap: 5px;
-      padding: 11px 15px 50px;
+      padding: 11px 15px 74px;
     }
     .hotel-preview h3 {
       margin: 0;
@@ -1668,7 +1668,7 @@
       top: auto;
       right: auto;
       left: 12px;
-      bottom: 5px;
+      bottom: 12px;
       width: 44px;
       height: 34px;
       min-height: 34px;
@@ -2565,7 +2565,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "86";
+      const APP_VERSION = "87";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -4665,7 +4665,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=86", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=87", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
