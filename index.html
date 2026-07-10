@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=87">
+  <link rel="manifest" href="manifest.webmanifest?v=88">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -539,7 +539,7 @@
     }
     .attraction-controls {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 1fr) auto auto;
       gap: 6px;
       padding: 2px 1px 8px;
       align-items: center;
@@ -565,9 +565,10 @@
       background-size: 5px 5px;
       background-repeat: no-repeat;
     }
-    .attraction-map-toggle {
+    .attraction-map-toggle,
+    .attraction-advanced-toggle {
       min-height: 44px;
-      min-width: 58px;
+      min-width: 68px;
       border: 1px solid var(--line);
       border-radius: 999px;
       background: #fffefa;
@@ -578,12 +579,28 @@
       font-weight: 950;
       white-space: nowrap;
     }
+    .attraction-advanced-toggle {
+      min-width: 78px;
+      background: var(--soft);
+    }
     .attraction-map-toggle[aria-pressed="true"] {
       background: var(--accent);
       border-color: var(--accent);
       color: var(--accent-ink);
     }
-    .attraction-map-toggle { width: 100%; }
+    .attraction-advanced-toggle[aria-expanded="true"] {
+      background: #25211c;
+      border-color: #25211c;
+      color: #fffefa;
+    }
+    .attraction-advanced-panel {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      padding-top: 1px;
+    }
+    .attraction-advanced-panel[hidden] { display: none; }
     .map-location-bar {
       display: flex;
       align-items: center;
@@ -854,7 +871,7 @@
       display: grid;
       gap: 7px;
       min-width: 0;
-      padding: 10px 10px 48px;
+      padding: 10px 10px 72px;
     }
     .attraction-main h3 {
       margin: 0;
@@ -2565,7 +2582,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "87";
+      const APP_VERSION = "88";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -3864,6 +3881,7 @@
       const attractionStatusChoice = {};
       const attractionSortChoice = {};
       const attractionViewChoice = {};
+      const attractionAdvancedChoice = {};
       const ATTRACTION_SORTS = { rating: "Top", distance: "Near", name: "A-Z" };
       const HOTEL_COORDS = {
         vienna: [48.235424, 16.421906],
@@ -4107,24 +4125,28 @@
           return (rank[a._state] ?? 0) - (rank[b._state] ?? 0);
         });
         const activeView = attractionViewChoice[city] === "map" ? "map" : "list";
+        const advancedOpen = !!attractionAdvancedChoice[city];
         const controls = `
           <div class="attraction-controls" aria-label="Attraction controls">
-            <label class="attraction-control">
+            <label class="attraction-control attraction-primary-filter">
               <select class="attraction-select" data-attraction-select="filter" aria-label="Attraction type">
                 ${["All", ...filters].map(filter => `<option value="${escapeHTML(filter)}"${filter === activeFilter ? " selected" : ""}>${escapeHTML(filter === "All" ? "All" : ATTRACTION_FILTER_LABELS[filter] || filter)}</option>`).join("")}
               </select>
             </label>
-            <label class="attraction-control">
-              <select class="attraction-select" data-attraction-select="status" aria-label="Attraction status">
-                ${Object.entries(ATTRACTION_STATUS_LABELS).map(([key, label]) => `<option value="${key}"${key === activeStatus ? " selected" : ""}>${escapeHTML(label)}</option>`).join("")}
-              </select>
-            </label>
-            <label class="attraction-control">
-              <select class="attraction-select" data-attraction-select="sort" aria-label="Attraction sort">
-                ${Object.entries(ATTRACTION_SORTS).map(([key, label]) => `<option value="${key}"${key === activeSort ? " selected" : ""}>${escapeHTML(label)}</option>`).join("")}
-              </select>
-            </label>
             <button class="attraction-map-toggle" type="button" data-attraction-view-toggle aria-pressed="${activeView === "map" ? "true" : "false"}">${activeView === "map" ? "List" : "Map"}</button>
+            <button class="attraction-advanced-toggle" type="button" data-attraction-advanced-toggle aria-expanded="${advancedOpen ? "true" : "false"}">${advancedOpen ? "Less" : "More"}</button>
+            <div class="attraction-advanced-panel"${advancedOpen ? "" : " hidden"}>
+              <label class="attraction-control">
+                <select class="attraction-select" data-attraction-select="status" aria-label="Attraction status">
+                  ${Object.entries(ATTRACTION_STATUS_LABELS).map(([key, label]) => `<option value="${key}"${key === activeStatus ? " selected" : ""}>${escapeHTML(label)}</option>`).join("")}
+                </select>
+              </label>
+              <label class="attraction-control">
+                <select class="attraction-select" data-attraction-select="sort" aria-label="Attraction sort">
+                  ${Object.entries(ATTRACTION_SORTS).map(([key, label]) => `<option value="${key}"${key === activeSort ? " selected" : ""}>${escapeHTML(label)}</option>`).join("")}
+                </select>
+              </label>
+            </div>
           </div>`;
         attractionContent.innerHTML = `
           <section class="card wide attraction-city" data-attraction-city="${escapeHTML(city)}" data-city-completed="${COMPLETED_CITIES.has(city)}">
@@ -4199,6 +4221,12 @@
         const viewToggle = attractionContent.querySelector("[data-attraction-view-toggle]");
         if (viewToggle) viewToggle.addEventListener("click", () => {
           attractionViewChoice[city] = activeView === "map" ? "list" : "map";
+          renderAttractions(city);
+          attractionContent.scrollIntoView({ block: "start", behavior: "smooth" });
+        });
+        const advancedToggle = attractionContent.querySelector("[data-attraction-advanced-toggle]");
+        if (advancedToggle) advancedToggle.addEventListener("click", () => {
+          attractionAdvancedChoice[city] = !advancedOpen;
           renderAttractions(city);
           attractionContent.scrollIntoView({ block: "start", behavior: "smooth" });
         });
@@ -4665,7 +4693,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=87", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=88", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
