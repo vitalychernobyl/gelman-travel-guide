@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=84">
+  <link rel="manifest" href="manifest.webmanifest?v=85">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
   <link rel="icon" href="app-logo.png?v=17" type="image/png">
@@ -1146,6 +1146,36 @@
       background: #edf8f4;
       color: #0f654f;
     }
+    .theatre-ticket .ticket {
+      border-color: rgba(115, 57, 188, .25);
+      background: linear-gradient(135deg, #fffefa 0%, #fffefa 58%, #f7edff 100%);
+    }
+    .theatre-ticket .ticket-main {
+      border-top: 5px solid #7838d8;
+    }
+    .theatre-ticket .airline {
+      color: #6b31c4;
+      font-weight: 950;
+    }
+    .theatre-ticket .airline-logo::before {
+      width: 20px;
+      height: 14px;
+      border-radius: 4px 4px 9px 9px;
+      background:
+        radial-gradient(circle at 50% 115%, transparent 0 8px, #ffffff 8px 10px, transparent 10px),
+        linear-gradient(90deg, #6124b5 0 45%, #f3b14e 45% 55%, #8d44ee 55% 100%);
+      transform: none;
+    }
+    .theatre-ticket .ticket-stub {
+      background: linear-gradient(160deg, #5d20b0, #9d58ff);
+    }
+    .theatre-ticket .ticket-stub .wordmark {
+      color: #ffe6a8;
+    }
+    .theatre-ticket .ticket-hint {
+      background: #f6ecff;
+      color: #57229c;
+    }
     details.ticket-card {
       border: 0;
       background: transparent;
@@ -2270,6 +2300,44 @@
           <div><h2>London</h2><p>Mon, Jul 6 - Sat, Jul 11, 2026</p></div>
         </div>
         <div class="plan-grid">
+          <details class="ticket-card theatre-ticket" id="plan-london-operation-mincemeat" data-expires-at="2026-07-10T22:15:00+01:00" data-uber-coords="51.5133313,-0.1208962">
+            <summary>
+              <article class="ticket">
+                <div class="ticket-main">
+                  <div class="airline"><span class="airline-logo">Operation Mincemeat</span><span>ATG Tickets</span></div>
+                  <div class="route">
+                    <div class="city"><strong>Fortune Theatre</strong><span>Covent Garden</span></div>
+                    <div class="plane-line">→</div>
+                    <div class="city"><strong>7:30 PM</strong><span>Show starts</span></div>
+                  </div>
+                  <div class="ticket-meta">
+                    <div><span>Date</span><strong>Jul 10</strong></div>
+                    <div><span>Seats</span><strong>Upper Circle B1-B4</strong></div>
+                  </div>
+                  <div class="ticket-hints">
+                    <div class="ticket-hint"><span>Leave by</span><strong>6:10 PM</strong></div>
+                    <div class="ticket-hint"><span>Arrive by</span><strong>7:00 PM</strong></div>
+                  </div>
+                </div>
+                <div class="ticket-stub"><div><span class="wordmark">ATG<br>Tickets</span><strong>B1</strong><span class="brand-sash"></span></div></div>
+              </article>
+            </summary>
+            <div class="ticket-extra info-list">
+              <div class="info-row"><span>Order</span><strong>40996922</strong></div>
+              <div class="info-row"><span>Show</span><strong>Operation Mincemeat: A New Musical</strong></div>
+              <div class="info-row"><span>Venue</span><strong>Fortune Theatre, London</strong></div>
+              <div class="info-row"><span>Address</span><strong>29 Russell Street, London WC2B 5HH, United Kingdom</strong></div>
+              <div class="info-row"><span>Date</span><strong>Friday, July 10, 2026</strong></div>
+              <div class="info-row"><span>Timing</span><strong>Bars open 6:00 PM; arrive by 7:00 PM; show starts 7:30 PM</strong></div>
+              <div class="info-row"><span>Leave stay</span><strong>6:10 PM from Canary Wharf / Crews Street area</strong></div>
+              <div class="info-row"><span>Tickets</span><strong>Use the attached ATG PDF/email for the QR tickets; QR codes are not published in the public app</strong></div>
+              <div class="info-row"><span>Seats</span><strong>B1 £59.50 limited side view, not on aisle; B2 £59.50 limited side view; B3 £92.50; B4 £92.50 safety rails affect view</strong></div>
+              <div class="ticket-actions">
+                <a class="directions-button" href="https://www.google.com/maps/dir/?api=1&amp;destination=Fortune%20Theatre%2C%2029%20Russell%20Street%2C%20London%20WC2B%205HH%2C%20United%20Kingdom&amp;travelmode=transit&amp;dir_action=navigate" target="_blank" rel="noopener">Directions</a>
+                <a class="directions-button ticket-button" href="https://operationmincemeat.com/" target="_blank" rel="noopener">Show Info</a>
+              </div>
+            </div>
+          </details>
           <details class="ticket-card museum-ticket" id="plan-london-courtauld-gallery" data-expires-at="2026-07-08T15:00:00+01:00">
             <summary>
               <article class="ticket">
@@ -2496,7 +2564,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "84";
+      const APP_VERSION = "85";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -3258,6 +3326,8 @@
         "Tower of London": [51.508217, -0.076188],
         "Westminster Abbey": [51.499399, -0.127391],
         "London Eye": [51.504637, -0.116681],
+        "Fortune Theatre": [51.5133313, -0.1208962],
+        "Operation Mincemeat": [51.5133313, -0.1208962],
         "The Courtauld Gallery": [51.511029, -0.117194],
         "WatchHouse Cabot Place": [51.504952, -0.020265],
         "Caravan Canary Wharf": [51.505427, -0.019304],
@@ -4594,7 +4664,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=84", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=85", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
