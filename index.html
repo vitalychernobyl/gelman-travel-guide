@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel</title>
-  <link rel="manifest" href="manifest.webmanifest?v=94">
+  <link rel="manifest" href="manifest.webmanifest?v=95">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" sizes="180x180" href="gelman-travel-app-icon-180.png">
   <link rel="icon" href="gelman-travel-app-icon-512.png" type="image/png">
@@ -343,25 +343,22 @@
     }
     #plans .page-head,
     #photos .page-head { display: none; }
-    .plans-toolbar {
-      display: flex;
-      justify-content: flex-end;
-      min-height: 44px;
-      padding: 0 10px;
-    }
     .hard-refresh-button {
+      flex: 0 0 auto;
       display: inline-grid;
       place-items: center;
-      width: 44px;
-      height: 44px;
+      width: 32px;
+      height: 32px;
+      min-height: 32px;
+      margin-left: auto;
       padding: 0;
       border-color: rgba(216, 211, 202, .95);
       background: #fffefa;
       color: var(--ink);
-      font-size: 1.45rem;
+      font-size: 1.15rem;
       font-weight: 900;
       line-height: 1;
-      box-shadow: 0 6px 16px rgba(59, 52, 43, .1);
+      box-shadow: 0 3px 10px rgba(59, 52, 43, .09);
     }
     .hard-refresh-button.is-refreshing {
       animation: refresh-spin .75s linear infinite;
@@ -2088,9 +2085,7 @@
     </main>
 
     <main id="plans" class="page" data-page="plans">
-      <div class="plans-toolbar">
-        <button class="hard-refresh-button" id="hardRefreshButton" type="button" aria-label="Refresh app" title="Refresh app">↻</button>
-      </div>
+      <button class="hard-refresh-button" id="hardRefreshButton" type="button" aria-label="Refresh app" title="Refresh app" hidden>↻</button>
       <div class="page-head">
         <div>
           <h2 class="page-title">Trip Plans</h2>
@@ -2603,7 +2598,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "94";
+      const APP_VERSION = "95";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -4394,6 +4389,11 @@
         if (!cityPlans.some(plan => plan.dataset.city === city)) city = "amsterdam";
         cityTabs.forEach(tab => tab.setAttribute("aria-pressed", tab.dataset.cityTarget === city));
         cityPlans.forEach(plan => { plan.hidden = plan.dataset.city !== city; });
+        const activeTitleRow = cityPlans.find(plan => plan.dataset.city === city)?.querySelector(".city-title-row");
+        if (activeTitleRow && hardRefreshButton) {
+          activeTitleRow.appendChild(hardRefreshButton);
+          hardRefreshButton.hidden = false;
+        }
         localStorage.gelmanCity = city;
       }
       function syncAttractionPageState(city) {
@@ -4745,7 +4745,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=94", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=95", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
