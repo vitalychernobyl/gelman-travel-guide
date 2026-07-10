@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel</title>
-  <link rel="manifest" href="manifest.webmanifest?v=92">
+  <link rel="manifest" href="manifest.webmanifest?v=93">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" sizes="180x180" href="gelman-travel-app-icon-180.png">
   <link rel="icon" href="gelman-travel-app-icon-512.png" type="image/png">
@@ -2574,7 +2574,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "92";
+      const APP_VERSION = "93";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -4241,13 +4241,6 @@
         }
         return CITY_ORDER[CITY_ORDER.length - 1];
       }
-      function rememberedCityChoice() {
-        try {
-          const choice = JSON.parse(localStorage.gelmanTripCityChoice || "null");
-          if (choice && choice.day === todayKey(currentNow()) && DICTIONARIES[choice.city]) return choice.city;
-        } catch (error) {}
-        return null;
-      }
       function updateHeroStatus() {
         const meta = CITY_META[activeCity] || CITY_META.amsterdam;
         const weatherMeta = CITY_WEATHER[activeCity] || CITY_WEATHER.amsterdam;
@@ -4625,7 +4618,7 @@
       prepareCopyAddresses();
       applyPrefs();
       const sharedCity = startParams.get("city");
-      showTripCity(DICTIONARIES[sharedCity] ? sharedCity : (rememberedCityChoice() || cityForToday()));
+      showTripCity(DICTIONARIES[sharedCity] ? sharedCity : cityForToday());
       showPage(activePage);
       updateFlightCountdowns();
       if (startHash) history.replaceState(null, "", buildShareUrl(activePage, activeCity, startHash));
@@ -4685,7 +4678,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=92", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=93", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
