@@ -3,7 +3,7 @@
   "short_name": "Gelman Travel",
   "description": "A family travel guide with plans, places, and quick phrases.",
   "id": "./",
-  "start_url": "./?page=plans",
+  "start_url": "./?page=plans&launch=current",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f3f3f1",

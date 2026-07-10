@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel</title>
-  <link rel="manifest" href="manifest.webmanifest?v=93">
+  <link rel="manifest" href="manifest.webmanifest?v=94">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" sizes="180x180" href="gelman-travel-app-icon-180.png">
   <link rel="icon" href="gelman-travel-app-icon-512.png" type="image/png">
@@ -343,6 +343,32 @@
     }
     #plans .page-head,
     #photos .page-head { display: none; }
+    .plans-toolbar {
+      display: flex;
+      justify-content: flex-end;
+      min-height: 44px;
+      padding: 0 10px;
+    }
+    .hard-refresh-button {
+      display: inline-grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border-color: rgba(216, 211, 202, .95);
+      background: #fffefa;
+      color: var(--ink);
+      font-size: 1.45rem;
+      font-weight: 900;
+      line-height: 1;
+      box-shadow: 0 6px 16px rgba(59, 52, 43, .1);
+    }
+    .hard-refresh-button.is-refreshing {
+      animation: refresh-spin .75s linear infinite;
+    }
+    @keyframes refresh-spin {
+      to { transform: rotate(360deg); }
+    }
     .page-title {
       margin: 0;
       color: var(--ink);
@@ -2062,6 +2088,9 @@
     </main>
 
     <main id="plans" class="page" data-page="plans">
+      <div class="plans-toolbar">
+        <button class="hard-refresh-button" id="hardRefreshButton" type="button" aria-label="Refresh app" title="Refresh app">↻</button>
+      </div>
       <div class="page-head">
         <div>
           <h2 class="page-title">Trip Plans</h2>
@@ -2574,7 +2603,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "93";
+      const APP_VERSION = "94";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -2598,6 +2627,7 @@
       const closeLogo = document.querySelector("#closeLogo");
       const shareButton = document.querySelector("#shareButton");
       const shareStatus = document.querySelector("#shareStatus");
+      const hardRefreshButton = document.querySelector("#hardRefreshButton");
       let deferredInstallPrompt = null;
       let size = Number(localStorage.gelmanFont || DEFAULT_FONT_SIZE);
       let density = localStorage.gelmanDensity || "compact";
@@ -4610,6 +4640,7 @@
         copyText(address.dataset.copyAddress);
       });
       tabs.forEach(tab => tab.addEventListener("click", () => showPage(tab.dataset.target)));
+      hardRefreshButton?.addEventListener("click", hardRefreshApp);
       tripCityTabs.forEach(tab => tab.addEventListener("click", () => showTripCity(tab.dataset.tripCity, true, true)));
       cityTabs.forEach(tab => tab.addEventListener("click", () => showCity(tab.dataset.cityTarget)));
       enhanceHotelCards();
@@ -4618,7 +4649,13 @@
       prepareCopyAddresses();
       applyPrefs();
       const sharedCity = startParams.get("city");
-      showTripCity(DICTIONARIES[sharedCity] ? sharedCity : cityForToday());
+      const standaloneLaunch = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+      const legacyAmsterdamLaunch = standaloneLaunch
+        && sharedCity === "amsterdam"
+        && startParams.get("page") === "plans"
+        && !startHash
+        && !startParams.has("launch");
+      showTripCity(DICTIONARIES[sharedCity] && !legacyAmsterdamLaunch ? sharedCity : cityForToday());
       showPage(activePage);
       updateFlightCountdowns();
       if (startHash) history.replaceState(null, "", buildShareUrl(activePage, activeCity, startHash));
@@ -4647,6 +4684,36 @@
         if (!window.caches) return;
         const keys = await caches.keys();
         await Promise.all(keys.filter(key => key.startsWith("gelman-travel-guide-")).map(key => caches.delete(key)));
+      }
+
+      async function hardRefreshApp() {
+        if (hardRefreshButton?.disabled) return;
+        if (hardRefreshButton) {
+          hardRefreshButton.disabled = true;
+          hardRefreshButton.classList.add("is-refreshing");
+          hardRefreshButton.setAttribute("aria-label", "Refreshing app");
+        }
+        let version = APP_VERSION;
+        try {
+          const response = await fetch(`${VERSION_URL}?t=${Date.now()}`, {
+            cache: "no-store",
+            headers: { "Cache-Control": "no-cache" }
+          });
+          if (response.ok) {
+            const info = await response.json();
+            version = info.version || version;
+          }
+          await clearAppCaches();
+          if ("serviceWorker" in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            const appScope = new URL("./", location.href).href;
+            await Promise.all(registrations
+              .filter(registration => registration.scope === appScope)
+              .map(registration => registration.unregister()));
+          }
+        } finally {
+          location.replace(cacheBustedUrl(version));
+        }
       }
 
       async function reloadForFreshVersion(version) {
@@ -4678,7 +4745,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=93", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=94", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
@@ -4714,18 +4781,7 @@
           if (event.data?.type === "APP_UPDATED") reloadForFreshVersion(event.data.version);
         });
 
-        window.forceAppUpdate = async () => {
-          try {
-            await clearAppCaches();
-            const registrations = await navigator.serviceWorker.getRegistrations();
-            const appScope = new URL("./", location.href).href;
-            await Promise.all(registrations
-              .filter(registration => registration.scope === appScope)
-              .map(registration => registration.unregister()));
-          } finally {
-            location.replace(cacheBustedUrl(APP_VERSION));
-          }
-        };
+        window.forceAppUpdate = hardRefreshApp;
       } else if (location.protocol.startsWith("http")) {
         checkPublishedVersion();
         document.addEventListener("visibilitychange", () => {
