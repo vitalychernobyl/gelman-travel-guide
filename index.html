@@ -6,10 +6,10 @@
   <meta name="theme-color" content="#f3f3f1">
   <meta name="robots" content="noindex,nofollow,noarchive,noimageindex">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
+  <meta name="apple-mobile-web-app-title" content="Gelman Travel">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=90">
+  <title>Gelman Travel</title>
+  <link rel="manifest" href="manifest.webmanifest?v=92">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
   <link rel="apple-touch-icon" sizes="180x180" href="gelman-travel-app-icon-180.png">
   <link rel="icon" href="gelman-travel-app-icon-512.png" type="image/png">
@@ -1826,13 +1826,6 @@
       font-weight: 850;
       text-decoration: none;
     }
-    .note {
-      margin: 12px 0 0;
-      padding: 8px;
-      color: var(--muted);
-      border-top: 1px solid var(--line);
-      font-size: .82rem;
-    }
     .bottom-tabs {
       position: fixed;
       left: 0;
@@ -2049,7 +2042,7 @@
       </button>
       <div class="hero-brand">
         <button class="logo-button" id="logoButton" type="button" aria-label="Open Gelman Travel logo">
-          <img class="hero-logo" src="app-logo-circle.png?v=17" alt="Gelman Travel Guide logo">
+          <img class="hero-logo" src="app-logo-circle.png?v=17" alt="Gelman Travel logo">
         </button>
         <h1 class="app-title">Gelman Travel</h1>
         <header class="app-top">
@@ -2066,7 +2059,6 @@
     <main id="dictionary" class="page" data-page="dictionary" hidden>
       <nav class="section-nav" aria-label="Dictionary sections" id="dictionaryNav"></nav>
       <div id="dictionaryContent" class="dictionary-content" aria-live="polite"></div>
-      <p class="note">Edit city phrase lists in the tiny JavaScript data block near the bottom of this HTML file. Offline mode needs the service worker file and a local or HTTPS host.</p>
     </main>
 
     <main id="plans" class="page" data-page="plans">
@@ -2571,7 +2563,7 @@
 
     <div class="logo-lightbox" id="logoLightbox" hidden role="dialog" aria-modal="true" aria-label="Gelman Travel logo">
       <div class="logo-card">
-        <img src="app-logo-circle.png?v=17" alt="Gelman Travel Guide logo large">
+        <img src="app-logo-circle.png?v=17" alt="Gelman Travel logo large">
         <button class="plain-button" id="closeLogo" type="button">Close</button>
       </div>
     </div>
@@ -2582,7 +2574,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "90";
+      const APP_VERSION = "92";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -4693,7 +4685,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=90", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=92", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;

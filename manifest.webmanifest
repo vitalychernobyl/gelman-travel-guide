@@ -1,7 +1,7 @@
 {
-  "name": "Gelman Travel Guide",
-  "short_name": "Gelman Guide",
-  "description": "A compact Austria travel dictionary for offline pocket use.",
+  "name": "Gelman Travel",
+  "short_name": "Gelman Travel",
+  "description": "A family travel guide with plans, places, and quick phrases.",
   "id": "./",
   "start_url": "./?city=amsterdam&page=plans",
   "scope": "./",
