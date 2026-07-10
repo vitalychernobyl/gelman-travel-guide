@@ -9,10 +9,10 @@
   <meta name="apple-mobile-web-app-title" content="Gelman Travel Guide">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Gelman Travel Guide</title>
-  <link rel="manifest" href="manifest.webmanifest?v=88">
+  <link rel="manifest" href="manifest.webmanifest?v=90">
   <link rel="stylesheet" href="vendor/leaflet.css?v=1">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=17">
-  <link rel="icon" href="app-logo.png?v=17" type="image/png">
+  <link rel="apple-touch-icon" sizes="180x180" href="gelman-travel-app-icon-180.png">
+  <link rel="icon" href="gelman-travel-app-icon-512.png" type="image/png">
   <style>
     :root {
       --font: 16px;
@@ -2031,7 +2031,7 @@
 <body>
   <div class="app">
     <div class="install-banner" id="installBanner" hidden>
-      <img src="apple-touch-icon.png?v=17" alt="">
+      <img src="gelman-travel-app-icon-180.png" alt="">
       <div class="install-banner-text">
         <strong>Gelman Travel app</strong>
         <span>Add this guide to your Home Screen.</span>
@@ -2582,7 +2582,7 @@
   <script>
     (() => {
       const root = document.documentElement;
-      const APP_VERSION = "88";
+      const APP_VERSION = "90";
       const DEFAULT_FONT_SIZE = 16;
       const VERSION_URL = "app-version.json";
       const UPDATE_RELOAD_KEY = "gelmanLastForcedReloadVersion";
@@ -4693,7 +4693,7 @@
           registration.update().catch(() => {});
         };
 
-        navigator.serviceWorker.register("service-worker.js?v=88", { updateViaCache: "none" }).then(registration => {
+        navigator.serviceWorker.register("service-worker.js?v=90", { updateViaCache: "none" }).then(registration => {
           registration.addEventListener("updatefound", () => {
             const newWorker = registration.installing;
             if (!newWorker) return;
